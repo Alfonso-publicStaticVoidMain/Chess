@@ -1,8 +1,8 @@
 package com.mycompany.chess;
 
 public class Position {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     
     private Position(int x, int y) {
         if (!isValid(x, y)) throw new IllegalArgumentException("Invalid position on the board.");
@@ -56,7 +56,15 @@ public class Position {
             return null;
         }
     }
-
+    
+    public static int xDist(Position initPos, Position finPos) {
+        return Math.abs(finPos.x - initPos.x);
+    }
+    
+    public static int yDist(Position initPos, Position finPos) {
+        return Math.abs(finPos.y - initPos.y);
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
