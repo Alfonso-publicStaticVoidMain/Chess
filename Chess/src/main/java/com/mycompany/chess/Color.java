@@ -14,16 +14,10 @@ public enum Color {
         this.initRow = initRow;
     }
 
-    public int xDirection() {
-        return this.xDirection;
-    }
+    public int xDirection() {return this.xDirection;}
 
-    public int initRowPawn() {
-        return this.initRowPawn;
-    }
+    public int initRowPawn() {return this.initRowPawn;}
 
-    public int initRow() {
-        return this.initRow;
-    }
+    public int initRow() {return this.initRow;}
     
 }
