@@ -4,12 +4,16 @@ import java.util.*;
 
 public class Chess {
 
-    private List<Piece> pieces = new ArrayList<>();
+    private Set<Piece> pieces = new HashSet<>();
+    
+    public void addStandardPieces() {
+        // TO DO
+    }
     
     public boolean checkPiece(Position pos) {
         long numberOfPiecesInPosition = this.pieces.stream()
-                .filter(piece -> piece.getPos().equals(pos))
-                .count();
+            .filter(piece -> piece.getPos().equals(pos))
+            .count();
         if (numberOfPiecesInPosition != 0 && numberOfPiecesInPosition != 1) {
             System.out.println("Illegal number of pieces found in position " + pos);
             return false;
@@ -99,13 +103,27 @@ public class Chess {
     }
     
     public Chess copyGame() {
+        Chess result = new Chess();
+        this.pieces.stream()
+            .forEach(piece -> result.pieces.add(piece.copy()));
+        result.linkPieces();
+        return result;
+    }
+    
+    public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
         // TO DO
-        return this;
+        return false;
+    }
+    
+    public boolean checkMate(Color color, boolean checkCheck) {
+        // TO DO
+        return false;
     }
     
     public static void main(String[] args) {
         Rook torre = new Rook(Position.of(1, 1), Color.BLACK);
-        System.out.println(torre);
-        System.out.println(torre.getClass().getSimpleName());
+        Chess chessGame = new Chess();
+        chessGame.pieces.add(torre);
+        chessGame.printTable();
     }
 }
