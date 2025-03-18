@@ -15,9 +15,7 @@ public enum Color {
     }
 
     public int xDirection() {return this.xDirection;}
-
     public int initRowPawn() {return this.initRowPawn;}
-
     public int initRow() {return this.initRow;}
     
 }
