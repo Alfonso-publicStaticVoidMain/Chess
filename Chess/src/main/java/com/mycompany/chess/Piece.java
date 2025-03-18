@@ -12,9 +12,13 @@ public abstract class Piece {
     public void setPos(Position pos) {this.pos = pos;}
     public Color getColor() {return this.color;}
     public void setColor(Color color) {this.color = color;}
+    public Chess getGame() {return this.game;}
+    public void setGame(Chess game) {this.game = game;}
+    
 
     @Override
     public String toString() {
-        return "Piece{" + "pos=" + pos + ", color=" + color + '}';
+        return "" + Character.toUpperCase(this.getClass().getSimpleName().charAt(0)) + Character.toUpperCase(this.getColor().name().charAt(0));
     }
+    
 }
