@@ -1,0 +1,7 @@
+com\mycompany\chess\AbstractPiece.class
+com\mycompany\chess\Color.class
+com\mycompany\chess\Piece.class
+com\mycompany\chess\Rook.class
+com\mycompany\chess\Pawn.class
+com\mycompany\chess\Chess.class
+com\mycompany\chess\Position.class
