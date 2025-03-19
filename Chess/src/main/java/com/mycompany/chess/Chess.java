@@ -161,6 +161,11 @@ public class Chess {
         return false;
     }
     
+    public boolean checkLegalEnPassant(Piece piece, Position finPos) {
+        // TO DO
+        return true;
+    }
+    
     public static void main(String[] args) {
         Rook torre = new Rook(Position.of(1, 1), Color.BLACK);
         Chess chessGame = new Chess();
