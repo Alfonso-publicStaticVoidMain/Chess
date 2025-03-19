@@ -5,11 +5,21 @@ import java.util.*;
 public class Chess {
 
     private Set<Piece> pieces = new HashSet<>();
+    private List<Play> playRecord = new LinkedList<>();
     
     public void addStandardPieces() {
         // TO DO
     }
     
+    /**
+     * <p>
+     * Checks whether's there's a piece or not in the specified position.
+     * </p>
+     * @param pos Position to check.
+     * @return Returns true if there's a {@link Piece} in the {@link Position},
+     * false otherwise. If somehow there's 2 or more pieces in the position,
+     * it prints an error message and returns false.
+     */
     public boolean checkPiece(Position pos) {
         long numberOfPiecesInPosition = this.pieces.stream()
             .filter(piece -> piece.getPos().equals(pos))
@@ -21,6 +31,15 @@ public class Chess {
         return numberOfPiecesInPosition == 1;
     }
     
+    /**
+     * <p>
+     * Returns the Piece present in the specified position, if there's one.
+     * </p>
+     * @param pos Position to get the Piece from.
+     * @return Returns the {@link Piece} found in the {@link Position}, if one
+     * can be found there. Otherwise, it returns {@code null} and prints an
+     * error message.
+     */
     public Piece findPiece(Position pos) {
         if (this.checkPiece(pos)) {
             return this.pieces.stream()
@@ -32,12 +51,34 @@ public class Chess {
         return null;
     }
     
+    /**
+     * <p>
+     * Checks whether there's a Piece in the specified position that is the
+     * same color as another Piece.
+     * </p>
+     * @param piece Piece whose color we will compare to.
+     * @param pos Position we'll check for a Piece of that color.
+     * @return Returns true if in the {@link Position} there's a
+     * {@link Piece} whose color is the same as {@code piece}. False if there's
+     * no piece or if there's a piece of a different color.
+     */
     public boolean checkPieceSameColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
         if (this.findPiece(pos).getColor() != piece.getColor()) return false;
         return true;
     }
-    
+
+    /**
+     * <p>
+     * Checks whether there's a Piece in the specified position that is the
+     * opposite color as another Piece.
+     * </p>
+     * @param piece Piece whose color we will compare to.
+     * @param pos Position we'll check for a Piece of that color.
+     * @return Returns true if in the {@link Position} there's a
+     * {@link Piece} whose color is different than {@code piece}'s.
+     * False if there's no piece or if there's a piece of the same color.
+     */    
     public boolean checkPieceDiffColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
         if (this.findPiece(pos).getColor() == piece.getColor()) return false;
