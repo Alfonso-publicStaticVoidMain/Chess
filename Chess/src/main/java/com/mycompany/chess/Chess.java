@@ -60,7 +60,7 @@ public class Chess {
                     if (y != 0 && p.getPos().equals(Position.of(x, y))) {
                         printedPiece = true;                       
                         System.out.print("|" + p + "|");
-                        }
+                    }
                 }
                 if (!printedPiece && y != 0) System.out.print("|__|");
                 else if (y == 0) System.out.print("  " + convertNumberToLetter(x) + " ");
