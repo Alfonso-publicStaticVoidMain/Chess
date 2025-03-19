@@ -19,13 +19,31 @@ public abstract class Piece {
 
     @Override
     public String toString() {
-        return "" + Character.toUpperCase(this.getClass().getSimpleName().charAt(0)) + Character.toUpperCase(this.getColor().name().charAt(0));
+        return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
     }
     
+    /**
+     * <p>
+     * Method that performs basic legality checks on a piece movement.
+     * Intended to be referenced by the implementations of checkLegalMovement
+     * on each of the child classes of Piece.
+     * </p>
+     * @param piece The piece that we want to move.
+     * @param finPos The position we want to move the piece to.
+     * @param checkCheck state parameter to track if we need to declare the 
+     * movement illegal if it causes a check.
+     * @return Returns false if either of the following happens:
+     *      There's a piece of the same color in the final position.
+     *      We are checking for checks and the movement causes one.
+     *      The final position is the same as the initial position.
+     * @see
+     *      {@link Chess#checkPieceSameColorAs(Piece, Position)}
+     *      {@link Chess#checkIfMovementCausesCheck(Piece, Position)}
+     */
     public static boolean basicLegalityChecks(Piece piece, Position finPos, boolean checkCheck) {
         if (piece.getGame().checkPieceSameColorAs(piece, finPos)) return false;
         if (checkCheck && piece.getGame().checkIfMovementCausesCheck(piece, finPos)) return false;
-        if (piece.getPos().equals(finPos));
+        if (piece.getPos().equals(finPos)) return false;
         return true;
     }
     
