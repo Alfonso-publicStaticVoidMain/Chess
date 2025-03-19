@@ -120,8 +120,8 @@ public class Chess {
      * @return Returns the {@link Piece} object in the Pieces Set that is the
      * only {@link King} of that color.
      */
-    public Piece findKing(Color color) {
-        return this.pieces.stream()
+    public King findKing(Color color) {
+        return (King) this.pieces.stream()
             .filter(piece -> (piece instanceof King) && piece.getColor() == color)
             .findAny()
             .get();
@@ -191,15 +191,30 @@ public class Chess {
         return result;
     }
     
+    /**
+     * <p>
+     * Checks if a movement of a certain Piece to a certain Position causes
+     * the King of that color to be in check.
+     * </p>
+     * @param piece Piece we're attempting to move.
+     * @param finPos Position we're attempting to move the Piece to.
+     * @return Returns true if the movement causes the King of the same color
+     * as the {@code piece} to be in check after moving it to {@code finPos}.
+     * To achieve this, it copies the game into an auxiliary game, performs the
+     * movement there, and then checks if the King is in check.
+     */
     public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
-        // TO DO
-        return false;
+        Chess auxGame = this.copyGame();
+        Piece copyOfPiece = auxGame.findPiece(piece.getPos());
+        copyOfPiece.move(finPos);
+        return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
     public boolean checkMate(Color color, boolean checkCheck) {
         // TO DO
         return false;
     }
+    
     /**
      * <p>
      * Checks if a pawn movement is a legal En Passant move, according to the
