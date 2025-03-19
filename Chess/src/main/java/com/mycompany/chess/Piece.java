@@ -44,8 +44,7 @@ public abstract class Piece {
     public static boolean basicLegalityChecks(Piece piece, Position finPos, boolean checkCheck) {
         if (piece.getGame().checkPieceSameColorAs(piece, finPos)) return false;
         if (checkCheck && piece.getGame().checkIfMovementCausesCheck(piece, finPos)) return false;
-        if (piece.getPos().equals(finPos)) return false;
-        return true;
+        return !piece.getPos().equals(finPos);
     }
     
 }
