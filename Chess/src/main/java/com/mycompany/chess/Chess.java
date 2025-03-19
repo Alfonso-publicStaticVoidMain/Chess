@@ -183,6 +183,12 @@ public class Chess {
             .forEach(piece -> piece.setGame(this));
     }
     
+    /**
+     * <p>
+     * Returns a copy of {@code this} Chess game.
+     * </p>
+     * @return Returns a copy of {@code this} Chess game.
+     */
     public Chess copyGame() {
         Chess result = new Chess();
         this.pieces.stream()
