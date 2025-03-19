@@ -58,11 +58,11 @@ public class Position {
     }
     
     public static int xDist(Position initPos, Position finPos) {
-        return Math.abs(finPos.x - initPos.x);
+        return finPos.x - initPos.x;
     }
     
     public static int yDist(Position initPos, Position finPos) {
-        return Math.abs(finPos.y - initPos.y);
+        return finPos.y - initPos.y;
     }
     
     @Override
@@ -73,14 +73,15 @@ public class Position {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Position other = (Position) obj;
-        if (this.x != other.x) {
-            return false;
-        }
-        return this.y == other.y;
+        return (this.x == other.x && this.y == other.y);
+//        if (this.x != other.x) {
+//            return false;
+//        }
+//        return this.y == other.y;
     }
 
     @Override
@@ -97,6 +98,5 @@ public class Position {
             default -> "";
         } + this.y;
     }
-    
-    
+
 }
