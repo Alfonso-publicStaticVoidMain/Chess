@@ -1,14 +1,37 @@
 package com.mycompany.chess;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Chess {
 
     private Set<Piece> pieces = new HashSet<>();
     private List<Play> playRecord = new LinkedList<>();
     
+    /**
+     * <p>
+     * Adds the standard Chess pieces to {@code this}.
+     * </p>
+     */
     public void addStandardPieces() {
-        // TO DO
+        for (Color color : Color.values()) {
+            // Add Pawns
+            IntStream.rangeClosed(1, 8)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, color.initRowPawn()), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, color.initRow()), color));
+            this.pieces.add(new Rook(Position.of(8, color.initRow()), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(2, color.initRow()), color));
+            this.pieces.add(new Knight(Position.of(7, color.initRow()), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(3, color.initRow()), color));
+            this.pieces.add(new Bishop(Position.of(6, color.initRow()), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(4, color.initRow()), color));
+            // Add King
+            this.pieces.add(new King(Position.of(5, color.initRow()), color));
+        }
     }
     
     /**
@@ -85,14 +108,27 @@ public class Chess {
         return true;
     }
     
+    /**
+     * <p>
+     * Finds and returns the King piece of the specified color.
+     * </p>
+     * @param color Color of the seeked King.
+     * @return Returns the {@link Piece} object in the Pieces Set that is the
+     * only {@link King} of that color.
+     */
     public Piece findKing(Color color) {
         return this.pieces.stream()
-            .filter(piece -> piece.getClass().getSimpleName().equals("King") && piece.getColor() == color)
+            .filter(piece -> (piece instanceof King) && piece.getColor() == color)
             .findAny()
             .get();
     }
     
-    public void printTable() {
+    /**
+     * <p>
+     * Prints the current state of the board.
+     * </p>
+     */
+    public void printBoard() {
         for (int y = 8; y >= 0; y--) {
             System.out.print(y + " ");
             for (int x = 1; x <= 8; x++) {
@@ -185,6 +221,6 @@ public class Chess {
         Rook torre = new Rook(Position.of(1, 1), Color.BLACK);
         Chess chessGame = new Chess();
         chessGame.pieces.add(torre);
-        chessGame.printTable();
+        chessGame.printBoard();
     }
 }
