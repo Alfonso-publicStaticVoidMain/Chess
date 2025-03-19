@@ -7,6 +7,10 @@ public class Chess {
 
     private Set<Piece> pieces = new HashSet<>();
     private List<Play> playRecord = new LinkedList<>();
+
+    public Set<Piece> getPieces() {
+        return pieces;
+    }
     
     /**
      * <p>
