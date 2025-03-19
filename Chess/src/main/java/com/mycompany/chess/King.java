@@ -34,8 +34,7 @@ public class King extends Piece {
      * move to the piece {@code this} is attempting to move to, with the ability
      * to eat (account for Pawns different movement when eating).
      */
-    public boolean checkCheck(Position finPos) {
-        // TO DO       
+    public boolean checkCheck(Position finPos) {    
         return this.getGame().getPieces().stream()
             .filter(piece -> piece.getColor() == this.getColor())
             .filter(piece -> 
