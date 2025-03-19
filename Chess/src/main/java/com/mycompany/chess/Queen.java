@@ -14,15 +14,50 @@ public class Queen extends Piece {
     
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
-        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
+        if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
         Position initPos = this.getPos();
-        if (checkCheck && this.getGame().checkIfMovementCausesCheck(this, finPos)) return false;
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
+        int Xdirection = 0;
+        int Ydirection = 0;
         
-        
-        
-        return false;
+        if (Math.abs(Xmovement) == Math.abs(Ymovement)) {
+            if (Xmovement > 1) Xdirection = 1;
+            else if (Xmovement < -1) Xdirection = -1;
+            if (Ymovement > 1) Ydirection = 1;
+            else if (Ymovement < -1) Ydirection = -1;
+
+            if (Xdirection != 0 && Ydirection != 0) {
+                for (int i = 1; i < Math.abs(Ymovement); i++) {
+                    if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y() + i * Ydirection))) return false;
+                }
+            }
+        } else if (Xmovement == 0 || Ymovement == 0) {
+            if (Xmovement > 1) {
+                Xdirection = 1;
+            } else if (Xmovement < -1) {
+                Xdirection = -1;
+            }
+
+            if (Xdirection != 0) {
+                for (int i = 1; i < Math.abs(Xmovement); i++) {
+                    if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y()))) return false;
+                }
+            }
+
+            if (Ymovement > 1) {
+                Ydirection = 1;
+            } else if (Ymovement < -1) {
+                Ydirection = -1;
+            }
+
+            if (Ydirection != 0) {
+                for (int i = 1; i < Math.abs(Ymovement); i++) {
+                    if (this.getGame().checkPiece(Position.of(initPos.x(), initPos.y() + i * Ydirection))) return false;
+                }
+            }
+        } else return false;
+        return true;
     }
 
     @Override
