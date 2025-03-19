@@ -25,7 +25,8 @@ public abstract class Piece {
     /**
      * <p>
      * Method that performs basic legality checks on a piece movement.
-     * Intended to be referenced by the implementations of checkLegalMovement
+     * It is intended to be referenced by the implementations of the
+     * {@link Piece#checkLegalMovement(Position, boolean)} method
      * on each of the child classes of Piece.
      * </p>
      * @param piece The piece that we want to move.
