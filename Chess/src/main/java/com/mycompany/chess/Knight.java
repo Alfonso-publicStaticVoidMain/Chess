@@ -14,9 +14,8 @@ public class Knight extends Piece {
     
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
-        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
+        if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
         Position initPos = this.getPos();
-        if (checkCheck && this.getGame().checkIfMovementCausesCheck(this, finPos)) return false;
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
         
