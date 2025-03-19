@@ -23,6 +23,34 @@ public class King extends Piece {
         
         return false;
     }
+    
+    /**
+     * <p>
+     * Checks whether {@code this} King would be in check if it moved to the
+     * specified position.
+     * </p>
+     * @param finPos The position the King is trying to move to.
+     * @return Returns true if no piece of the opposing color can make a legal
+     * move to the piece {@code this} is attempting to move to, with the ability
+     * to eat (account for Pawns different movement when eating).
+     */
+    public boolean checkCheck(Position finPos) {
+        // TO DO       
+        return this.getGame().getPieces().stream()
+            .filter(piece -> piece.getColor() == this.getColor())
+            .filter(piece -> 
+                (piece instanceof Pawn) ?
+                    Position.yDist(piece.getPos(), finPos) == piece.getColor().yDirection()
+                    && Math.abs(Position.xDist(piece.getPos(), finPos)) == 1
+                : piece.checkLegalMovement(finPos, false)
+            )
+            .count()
+            != 0;
+    }
+    
+    public boolean checkCheck() {
+        return this.checkCheck(this.getPos());
+    }
 
     @Override
     public boolean move(Position finPos) {
