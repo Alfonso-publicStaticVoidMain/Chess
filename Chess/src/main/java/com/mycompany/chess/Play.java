@@ -27,6 +27,24 @@ public class Play {
         return "";
         //return "Play{" + "piece=" + piece + ", initPos=" + initPos + ", finPos=" + finPos + ", pieceEaten=" + pieceEaten + '}';
     }
+
+    public Piece getPiece() {
+        return this.piece;
+    }
+
+    public Position getInitPos() {
+        return this.initPos;
+    }
+
+    public Position getFinPos() {
+        return this.finPos;
+    }
+
+    public Optional<Piece> getPieceEaten() {
+        return this.pieceEaten;
+    }
     
-    
+    public boolean pieceWasEaten() {
+        return this.pieceEaten.isPresent();
+    }
 }
