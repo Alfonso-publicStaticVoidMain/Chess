@@ -4,16 +4,43 @@ public class Position {
     private final int x;
     private final int y;
     
+    /**
+     * <p>
+     * Private constructor of the factory class Position. It only allows for
+     * the creation of Positions that are within the Chess board.
+     * </p>
+     * @param x X coordinate of the position.
+     * @param y Y coordinate of the position.
+     * @throws Throws an IllegalArgumentException if the x and y values
+     * attempted represent a position that'd be outside of the Chess board.
+     */
     private Position(int x, int y) {
         if (!isValid(x, y)) throw new IllegalArgumentException("Invalid position on the board.");
         this.x = x;
         this.y = y;
     }
     
+    /**
+     * <p>
+     * Static factory method to create new Positions. In this case, from a
+     * String representing the algebraic notation of the position (A1, A2, etc.)
+     * </p>
+     * @param pos String representing the position.
+     * @return Returns a new Position constructed by converting the first char
+     * of the String to an integer, to store it as the x coordinate of the
+     * position, and storing the second as the y coordinate.
+     * If the String doesn't have length 2, or if the position it'd represent
+     * is not within the Chess board, an error message is printed and 
+     * {@code null} is returned.
+     */
     public static Position of(String pos) {
-        if (pos.length()!=2) return null;
+        if (pos.length()!=2) {
+            System.out.println("Error occurred while trying to create the position with value: " + pos);
+            System.out.println("The specified String doesn't have length 2.");
+            return null;
+        }
         try {
-            return new Position(Chess.convertLetterToNumber(Character.toUpperCase(pos.charAt(0))), Integer.parseInt(""+pos.charAt(1)));
+            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
         } catch (IllegalArgumentException e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with value: " + pos);
@@ -21,6 +48,18 @@ public class Position {
         }
     }
     
+    /**
+     * <p>
+     * Static factory method to create new Positions. In this case, from a
+     * pair of integers representing the coordinates of the Position.
+     * </p>
+     * @param x X coordinate of the new Position.
+     * @param y Y coordinate of the new Position.
+     * @return Returns a new Position constructed by storing the two integers
+     * as the X and Y coordinate.
+     * If supposed new Position is not within the Chess board, an error message
+     * is printed and {@code null} is returned.
+     */
     public static Position of(int x, int y) {
         try {
             return new Position(x, y);
@@ -30,11 +69,33 @@ public class Position {
             return null;
         }
     }
-    
-    public static boolean isValid(int x, int y) {return (x >= 1 && x <= 8 && y >= 1 && y <= 8);}
+       
     public int x() {return x;}
     public int y() {return y;}
     
+    /**
+     * <p>
+     * Checks whether a pair of integers is a valid coordinate of the chess
+     * board.
+     * </p>
+     * @param x The x coordinate of the supposed Position.
+     * @param y The y coordinate of the supposed Position.
+     * @return Returns true if both x and y are between (and including) 1 and 8.
+     */
+    public static boolean isValid(int x, int y) {return (x >= 1 && x <= 8 && y >= 1 && y <= 8);}
+    
+    /**
+     * <p>
+     * Returns a new Position constructed by moving {@code this} Position 
+     * the specified distances in the X and Y axis.
+     * </p>
+     * @param xDist Distance in the X axis to move.
+     * @param yDist Distance in the Y axis to move.
+     * @return If it is within the Chess board, returns the Position
+     * constructed by moving {@code this} the desired distances. Otherwise,
+     * prints the exception thrown by the Position constructor and an error
+     * message.
+     */
     public Position move(int xDist, int yDist) {
         try {
             return new Position(this.x+xDist, this.y+yDist);
@@ -44,10 +105,28 @@ public class Position {
         }
     }
     
+    /**
+     * <p>
+     * Calculates the signed distance in the X axis between two positions,
+     * </p>
+     * @param initPos The initial position.
+     * @param finPos The final position.
+     * @return The x coordinate of the final position minus the x coordinate
+     * of the initial position.
+     */
     public static int xDist(Position initPos, Position finPos) {
         return finPos.x - initPos.x;
     }
     
+    /**
+     * <p>
+     * Calculates the signed distance in the Y axis between two positions,
+     * </p>
+     * @param initPos The initial position.
+     * @param finPos The final position.
+     * @return The y coordinate of the final position minus the y coordinate
+     * of the initial position.
+     */
     public static int yDist(Position initPos, Position finPos) {
         return finPos.y - initPos.y;
     }
@@ -71,6 +150,14 @@ public class Position {
 //        return this.y == other.y;
     }
 
+    /**
+     * <p>
+     * Represents the Position using the algebraic notation, A1, A2, etc.
+     * </p>
+     * @return Returns a 2-character String with the first being the x
+     * coordinate of the Position converted to a letter (1 -> A, up to
+     * 8 -> H) and the second being the digit of the y coordinate.
+     */
     @Override
     public String toString() {
         return "" + Chess.convertNumberToLetter(this.x) + this.y;
