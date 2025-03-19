@@ -24,7 +24,9 @@ public class Pawn extends Piece {
 
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        
+        return true;
     }
     
 }
