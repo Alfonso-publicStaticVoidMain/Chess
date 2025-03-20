@@ -44,11 +44,6 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean move(Position finPos) {
-        return false;
-    }
-
-    @Override
     public Piece copy() {
         return new Rook(this.getPos(), this.getColor());
     }
