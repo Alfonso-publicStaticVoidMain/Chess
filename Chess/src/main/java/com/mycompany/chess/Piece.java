@@ -22,6 +22,20 @@ public abstract class Piece {
         return this.color.initRow();
     }
     
+    /**
+     * <p>
+     * If the movement is legal, moves {@code this} Piece to the specified
+     * Position.
+     * </p>
+     * @param finPos Position we're trying to move the Piece to.
+     * @param checkCheck State parameter to check if the movement should be
+     * declared illegal if it'd cause a check.
+     * @return Returns true if the movement was sucessfully done. In that case,
+     * updates {@code this}'s position, and if there was a Piece previously in
+     * that position, eliminates it from its game's playRecord.
+     * Then the movement is recorded into {@code this}'s game's playRecord
+     * attribute.
+     */
     public boolean move(Position finPos, boolean checkCheck) {
         Chess game = this.getGame();
         Position initPos = this.getPos();
