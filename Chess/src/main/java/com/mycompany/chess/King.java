@@ -52,11 +52,6 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean move(Position finPos) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public Piece copy() {
         return new King(this.getPos(), this.getColor());
     }
