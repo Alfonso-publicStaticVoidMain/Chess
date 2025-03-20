@@ -7,7 +7,6 @@ public abstract class Piece {
 
     public abstract boolean checkLegalMovement(Position finPos);
     public abstract boolean checkLegalMovement(Position finPos, boolean checkCheck);
-    public abstract boolean move(Position finPos);
     public abstract Piece copy();
     
     public Position getPos() {return this.pos;}
@@ -17,9 +16,16 @@ public abstract class Piece {
     public Chess getGame() {return this.game;}
     public void setGame(Chess game) {this.game = game;}
 
-    @Override
-    public String toString() {
-        return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
+    public int initRow() {
+        return this.color.initRow();
+    }
+    
+    public boolean move(Position finPos, boolean checkCheck) {
+        return true;
+    }
+    
+    public boolean move(Position finPos) {
+        return move(finPos, true);
     }
     
     /**
@@ -45,6 +51,11 @@ public abstract class Piece {
         if (piece.getGame().checkPieceSameColorAs(piece, finPos)) return false;
         if (checkCheck && piece.getGame().checkIfMovementCausesCheck(piece, finPos)) return false;
         return !piece.getPos().equals(finPos);
+    }
+    
+    @Override
+    public String toString() {
+        return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
     }
     
 }
