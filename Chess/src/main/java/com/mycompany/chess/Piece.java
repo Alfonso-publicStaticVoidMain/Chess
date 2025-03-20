@@ -1,5 +1,7 @@
 package com.mycompany.chess;
 
+import java.util.Optional;
+
 public abstract class Piece {
     private Position pos;
     private Color color;
@@ -21,7 +23,26 @@ public abstract class Piece {
     }
     
     public boolean move(Position finPos, boolean checkCheck) {
-        return true;
+        Chess game = this.getGame();
+        Position initPos = this.getPos();
+        Piece eatenPiece = null;
+        if (this.checkLegalMovement(finPos, checkCheck)) {
+            if (game.checkPiece(finPos)) {
+                eatenPiece = game.findPiece(finPos);
+                game.getPieces().remove(eatenPiece);
+            }
+            this.setPos(finPos);
+            if (this instanceof Pawn) {
+                int Xmovement = Position.xDist(initPos, finPos);
+                int Ymovement = Position.yDist(initPos, finPos);
+                if (Xmovement == ((Pawn) this).xDirEnPassant()) {
+                    eatenPiece = game.findPiece(Position.of(finPos.x(), finPos.y() - this.getColor().yDirection()));
+                    game.getPieces().remove(eatenPiece);
+                }
+            }
+            this.getGame().getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+        }
+        return false;
     }
     
     public boolean move(Position finPos) {
