@@ -21,6 +21,16 @@ public class Pawn extends Piece {
         return checkLegalMovement(finPos, true);
     }
     
+    /**
+     * <p>
+     * Checks if the proposed position would be a legal movement of the Pawn
+     * within the {@code Chess} game it's in.
+     * </p>
+     * @param finPos Position the Pawn is attempting to move to.
+     * @param checkCheck State parameter to determine if we will declare the
+     * movement illegal if it causes a check of its own King.
+     * @return 
+     */
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
