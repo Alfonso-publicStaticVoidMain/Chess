@@ -73,6 +73,7 @@ public class Pawn extends Piece {
      */
     public boolean checkLegalEnPassant() {
         // TO DO
+        if (this.getGame().getPlayRecord().isEmpty()) return false;
         Play lastPlay = this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1);
         if (!(lastPlay.getPiece() instanceof Pawn)) return false;
         if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
