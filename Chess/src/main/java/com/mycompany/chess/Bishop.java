@@ -19,6 +19,8 @@ public class Bishop extends Piece {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
         
+        if (Math.abs(Xmovement) != Math.abs(Ymovement)) return false;
+        
         int Xdirection = 0;
         int Ydirection = 0;
         
@@ -34,11 +36,6 @@ public class Bishop extends Piece {
             return true;
         }        
         return false;
-    }
-
-    @Override
-    public boolean move(Position finPos) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
