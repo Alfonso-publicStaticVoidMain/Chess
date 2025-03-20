@@ -5,11 +5,15 @@ import java.util.stream.IntStream;
 
 public class Chess {
 
-    private Set<Piece> pieces = new HashSet<>();
+    private List<Piece> pieces = new ArrayList<>();
     private List<Play> playRecord = new LinkedList<>();
 
-    public Set<Piece> getPieces() {
+    public List<Piece> getPieces() {
         return pieces;
+    }
+
+    public List<Play> getPlayRecord() {
+        return playRecord;
     }
     
     /**
@@ -219,27 +223,6 @@ public class Chess {
     public boolean checkMate(Color color, boolean checkCheck) {
         // TO DO
         return false;
-    }
-    
-    /**
-     * <p>
-     * Checks if a pawn movement is a legal En Passant move, according to the
-     * last play recorded in the game.
-     * </p>
-     * @param pawn The Pawn piece being moved.
-     * @param finPos The position the pawn is being moved to.
-     * @return Returns true if the {@link Pawn} movement is a legal En Passant
-     * move given the last play stored in the {@code playRecord} attribute
-     * of {@code this}
-     */
-    public boolean checkLegalEnPassant(Piece pawn, Position finPos) {
-        // TO DO
-        if (!(pawn instanceof Pawn)) return false;
-        Play lastPlay = this.playRecord.get(this.playRecord.size()-1);
-        if (!(lastPlay.getPiece() instanceof Pawn)) return false;
-        if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
-        
-        return true;
     }
     
     public static void main(String[] args) {
