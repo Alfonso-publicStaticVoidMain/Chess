@@ -212,11 +212,16 @@ public class Chess {
      * as the {@code piece} to be in check after moving it to {@code finPos}.
      * To achieve this, it copies the game into an auxiliary game, performs the
      * movement there, and then checks if the King is in check.
+     * @see
+     *      {@link Chess#findPiece(Position)}
+     *      {@link Chess#findKing(Color)}
+     *      {@link Piece#move(Position, boolean)}
+     *      {@link King#checkCheck()}
      */
     public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
         Chess auxGame = this.copyGame();
         Piece copyOfPiece = auxGame.findPiece(piece.getPos());
-        copyOfPiece.move(finPos);
+        copyOfPiece.move(finPos, false);
         return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
