@@ -40,6 +40,7 @@ public class Chess {
             // Add King
             this.pieces.add(new King(Position.of(5, color.initRow()), color));
         }
+        this.linkPieces();
     }
     
     /**
@@ -95,8 +96,7 @@ public class Chess {
      */
     public boolean checkPieceSameColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
-        if (this.findPiece(pos).getColor() != piece.getColor()) return false;
-        return true;
+        return this.findPiece(pos).getColor() == piece.getColor();
     }
 
     /**
@@ -112,8 +112,7 @@ public class Chess {
      */    
     public boolean checkPieceDiffColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
-        if (this.findPiece(pos).getColor() == piece.getColor()) return false;
-        return true;
+        return this.findPiece(pos).getColor() != piece.getColor();
     }
     
     /**
@@ -182,6 +181,12 @@ public class Chess {
         };
     }
     
+    /**
+     * <p>
+     * Sets the game of each piece in {@code this}'s piece attribute
+     * to {@code this}.
+     * </p>
+     */
     public void linkPieces() {
         this.pieces.stream()
             .forEach(piece -> piece.setGame(this));
@@ -226,8 +231,29 @@ public class Chess {
     }
     
     public boolean checkMate(Color color, boolean checkCheck) {
-        // TO DO
-        return false;
+        King king = this.findKing(color);
+        if (checkCheck && !king.checkCheck()) return false;
+        for (Piece p : this.pieces.stream()
+            .filter(piece -> piece.getColor() == color)
+            .toList()) {
+            for (int x = 1; x <= 8; x++) {
+                for (int y = 1; y <= 8; y++) {
+                    Position finPos = Position.of(x, y);
+                    if (p.checkLegalMovement(finPos)) {
+                        Chess auxGame = this.copyGame();
+                        King auxKing = auxGame.findKing(color);
+                        Piece auxPiece = auxGame.findPiece(p.getPos());
+                        auxPiece.move(finPos);
+                        if (!auxKing.checkCheck()) return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean checkMate(Color color) {
+        return this.checkMate(color, true);
     }
     
     public static void main(String[] args) {
