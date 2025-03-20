@@ -16,15 +16,15 @@ public class Knight extends Piece {
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
         Position initPos = this.getPos();
-        int Xmovement = Position.xDist(initPos, finPos);
-        int Ymovement = Position.yDist(initPos, finPos);
+        int absXmovement = Math.abs(Position.xDist(initPos, finPos));
+        int absYmovement = Math.abs(Position.yDist(initPos, finPos));
         
         return (
-            Math.abs(Ymovement) + Math.abs(Xmovement) == 3
-            && Math.abs(Ymovement) >= 1
-            && Math.abs(Ymovement) <= 2
-            && Math.abs(Ymovement) >= 1
-            && Math.abs(Xmovement) <= 2
+            absYmovement + absXmovement == 3
+            && absYmovement >= 1
+            && absYmovement <= 2
+            && absXmovement >= 1
+            && absXmovement <= 2
         );
     }
 
