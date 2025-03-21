@@ -41,6 +41,10 @@ public abstract class Piece {
      * that position, eliminates it from its game's playRecord.
      * Then the movement is recorded into {@code this}'s game's playRecord
      * attribute.
+     * @see
+     *      {@link Piece#checkLegalMovement(Position, boolean)}
+     *      {@link Pawn#xDirEnPassant}
+     *      {@link Chess#findPiece}
      */
     public boolean move(Position finPos, boolean checkCheck) {
         Chess chessGame = this.getGame();
