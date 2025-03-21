@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class Chess {
-
+    
     private List<Piece> pieces = new ArrayList<>();
     private List<Play> playRecord = new LinkedList<>();
 
