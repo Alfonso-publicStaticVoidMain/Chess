@@ -29,7 +29,34 @@ public class Pawn extends Piece {
      * @param finPos Position the Pawn is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
-     * @return 
+     * @return Returns true if the proposed movement is a legal position for
+     * {@code this} Pawn, performing the following checks:
+     * 
+     * First, some common legality checks are performed within the method 
+     * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
+     * in the final Position, if we're checking for checks and the movement
+     * would cause one, or if the final Position is the same as the initial one,
+     * false is returned.
+     * 
+     * Then we check if the movement in the Y axis is in the same direction
+     * as the Pawn's movement, dictated by its color. If this doesn't happen,
+     * ie, if the direction and the movement have different signs, false
+     * is returned.
+     * 
+     * If there isn't a Piece in the final Position we check if the Pawn is
+     * trying to move En Passant. Otherwise, if the movement in the X axis
+     * isn't 0, false is returned.
+     * 
+     * Then, if the movement in the Y axis in absolute value is greater than 2,
+     * or if it's greater than 1 while the starting row isn't the same as the
+     * initial row of the Pawn, or if the movement is 2 and there's a Piece in
+     * the middle, false is returned.
+     * 
+     * If there's a Piece in the final Position (which must be of a different
+     * color because of the previous legality checks), we check if the
+     * movement in the X axis in absolute value is 1 and the movement in the
+     * Y axis is the same as the Pawn's direction. If this isn't the case, false
+     * is returned.
      */
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
@@ -42,7 +69,7 @@ public class Pawn extends Piece {
         if (Ymovement * Ydirection < 0) return false;
         
         if (!this.getGame().checkPiece(finPos)) {
-            if (Xmovement == this.xDirEnPassant()) return true;
+            if (this.checkLegalEnPassant() && Xmovement == this.xDirEnPassant()) return true;
             if (Xmovement != 0) return false;
             
             if (Math.abs(Ymovement) > 2) return false;
@@ -70,9 +97,19 @@ public class Pawn extends Piece {
      * @return Returns true if the {@link Pawn} is able to do an En Passant
      * move given the last play stored in the {@code playRecord} attribute
      * of {@code this.game}.
+     * 
+     * If {@code this}'s game doesn't have at least one {@link Play} stored,
+     * false is returned. It's impossible to move En Passant.
+     * 
+     * If the last {@link Piece} that was moved ins't a Pawn, false is returned.
+     * 
+     * If the last Pawn moved didn't move 2 units in the Y direction, false is
+     * returned.
+     * 
+     * If the final Position of the last Pawn moved isn't within 1 distance of
+     * {@code this}'s current position, false is returned.
      */
     public boolean checkLegalEnPassant() {
-        // TO DO
         if (this.getGame().getPlayRecord().isEmpty()) return false;
         Play lastPlay = this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1);
         if (!(lastPlay.getPiece() instanceof Pawn)) return false;
@@ -87,7 +124,12 @@ public class Pawn extends Piece {
      * direction in the X axis it must move to succesfully make that move.
      * </p>
      * @return Returns the direction {@code this} Pawn must move to make an
-     * En Passant move on the last moved Pawn, if able. If unable, returns 0.
+     * En Passant move on the last moved Pawn, if able, ie, the distance in
+     * the X axis between {@code this}'s current position and the final position
+     * of the last moved Pawn in the {@link Chess} game's {@code playRecord}
+     * attribute.
+     * 
+     * If unable to move En Passant, returns 0.
      */
     public int xDirEnPassant() {
         if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1).getFinPos());
@@ -98,7 +140,5 @@ public class Pawn extends Piece {
     public Piece copy() {
         return new Pawn(this.getPos(), this.getColor());
     }
-
-    
     
 }
