@@ -14,7 +14,7 @@ public class Position {
      * @throws Throws an IllegalArgumentException if the x and y values
      * attempted represent a position that'd be outside of the Chess board.
      */
-    private Position(int x, int y) {
+    private Position(int x, int y) throws IllegalArgumentException {
         if (!isValid(x, y)) throw new IllegalArgumentException("Invalid position on the board.");
         this.x = x;
         this.y = y;
