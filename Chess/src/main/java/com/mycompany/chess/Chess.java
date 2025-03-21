@@ -272,6 +272,54 @@ public class Chess {
             .anyMatch(play -> play.getInitPos().equals(pos));
     }
     
+    /**
+     * <p>
+     * Checks if left castling is possible in this Chess game.
+     * </p>
+     * @param color Color for which to check castling.
+     * @return Returns true if the castling is possible for the {@code Color}
+     * parameter, performing the following checks:
+     * 
+     * If there is any recorded movement from the initial position of the King
+     * or left Rook, returns false.
+     * 
+     * If there's any Piece between the King and left Rook, returns false.
+     */
+    public boolean checkLeftCastling(Color color) {
+        // TO DO
+        Position kingInitPos = Position.of(5, color.initRow());
+        Position leftRookInitPos = Position.of(1, color.initRow());
+        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
+            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
+        ) return false;
+        return IntStream.rangeClosed(2, 4)
+            .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
+    }
+    
+    /**
+     * <p>
+     * Checks if right castling is possible in this Chess game.
+     * </p>
+     * @param color Color for which to check castling.
+     * @return Returns true if the castling is possible for the {@code Color}
+     * parameter, performing the following checks:
+     * 
+     * If there is any recorded movement from the initial position of the King
+     * or right Rook, returns false.
+     * 
+     * If there's any Piece between the King and right Rook, returns false.
+     */
+    public boolean checkRightCastling(Color color) {
+        // TO DO
+        Position kingInitPos = Position.of(5, color.initRow());
+        Position leftRookInitPos = Position.of(8, color.initRow());
+        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
+            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
+        ) return false;
+        return IntStream.rangeClosed(6, 7)
+            .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
+    }
+    
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
         return switch (Character.toLowerCase(letter)) {
             case 'a' -> 1;
