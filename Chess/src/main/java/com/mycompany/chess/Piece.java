@@ -18,6 +18,12 @@ public abstract class Piece {
     public Chess getGame() {return this.game;}
     public void setGame(Chess game) {this.game = game;}
 
+    /**
+     * The initial row of {@code this} Piece on the board.
+     * @return Returns an integer representing the initial row of the Piece.
+     * The method will be overwritten in the {@link Pawn} class returning
+     * the initRowPawn of its color.
+     */
     public int initRow() {
         return this.color.initRow();
     }
@@ -37,21 +43,20 @@ public abstract class Piece {
      * attribute.
      */
     public boolean move(Position finPos, boolean checkCheck) {
-        Chess game = this.getGame();
+        Chess chessGame = this.getGame();
         Position initPos = this.getPos();
         Piece eatenPiece = null;
         if (this.checkLegalMovement(finPos, checkCheck)) {
-            if (game.checkPiece(finPos)) {
-                eatenPiece = game.findPiece(finPos);
-                game.getPieces().remove(eatenPiece);
+            if (chessGame.checkPiece(finPos)) {
+                eatenPiece = chessGame.findPiece(finPos);
+                chessGame.getPieces().remove(eatenPiece);
             }
             this.setPos(finPos);
-            if (this instanceof Pawn) {
+            if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
-                int Ymovement = Position.yDist(initPos, finPos);
-                if (Xmovement == ((Pawn) this).xDirEnPassant()) {
-                    eatenPiece = game.findPiece(Position.of(finPos.x(), finPos.y() - this.getColor().yDirection()));
-                    game.getPieces().remove(eatenPiece);
+                if (Xmovement == pawn.xDirEnPassant()) {
+                    eatenPiece = chessGame.findPiece(Position.of(finPos.x(), finPos.y() - this.getColor().yDirection()));
+                    chessGame.getPieces().remove(eatenPiece);
                 }
             }
             this.getGame().getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
