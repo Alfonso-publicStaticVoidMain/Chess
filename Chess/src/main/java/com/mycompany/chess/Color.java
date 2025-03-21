@@ -8,8 +8,8 @@ public enum Color {
     private final int initRowPawn;
     private final int initRow;
     
-    Color(int xDirection, int initRowPawn, int initRow) {
-        this.yDirection = xDirection;
+    Color(int yDirection, int initRowPawn, int initRow) {
+        this.yDirection = yDirection;
         this.initRowPawn = initRowPawn;
         this.initRow = initRow;
     }
