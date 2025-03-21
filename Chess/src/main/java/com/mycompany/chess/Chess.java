@@ -365,6 +365,7 @@ public class Chess {
      */
     public boolean crownPawn(Piece piece, String newType) {
         if (!(piece instanceof Pawn)) return false;
+        if (piece.getPos().y() != piece.getColor().crowningRow()) return false;
         this.pieces.remove(piece);
         switch (newType.toLowerCase()) {
             case "knight" -> {
