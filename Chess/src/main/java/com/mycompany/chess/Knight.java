@@ -8,11 +8,6 @@ public class Knight extends Piece {
     }
     
     @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return this.checkLegalMovement(finPos, true);
-    }
-    
-    @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
         Position initPos = this.getPos();
@@ -26,6 +21,11 @@ public class Knight extends Piece {
             && absXmovement >= 1
             && absXmovement <= 2
         );
+    }
+    
+    @Override
+    public boolean checkLegalMovement(Position finPos) {
+        return this.checkLegalMovement(finPos, true);
     }
 
     @Override
