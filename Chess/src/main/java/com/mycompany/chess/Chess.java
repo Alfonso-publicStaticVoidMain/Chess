@@ -18,8 +18,24 @@ public class Chess {
     
     /**
      * <p>
-     * Adds the standard Chess pieces to {@code this}.
+     * Sets the game of each piece in {@code this} game's piece list
+     * to {@code this}.
      * </p>
+     */
+    public void linkPieces() {
+        this.pieces.stream()
+            .forEach(piece -> piece.setGame(this));
+    }
+    
+    /**
+     * <p>
+     * Adds the standard Chess pieces to {@code this} game's pieces list.
+     * </p>
+     * @see 
+     *      {@link Position#of(int, int)}
+     *      {@link Color#initRow}
+     *      {@link Color#initRowPawn}
+     *      {@link Chess#linkPieces}
      */
     public void addStandardPieces() {
         for (Color color : Color.values()) {
@@ -56,7 +72,7 @@ public class Chess {
         long numberOfPiecesInPosition = this.pieces.stream()
             .filter(piece -> piece.getPos().equals(pos))
             .count();
-        if (numberOfPiecesInPosition != 0 && numberOfPiecesInPosition != 1) {
+        if (numberOfPiecesInPosition > 1) {
             System.out.println("Illegal number of pieces found in position " + pos);
             return false;
         }
@@ -93,6 +109,9 @@ public class Chess {
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is the same as {@code piece}. False if there's
      * no piece or if there's a piece of a different color.
+     * @see
+     *      {@link Chess#checkPiece}
+     *      {@link Chess#findPiece}
      */
     public boolean checkPieceSameColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -109,6 +128,9 @@ public class Chess {
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is different than {@code piece}'s.
      * False if there's no piece or if there's a piece of the same color.
+     * @see
+     *      {@link Chess#checkPiece}
+     *      {@link Chess#findPiece}
      */    
     public boolean checkPieceDiffColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -153,6 +175,87 @@ public class Chess {
         }  
     }
     
+    /**
+     * <p>
+     * Returns a copy of {@code this} Chess game.
+     * </p>
+     * @return Returns a copy of {@code this} Chess game.
+     */
+    public Chess copyGame() {
+        Chess result = new Chess();
+        this.pieces.stream()
+            .forEach(piece -> result.pieces.add(piece.copy()));
+        result.linkPieces();
+        return result;
+    }
+    
+    /**
+     * <p>
+     * Checks if a movement of a certain Piece to a certain Position causes
+     * the King of that color to be in check.
+     * </p>
+     * @param piece Piece we're attempting to move.
+     * @param finPos Position we're attempting to move the Piece to.
+     * @return Returns true if the movement causes the King of the same color
+     * as the {@code piece} to be in check after moving it to {@code finPos}.
+     * To achieve this, it copies the game into an auxiliary game, performs the
+     * movement there, and then checks if the auxiliary King is in check.
+     * @see
+     *      {@link Chess#findPiece}
+     *      {@link Chess#findKing}
+     *      {@link Piece#move(Position, boolean)}
+     *      {@link King#checkCheck()}
+     */
+    public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
+        Chess auxGame = this.copyGame();
+        Piece copyOfPiece = auxGame.findPiece(piece.getPos());
+        copyOfPiece.move(finPos, false);
+        return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
+    }
+    
+    /**
+     * <p>
+     * Checks if the King of the given Color is in checkmate.
+     * </p>
+     * @param color Color we want to check checkmate for.
+     * @param checkCheck State parameter to track whether or not we want to
+     * take into account if the King is currently in check. Setting it to false
+     * will mean that this method will return true if the King is not in check
+     * but every possible movement for its color would put it in check.
+     * @return If checkCheck is set to true, the method will return true if
+     * the King is currently in check and no possible movement of its color
+     * would solve that.
+     * 
+     * If checkCheck is set to false, the method will return true if every
+     * possible movement of the King's color would put it in check, regardless
+     * of if it's currently in check or not.
+     */
+    public boolean checkMate(Color color, boolean checkCheck) {
+        King king = this.findKing(color);
+        if (checkCheck && !king.checkCheck()) return false;
+        for (Piece p : this.pieces.stream()
+            .filter(piece -> piece.getColor() == color)
+            .toList()) {
+            for (int x = 1; x <= 8; x++) {
+                for (int y = 1; y <= 8; y++) {
+                    Position finPos = Position.of(x, y);
+                    if (p.checkLegalMovement(finPos)) {
+                        Chess auxGame = this.copyGame();
+                        King auxKing = auxGame.findKing(color);
+                        Piece auxPiece = auxGame.findPiece(p.getPos());
+                        auxPiece.move(finPos);
+                        if (!auxKing.checkCheck()) return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean checkMate(Color color) {
+        return this.checkMate(color, true);
+    }
+    
     public static int convertLetterToNumber(char letter) {
         return switch (Character.toLowerCase(letter)) {
             case 'a' -> 1;
@@ -179,81 +282,6 @@ public class Chess {
             case 8 -> 'H';
             default -> ' ';
         };
-    }
-    
-    /**
-     * <p>
-     * Sets the game of each piece in {@code this}'s piece attribute
-     * to {@code this}.
-     * </p>
-     */
-    public void linkPieces() {
-        this.pieces.stream()
-            .forEach(piece -> piece.setGame(this));
-    }
-    
-    /**
-     * <p>
-     * Returns a copy of {@code this} Chess game.
-     * </p>
-     * @return Returns a copy of {@code this} Chess game.
-     */
-    public Chess copyGame() {
-        Chess result = new Chess();
-        this.pieces.stream()
-            .forEach(piece -> result.pieces.add(piece.copy()));
-        result.linkPieces();
-        return result;
-    }
-    
-    /**
-     * <p>
-     * Checks if a movement of a certain Piece to a certain Position causes
-     * the King of that color to be in check.
-     * </p>
-     * @param piece Piece we're attempting to move.
-     * @param finPos Position we're attempting to move the Piece to.
-     * @return Returns true if the movement causes the King of the same color
-     * as the {@code piece} to be in check after moving it to {@code finPos}.
-     * To achieve this, it copies the game into an auxiliary game, performs the
-     * movement there, and then checks if the King is in check.
-     * @see
-     *      {@link Chess#findPiece(Position)}
-     *      {@link Chess#findKing(Color)}
-     *      {@link Piece#move(Position, boolean)}
-     *      {@link King#checkCheck()}
-     */
-    public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
-        Chess auxGame = this.copyGame();
-        Piece copyOfPiece = auxGame.findPiece(piece.getPos());
-        copyOfPiece.move(finPos, false);
-        return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
-    }
-    
-    public boolean checkMate(Color color, boolean checkCheck) {
-        King king = this.findKing(color);
-        if (checkCheck && !king.checkCheck()) return false;
-        for (Piece p : this.pieces.stream()
-            .filter(piece -> piece.getColor() == color)
-            .toList()) {
-            for (int x = 1; x <= 8; x++) {
-                for (int y = 1; y <= 8; y++) {
-                    Position finPos = Position.of(x, y);
-                    if (p.checkLegalMovement(finPos)) {
-                        Chess auxGame = this.copyGame();
-                        King auxKing = auxGame.findKing(color);
-                        Piece auxPiece = auxGame.findPiece(p.getPos());
-                        auxPiece.move(finPos);
-                        if (!auxKing.checkCheck()) return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-    
-    public boolean checkMate(Color color) {
-        return this.checkMate(color, true);
     }
     
     public static void main(String[] args) {
