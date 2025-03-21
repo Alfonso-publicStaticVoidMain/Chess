@@ -310,7 +310,6 @@ public class Chess {
      * If there's any Piece between the King and right Rook, returns false.
      */
     public boolean checkRightCastling(Color color) {
-        // TO DO
         Position kingInitPos = Position.of(5, color.initRow());
         Position leftRookInitPos = Position.of(8, color.initRow());
         if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
@@ -318,6 +317,82 @@ public class Chess {
         ) return false;
         return IntStream.rangeClosed(6, 7)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
+    }
+    
+    /**
+     * <p>
+     * If left castling is legal, reassigns the positions of the appropiate
+     * King and Rook to do that castling.
+     * </p>
+     * @param color Color of the player doing the castling.
+     * @return Returns true if the castling was done succesfully, false if it
+     * wasn't a legal play.
+     */
+    public boolean doLeftCastling(Color color) {
+        if (!this.checkLeftCastling(color)) return false;
+        Piece king = this.findPiece(Position.of(5, color.initRow()));
+        Piece leftRook = this.findPiece(Position.of(1, color.initRow()));
+        king.setPos(Position.of(3, color.initRow()));
+        leftRook.setPos(Position.of(4, color.initRow()));
+        return true;
+    }
+    
+    /**
+     * <p>
+     * If right castling is legal, reassigns the positions of the appropiate
+     * King and Rook to do that castling.
+     * </p>
+     * @param color Color of the player doing the castling.
+     * @return Returns true if the castling was done succesfully, false if it
+     * wasn't a legal play.
+     */
+    public boolean doRightCastling(Color color) {
+        if (!this.checkRightCastling(color)) return false;
+        Piece king = this.findPiece(Position.of(5, color.initRow()));
+        Piece rightRook = this.findPiece(Position.of(8, color.initRow()));
+        king.setPos(Position.of(7, color.initRow()));
+        rightRook.setPos(Position.of(6, color.initRow()));
+        return true;
+    }
+    
+    /**
+     * <p>
+     * Crowns a Pawn and transforms it to a new type of Piece.
+     * </p>
+     * @param piece Piece to crown. Must be a Pawn.
+     * @param newType New type to convert the Pawn to. Not case sensitive.
+     * @return Returns true if the crowning was succesful, false otherwise.
+     */
+    public boolean crownPawn(Piece piece, String newType) {
+        if (!(piece instanceof Pawn)) return false;
+        this.pieces.remove(piece);
+        switch (newType.toLowerCase()) {
+            case "knight" -> {
+                Piece newKnight = new Knight(piece.getPos(), piece.getColor());
+                newKnight.setGame(this);
+                this.pieces.add(newKnight);
+                return true;
+            }
+            case "bishop" -> {
+                Piece newBishop = new Bishop(piece.getPos(), piece.getColor());
+                newBishop.setGame(this);
+                this.pieces.add(newBishop);
+                return true;
+            }
+            case "rook" -> {
+                Piece newRook = new Rook(piece.getPos(), piece.getColor());
+                newRook.setGame(this);
+                this.pieces.add(newRook);
+                return true;
+            }
+            case "queen" -> {
+                Piece newQueen = new Queen(piece.getPos(), piece.getColor());
+                newQueen.setGame(this);
+                this.pieces.add(newQueen);
+                return true;
+            }
+        }
+        return false;
     }
     
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
@@ -349,9 +424,7 @@ public class Chess {
     }
     
     public static void main(String[] args) {
-        Rook torre = new Rook(Position.of(1, 1), Color.BLACK);
-        Chess chessGame = new Chess();
-        chessGame.pieces.add(torre);
-        chessGame.printBoard();
+        
+        
     }
 }
