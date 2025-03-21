@@ -180,6 +180,8 @@ public class Chess {
      * Returns a copy of {@code this} Chess game.
      * </p>
      * @return Returns a copy of {@code this} Chess game.
+     * @see
+     *      {@link Chess#linkPieces}
      */
     public Chess copyGame() {
         Chess result = new Chess();
