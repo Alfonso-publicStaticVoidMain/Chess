@@ -272,7 +272,7 @@ public class Chess {
             .anyMatch(play -> play.getInitPos().equals(pos));
     }
     
-    public static int convertLetterToNumber(char letter) {
+    public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
         return switch (Character.toLowerCase(letter)) {
             case 'a' -> 1;
             case 'b' -> 2;
@@ -282,11 +282,11 @@ public class Chess {
             case 'f' -> 6;
             case 'g' -> 7;
             case 'h' -> 8;
-            default -> -1;
+            default -> throw new IllegalArgumentException("Invalid letter to convert to number.");
         };
     }
     
-    public static char convertNumberToLetter(int num) {
+    public static char convertNumberToLetter(int num) throws IllegalArgumentException {
         return switch (num) {
             case 1 -> 'A';
             case 2 -> 'B';
@@ -296,7 +296,7 @@ public class Chess {
             case 6 -> 'F';
             case 7 -> 'G';
             case 8 -> 'H';
-            default -> ' ';
+            default -> throw new IllegalArgumentException("Invalid number to convert to letter.");
         };
     }
     
