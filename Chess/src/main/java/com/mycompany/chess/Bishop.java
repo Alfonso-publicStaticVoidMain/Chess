@@ -8,11 +8,6 @@ public class Bishop extends Piece {
     }
     
     @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return this.checkLegalMovement(finPos, true);
-    }
-    
-    @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
         Position initPos = this.getPos();
@@ -36,6 +31,11 @@ public class Bishop extends Piece {
             return true;
         }        
         return false;
+    }
+    
+    @Override
+    public boolean checkLegalMovement(Position finPos) {
+        return this.checkLegalMovement(finPos, true);
     }
 
     @Override
