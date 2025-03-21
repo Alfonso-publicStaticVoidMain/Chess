@@ -258,6 +258,20 @@ public class Chess {
         return this.checkMate(color, true);
     }
     
+    /**
+     * <p>
+     * Checks whether there's a recorded Play whose initial position is the
+     * specified Position.
+     * </p>
+     * @param pos
+     * @return Returns true if in the {@code playRecord} list of {@link Play}s
+     * there's one that has initial position {@code pos}.
+     */
+    public boolean checkHistoryOfMovementsFromPosition(Position pos) {
+        return this.playRecord.stream()
+            .anyMatch(play -> play.getInitPos().equals(pos));
+    }
+    
     public static int convertLetterToNumber(char letter) {
         return switch (Character.toLowerCase(letter)) {
             case 'a' -> 1;
