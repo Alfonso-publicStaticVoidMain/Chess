@@ -422,9 +422,4 @@ public class Chess {
             default -> throw new IllegalArgumentException("Invalid number to convert to letter.");
         };
     }
-    
-    public static void main(String[] args) {
-        
-        
-    }
 }
