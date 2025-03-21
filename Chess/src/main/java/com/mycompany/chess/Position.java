@@ -51,7 +51,7 @@ public class Position {
     /**
      * <p>
      * Static factory method to create new Positions. In this case, from a
-     * pair of integers representing the coordinates of the Position.
+     * pair of integers representing the X and Y coordinates of the Position.
      * </p>
      * @param x X coordinate of the new Position.
      * @param y Y coordinate of the new Position.
