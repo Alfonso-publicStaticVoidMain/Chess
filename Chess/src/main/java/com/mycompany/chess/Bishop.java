@@ -9,7 +9,7 @@ public class Bishop extends Piece {
     
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
-        if (!Piece.basicLegalityChecks(this, finPos, checkCheck)) return false;
+        if (!this.basicLegalityChecks(finPos, checkCheck)) return false;
         Position initPos = this.getPos();
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
