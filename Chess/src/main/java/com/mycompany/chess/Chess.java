@@ -7,13 +7,30 @@ public class Chess {
     
     private List<Piece> pieces = new ArrayList<>();
     private List<Play> playRecord = new LinkedList<>();
+    private Map<Color, Boolean> leftCastlingAvaliability = new HashMap<>();
+    private Map<Color, Boolean> rightCastlingAvaliability = new HashMap<>();
+
+    public Map<Color, Boolean> getLeftCastlingAvaliability() {
+        return this.leftCastlingAvaliability;
+    }
+
+    public Map<Color, Boolean> getRightCastlingAvaliability() {
+        return rightCastlingAvaliability;
+    }
 
     public List<Piece> getPieces() {
-        return pieces;
+        return this.pieces;
     }
 
     public List<Play> getPlayRecord() {
-        return playRecord;
+        return this.playRecord;
+    }
+
+    public Chess() {
+        this.leftCastlingAvaliability.put(Color.WHITE, true);
+        this.leftCastlingAvaliability.put(Color.BLACK, true);
+        this.rightCastlingAvaliability.put(Color.WHITE, true);
+        this.rightCastlingAvaliability.put(Color.BLACK, true);
     }
     
     /**
@@ -266,7 +283,12 @@ public class Chess {
      * @param pos
      * @return Returns true if in the {@code playRecord} list of {@link Play}s
      * there's one that has initial position {@code pos}.
+     * @deprecated Now that the castling avaliability is tracked within the
+     * {@code Chess} class itself and updated on each movement in the
+     * {@link Piece#move(Position, boolean)} method, it shouldn't be necessary
+     * to track whether there's a play recorded from a certain Position.
      */
+    @Deprecated
     public boolean checkHistoryOfMovementsFromPosition(Position pos) {
         return this.playRecord.stream()
             .anyMatch(play -> play.getInitPos().equals(pos));
@@ -286,12 +308,12 @@ public class Chess {
      * If there's any Piece between the King and left Rook, returns false.
      */
     public boolean checkLeftCastling(Color color) {
-        // TO DO
         Position kingInitPos = Position.of(5, color.initRow());
         Position leftRookInitPos = Position.of(1, color.initRow());
-        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
-            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
-        ) return false;
+        if (!this.getLeftCastlingAvaliability().get(color)) return false;
+//        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
+//            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
+//        ) return false;
         return IntStream.rangeClosed(2, 4)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
@@ -311,10 +333,11 @@ public class Chess {
      */
     public boolean checkRightCastling(Color color) {
         Position kingInitPos = Position.of(5, color.initRow());
-        Position leftRookInitPos = Position.of(8, color.initRow());
-        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
-            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
-        ) return false;
+        Position rightRookInitPos = Position.of(8, color.initRow());
+        if (!this.getRightCastlingAvaliability().get(color)) return false;
+//        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
+//            || this.checkHistoryOfMovementsFromPosition(rightRookInitPos)
+//        ) return false;
         return IntStream.rangeClosed(6, 7)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
@@ -334,6 +357,8 @@ public class Chess {
         Piece leftRook = this.findPiece(Position.of(1, color.initRow()));
         king.setPos(Position.of(3, color.initRow()));
         leftRook.setPos(Position.of(4, color.initRow()));
+        this.getLeftCastlingAvaliability().put(color, false);
+        this.getRightCastlingAvaliability().put(color, false);
         return true;
     }
     
@@ -352,6 +377,8 @@ public class Chess {
         Piece rightRook = this.findPiece(Position.of(8, color.initRow()));
         king.setPos(Position.of(7, color.initRow()));
         rightRook.setPos(Position.of(6, color.initRow()));
+        this.getLeftCastlingAvaliability().put(color, false);
+        this.getRightCastlingAvaliability().put(color, false);
         return true;
     }
     
@@ -393,6 +420,7 @@ public class Chess {
                 return true;
             }
         }
+        System.out.println(newType + " wasn't a valid type to crown a Pawn");
         return false;
     }
     
