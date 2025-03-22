@@ -52,14 +52,24 @@ public class ChessMainClass {
             }
             
             if (!fin) {
+                // TO DO: Castling menu
                 
-                
-                
-                
-                
-                
+                Position[] positions = printMoveMenu(activePlayer, game);
+                Position initPos = positions[0];
+                Position finPos = positions[1];
+                Piece pieceToMove = game.findPiece(initPos);
+                pieceToMove.move(finPos);
+                if (pieceToMove instanceof Pawn && finPos.y() == activePlayer.crowningRow()) {
+                    game.crownPawn(pieceToMove, "queen");
+                }
             }
+            game.printBoard();
+            System.out.printf("----------------------------------%n");
             turnCounter++;
+            if (turnCounter > maxTurns) {
+                System.out.println("Turn limit of " + maxTurns + " reached.");
+                fin = true;
+            }
         }
     }
     
