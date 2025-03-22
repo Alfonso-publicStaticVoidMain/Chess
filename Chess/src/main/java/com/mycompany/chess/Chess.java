@@ -308,12 +308,12 @@ public class Chess {
      * If there's any Piece between the King and left Rook, returns false.
      */
     public boolean checkLeftCastling(Color color) {
-        Position kingInitPos = Position.of(5, color.initRow());
-        Position leftRookInitPos = Position.of(1, color.initRow());
-        if (!this.getLeftCastlingAvaliability().get(color)) return false;
+//        Position kingInitPos = Position.of(5, color.initRow());
+//        Position leftRookInitPos = Position.of(1, color.initRow());
 //        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
 //            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
 //        ) return false;
+        if (!this.getLeftCastlingAvaliability().get(color)) return false;
         return IntStream.rangeClosed(2, 4)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
@@ -332,12 +332,12 @@ public class Chess {
      * If there's any Piece between the King and right Rook, returns false.
      */
     public boolean checkRightCastling(Color color) {
-        Position kingInitPos = Position.of(5, color.initRow());
-        Position rightRookInitPos = Position.of(8, color.initRow());
-        if (!this.getRightCastlingAvaliability().get(color)) return false;
+//        Position kingInitPos = Position.of(5, color.initRow());
+//        Position rightRookInitPos = Position.of(8, color.initRow());
 //        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
 //            || this.checkHistoryOfMovementsFromPosition(rightRookInitPos)
 //        ) return false;
+        if (!this.getRightCastlingAvaliability().get(color)) return false;
         return IntStream.rangeClosed(6, 7)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
