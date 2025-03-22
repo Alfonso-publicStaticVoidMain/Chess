@@ -228,7 +228,7 @@ public class Chess {
     public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
         Chess auxGame = this.copyGame();
         Piece copyOfPiece = auxGame.findPiece(piece.getPos());
-        copyOfPiece.move(finPos, false);
+        copyOfPiece.move(finPos, false, false);
         return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
@@ -262,7 +262,7 @@ public class Chess {
                         Chess auxGame = this.copyGame();
                         King auxKing = auxGame.findKing(color);
                         Piece auxPiece = auxGame.findPiece(p.getPos());
-                        auxPiece.move(finPos);
+                        auxPiece.move(finPos, false, false);
                         if (!auxKing.checkCheck()) return false;
                     }
                 }
