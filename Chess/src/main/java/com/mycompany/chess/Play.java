@@ -6,7 +6,7 @@ public class Play {
     private Piece piece;
     private Position initPos;
     private Position finPos;
-    private Optional<Piece> pieceEaten;
+    private Optional<Piece> pieceEaten = null;
 
     public Play(Piece piece, Position initPos, Position finPos, Optional<Piece> pieceEaten) {
         this.piece = piece;
