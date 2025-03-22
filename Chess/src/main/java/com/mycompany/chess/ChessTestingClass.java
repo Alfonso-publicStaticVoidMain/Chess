@@ -14,23 +14,28 @@ public class ChessTestingClass {
         game.findPiece(Position.of("G2")).setPos(Position.of("G4"));
         game.findPiece(Position.of("E7")).setPos(Position.of("E5"));
         game.printBoard();
-        System.out.printf("----------------------------------%n");
+        
         King whiteKing = game.findKing(Color.WHITE);
-        System.out.println(whiteKing.checkCheck());
-        System.out.println(game.checkMate(Color.WHITE, false));
-        System.out.println(game.checkMate(Color.WHITE));
-        System.out.println(game.findPiece(Position.of("H4")).checkLegalMovement(Position.of("E1")));
-        System.out.println(whiteKing.checkLegalMovement(Position.of("F2")));
+        Piece blackQueen = game.findPiece(Position.of("H4"));
+        System.out.println("The King is in check: "+whiteKing.checkCheck());
+        System.out.println("WHITE is in soft checkmate: "+game.checkMate(Color.WHITE, false));
+        System.out.println("WHITE is in checkmate: "+game.checkMate(Color.WHITE));
+        System.out.println("Queen can move to E1: "+blackQueen.checkLegalMovement(Position.of("E1")));
+        System.out.println("King can move to F2: "+whiteKing.checkLegalMovement(Position.of("F2")));
+
         
         
+        System.out.printf("----------------------------------%n");
         whiteKing.setPos(Position.of("F2"));
         game.printBoard();
+        System.out.println("The King is in check: "+whiteKing.checkCheck());
+        System.out.println("WHITE is in soft checkmate: "+game.checkMate(Color.WHITE, false));
+        System.out.println("WHITE is in checkmate: "+game.checkMate(Color.WHITE));
+        System.out.println("Queen can move to F2: "+game.findPiece(Position.of("H4")).checkLegalMovement(Position.of("F2")));
+        System.out.println("King can move to E1: "+whiteKing.checkLegalMovement(Position.of("E1")));
         System.out.printf("----------------------------------%n");
-        System.out.println(whiteKing.checkCheck());
-        System.out.println(game.checkMate(Color.WHITE, false));
-        System.out.println(game.checkMate(Color.WHITE));
-        System.out.println(game.findPiece(Position.of("H4")).checkLegalMovement(Position.of("F2")));
-        System.out.println(whiteKing.checkLegalMovement(Position.of("E1")));
+        game.findPiece(Position.of("H1")).checkLegalMovement(Position.of("H4"));
+        game.printBoard();
     }
     
 }
