@@ -63,7 +63,17 @@ public abstract class Piece {
                     chessGame.getPieces().remove(eatenPiece);
                 }
             }
-            this.getGame().getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+            chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+            
+            if (chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
+                initPos.equals(Position.of(1, this.getColor().initRow()))
+                || initPos.equals(Position.of(5, this.getColor().initRow())))
+                ) chessGame.getLeftCastlingAvaliability().put(this.getColor(), false);
+            
+            if (chessGame.getRightCastlingAvaliability().get(this.getColor()) && (
+                initPos.equals(Position.of(8, this.getColor().initRow()))
+                || initPos.equals(Position.of(5, this.getColor().initRow())))
+                ) chessGame.getRightCastlingAvaliability().put(this.getColor(), false);
         }
         return false;
     }
@@ -79,9 +89,8 @@ public abstract class Piece {
      * {@link Piece#checkLegalMovement(Position, boolean)} method
      * on each of the child classes of Piece.
      * </p>
-     * @param piece The piece that we want to move.
-     * @param finPos The position we want to move the piece to.
-     * @param checkCheck state parameter to track if we need to declare the 
+     * @param finPos Position we want to move the piece to.
+     * @param checkCheck State parameter to track if we need to declare the 
      * movement illegal if it causes a check.
      * @return Returns false if either of the following happens:
      *      There's a piece of the same color in the final position.
@@ -91,10 +100,10 @@ public abstract class Piece {
      *      {@link Chess#checkPieceSameColorAs(Piece, Position)}
      *      {@link Chess#checkIfMovementCausesCheck(Piece, Position)}
      */
-    public static boolean basicLegalityChecks(Piece piece, Position finPos, boolean checkCheck) {
-        if (piece.getGame().checkPieceSameColorAs(piece, finPos)) return false;
-        if (checkCheck && piece.getGame().checkIfMovementCausesCheck(piece, finPos)) return false;
-        return !piece.getPos().equals(finPos);
+    public boolean basicLegalityChecks(Position finPos, boolean checkCheck) {
+        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
+        if (checkCheck && this.getGame().checkIfMovementCausesCheck(this, finPos)) return false;
+        return !this.getPos().equals(finPos);
     }
     
     @Override
