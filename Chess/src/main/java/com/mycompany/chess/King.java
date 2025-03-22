@@ -36,7 +36,7 @@ public class King extends Piece {
      */
     public boolean checkCheck(Position finPos) {    
         return this.getGame().getPieces().stream()
-            .filter(piece -> piece.getColor() == this.getColor())
+            .filter(piece -> piece.getColor() != this.getColor())
             .filter(piece -> 
                 (piece instanceof Pawn) ?
                     Position.yDist(piece.getPos(), finPos) == piece.getColor().yDirection()
