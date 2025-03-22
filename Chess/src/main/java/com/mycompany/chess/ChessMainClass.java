@@ -45,14 +45,14 @@ public class ChessMainClass {
             activePlayer = turnCounter%2==0 ? Color.WHITE : Color.BLACK;
             System.out.println("It's the turn of the " + activePlayer + " player");
             
-//            if (game.checkMate(activePlayer)) {
-//                System.out.println(activePlayer + " is in checkmate.");
-//                fin = true;
-//            } else if (game.findKing(activePlayer).checkCheck()) System.out.println(activePlayer + " is in check.");
-//            else if (game.checkMate(activePlayer, false)) {
-//                System.out.println(activePlayer + " isn't in check, but all possible plays would cause a check.");
-//                fin = true;
-//            }
+            if (game.checkMate(activePlayer)) {
+                System.out.println(activePlayer + " is in checkmate.");
+                fin = true;
+            } else if (game.findKing(activePlayer).checkCheck()) System.out.println(activePlayer + " is in check.");
+            else if (game.checkMate(activePlayer, false)) {
+                System.out.println(activePlayer + " isn't in check, but all possible plays would cause a check.");
+                fin = true;
+            }
             
             if (!fin) {
                 // TO DO: Castling menu
