@@ -207,31 +207,7 @@ public class Chess {
         result.linkPieces();
         return result;
     }
-    
-    /**
-     * <p>
-     * Checks if a movement of a certain Piece to a certain Position causes
-     * the King of that color to be in check.
-     * </p>
-     * @param piece Piece we're attempting to move.
-     * @param finPos Position we're attempting to move the Piece to.
-     * @return Returns true if the movement causes the King of the same color
-     * as the {@code piece} to be in check after moving it to {@code finPos}.
-     * To achieve this, it copies the game into an auxiliary game, performs the
-     * movement there, and then checks if the auxiliary King is in check.
-     * @see
-     *      {@link Chess#findPiece}
-     *      {@link Chess#findKing}
-     *      {@link Piece#move(Position, boolean)}
-     *      {@link King#checkCheck()}
-     */
-    public boolean checkIfMovementCausesCheck(Piece piece, Position finPos) {
-        Chess auxGame = this.copyGame();
-        Piece copyOfPiece = auxGame.findPiece(piece.getPos());
-        copyOfPiece.move(finPos, false, false);
-        return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
-    }
-    
+
     /**
      * <p>
      * Checks if the King of the given Color is in checkmate.
@@ -263,7 +239,10 @@ public class Chess {
                         King auxKing = auxGame.findKing(color);
                         Piece auxPiece = auxGame.findPiece(p.getPos());
                         auxPiece.move(finPos, false, false);
-                        if (!auxKing.checkCheck()) return false;
+                        if (!auxKing.checkCheck()) {
+                            System.out.println("Piece " + auxPiece + " moving to " + finPos + " doesn't cause a check!");
+                            return false;
+                        }
                     }
                 }
             }
