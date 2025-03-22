@@ -36,6 +36,8 @@ public abstract class Piece {
      * @param finPos Position we're trying to move the Piece to.
      * @param checkCheck State parameter to check if the movement should be
      * declared illegal if it'd cause a check.
+     * @param recordMovement State parameter to track if the movement should
+     * be added to the playRecord attribute of the Chess game of {@code this}.
      * @return Returns true if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's playRecord.
@@ -46,7 +48,7 @@ public abstract class Piece {
      *      {@link Pawn#xDirEnPassant}
      *      {@link Chess#findPiece}
      */
-    public boolean move(Position finPos, boolean checkCheck) {
+    public boolean move(Position finPos, boolean checkCheck, boolean recordMovement) {
         Chess chessGame = this.getGame();
         Position initPos = this.getPos();
         Piece eatenPiece = null;
@@ -63,7 +65,7 @@ public abstract class Piece {
                     chessGame.getPieces().remove(eatenPiece);
                 }
             }
-            chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+            if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
             
             if (chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
                 initPos.equals(Position.of(1, this.getColor().initRow()))
@@ -78,8 +80,12 @@ public abstract class Piece {
         return false;
     }
     
+    public boolean move(Position finPos, boolean checkCheck) {
+        return this.move(finPos, checkCheck, true);
+    }
+    
     public boolean move(Position finPos) {
-        return move(finPos, true);
+        return this.move(finPos, true, true);
     }
     
     /**
