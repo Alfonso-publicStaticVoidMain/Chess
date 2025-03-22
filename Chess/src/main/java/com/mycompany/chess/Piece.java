@@ -51,21 +51,24 @@ public abstract class Piece {
     public boolean move(Position finPos, boolean checkCheck, boolean recordMovement) {
         Chess chessGame = this.getGame();
         Position initPos = this.getPos();
-        Piece eatenPiece = null;
+        Piece eatenPiece;
         if (this.checkLegalMovement(finPos, checkCheck)) {
             if (chessGame.checkPiece(finPos)) {
                 eatenPiece = chessGame.findPiece(finPos);
                 chessGame.getPieces().remove(eatenPiece);
+                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
             }
             this.setPos(finPos);
             if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
-                if (Xmovement == pawn.xDirEnPassant()) {
+                if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
                     eatenPiece = chessGame.findPiece(Position.of(finPos.x(), finPos.y() - this.getColor().yDirection()));
                     chessGame.getPieces().remove(eatenPiece);
+                    if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
                 }
             }
-            if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+            
+            if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
             
             if (chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
                 initPos.equals(Position.of(1, this.getColor().initRow()))
