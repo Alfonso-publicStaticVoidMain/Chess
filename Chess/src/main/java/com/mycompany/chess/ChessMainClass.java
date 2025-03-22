@@ -56,14 +56,16 @@ public class ChessMainClass {
             
             if (!fin) {
                 // TO DO: Castling menu
-                
-                Position[] positions = printMoveMenu(activePlayer, game);
-                Position initPos = positions[0];
-                Position finPos = positions[1];
-                Piece pieceToMove = game.findPiece(initPos);
-                pieceToMove.move(finPos);
-                if (pieceToMove instanceof Pawn && finPos.y() == activePlayer.crowningRow()) {
-                    game.crownPawn(pieceToMove, "queen");
+                if (!playDone) {
+                    Position[] positions = printMoveMenu(activePlayer, game);
+                    Position initPos = positions[0];
+                    Position finPos = positions[1];
+                    Piece pieceToMove = game.findPiece(initPos);
+                    pieceToMove.move(finPos);
+                    if (pieceToMove instanceof Pawn && finPos.y() == activePlayer.crowningRow()) {
+                        // TO DO: proper crowning menu
+                        game.crownPawn(pieceToMove, "queen");
+                    }
                 }
             }
             game.printBoard();
