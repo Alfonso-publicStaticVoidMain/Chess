@@ -93,6 +93,29 @@ public abstract class Piece {
     
     /**
      * <p>
+     * Checks if a movement of a certain Piece to a certain Position causes
+     * the King of that color to be in check.
+     * </p>
+     * @param finPos Position we're attempting to move the Piece to.
+     * @return Returns true if the movement causes the King of the same color
+     * as the {@code piece} to be in check after moving it to {@code finPos}.
+     * To achieve this, it copies the game into an auxiliary game, performs the
+     * movement there, and then checks if the auxiliary King is in check.
+     * @see
+     *      {@link Chess#findPiece}
+     *      {@link Chess#findKing}
+     *      {@link Piece#move(Position, boolean)}
+     *      {@link King#checkCheck()}
+     */
+    public boolean checkIfMovementCausesCheck(Position finPos) {
+        Chess auxGame = this.getGame().copyGame();
+        Piece copyOfPiece = auxGame.findPiece(this.getPos());
+        copyOfPiece.move(finPos, false, false);
+        return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
+    }
+    
+    /**
+     * <p>
      * Method that performs basic legality checks on a piece movement.
      * It is intended to be referenced by the implementations of the
      * {@link Piece#checkLegalMovement(Position, boolean)} method
@@ -111,7 +134,7 @@ public abstract class Piece {
      */
     public boolean basicLegalityChecks(Position finPos, boolean checkCheck) {
         if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
-        if (checkCheck && this.getGame().checkIfMovementCausesCheck(this, finPos)) return false;
+        if (checkCheck && this.checkIfMovementCausesCheck(finPos)) return false;
         return !this.getPos().equals(finPos);
     }
     
