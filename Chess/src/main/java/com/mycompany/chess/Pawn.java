@@ -53,7 +53,7 @@ public class Pawn extends Piece {
      * 
      * If there's a Piece in the final Position (which must be of a different
      * color because of the previous legality checks), we check if the
-     * movement in the X axis in absolute value is 1 and the movement in the
+     * absolute value of the movement in the X axis is 1 and the movement in the
      * Y axis is the same as the Pawn's direction. If this isn't the case, false
      * is returned.
      */
