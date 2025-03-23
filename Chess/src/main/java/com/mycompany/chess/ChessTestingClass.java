@@ -11,22 +11,36 @@ public class ChessTestingClass {
 //            .forEach(p -> System.out.printf("Type: "+p.getColor()+" "+p.getClass().getSimpleName() + " | Position: "+p.getPos()+"\n"));
         game.printBoard();
         System.out.printf("----------------------------------%n");
-        King whiteKing = game.findKing(Color.WHITE);
-        King blackKing = game.findKing(Color.BLACK);
-        Piece blackQueen = game.findPiece(Position.of("D8"));
-        System.out.println("The white King is in check: "+whiteKing.checkCheck());
-        System.out.println("WHITE is in checkmate: "+game.checkMate(Color.WHITE));
-        System.out.println("Pieces that can move to white King's position:");
-        game.getPieces().stream()
-            .filter(piece -> piece.checkLegalMovement(whiteKing.getPos()))
-            .forEach(piece -> System.out.println(piece));
+        Piece whitePawn = game.findPiece(Position.of("D2"));
+        Piece blackPawn = game.findPiece(Position.of("E7"));
+        whitePawn.setPos(Position.of("D5"));
+        game.printBoard();
+        System.out.printf("----------------------------------%n");
+        blackPawn.move(Position.of("E5"));
+        game.printBoard();
+        System.out.printf("----------------------------------%n");
+        whitePawn.move(Position.of("E6"));
+        game.printBoard();
+        System.out.printf("----------------------------------%n");
         
-        System.out.println("The black King is in check: "+blackKing.checkCheck());
-        System.out.println("BLACK is in checkmate: "+game.checkMate(Color.BLACK));
-        System.out.println("Pieces that can move to black King's position:");
-        game.getPieces().stream()
-            .filter(piece -> piece.checkLegalMovement(blackKing.getPos()))
-            .forEach(piece -> System.out.println(piece));
+        
+        
+//        King whiteKing = game.findKing(Color.WHITE);
+//        King blackKing = game.findKing(Color.BLACK);
+//        Piece blackQueen = game.findPiece(Position.of("D8"));
+//        System.out.println("The white King is in check: "+whiteKing.checkCheck());
+//        System.out.println("WHITE is in checkmate: "+game.checkMate(Color.WHITE));
+//        System.out.println("Pieces that can move to white King's position:");
+//        game.getPieces().stream()
+//            .filter(piece -> piece.checkLegalMovement(whiteKing.getPos()))
+//            .forEach(piece -> System.out.println(piece));
+//        
+//        System.out.println("The black King is in check: "+blackKing.checkCheck());
+//        System.out.println("BLACK is in checkmate: "+game.checkMate(Color.BLACK));
+//        System.out.println("Pieces that can move to black King's position:");
+//        game.getPieces().stream()
+//            .filter(piece -> piece.checkLegalMovement(blackKing.getPos()))
+//            .forEach(piece -> System.out.println(piece));
         
         
 //        game.findPiece(Position.of("D8")).setPos(Position.of("H4"));
