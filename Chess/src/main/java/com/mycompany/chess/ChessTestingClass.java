@@ -1,5 +1,7 @@
 package com.mycompany.chess;
 
+import java.util.stream.IntStream;
+
 public class ChessTestingClass {
 
     public static void main(String[] args) {
@@ -32,10 +34,14 @@ public class ChessTestingClass {
         System.out.println("WHITE is in soft checkmate: "+game.checkMate(Color.WHITE, false));
         System.out.println("WHITE is in checkmate: "+game.checkMate(Color.WHITE));
         System.out.println("Queen can move to F2: "+game.findPiece(Position.of("H4")).checkLegalMovement(Position.of("F2")));
-        System.out.println("King can move to E1: "+whiteKing.checkLegalMovement(Position.of("E1")));
+        System.out.println("King can move to E3: "+whiteKing.checkLegalMovement(Position.of("E3")));
         System.out.printf("----------------------------------%n");
         game.findPiece(Position.of("H1")).checkLegalMovement(Position.of("H4"));
         game.printBoard();
+        
+        System.out.println(game.isPathClear(Position.of("H1"), Position.of("H4")));
+        System.out.println(game.isPathClear(Position.of("F1"), Position.of("H3")));
+        
     }
     
 }
