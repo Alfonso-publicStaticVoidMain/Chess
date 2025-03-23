@@ -221,23 +221,18 @@ public class Chess {
      * @param initPos Initial Position of the movement.
      * @param finPos Final Position of the movement.
      * @return Returns true if there's no {@link Piece} along the trajectory
-     * of the movement from initPos to finPos. The method will return false if
-     * the movement isn't on a straight line or diagonal, or if the Position
-     * arguments are equal.
+     * of the movement from initPos to finPos, both exclusive.
+     * The method will return false if the movement isn't on a straight line or
+     * diagonal.
      * @see
      *      {@link Chess#checkPiece}
      */
     public boolean isPathClear(Position initPos, Position finPos) {
-        if (initPos.equals(finPos)) {
-            //System.out.println("Error on the isPathClear method: Input positions " + initPos + " and " + finPos + " are equal.");
-            return false;
-        }
-        
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
         
         if (Xmovement*Ymovement!=0 && Math.abs(Xmovement)!=Math.abs(Ymovement)) {
-            //System.out.println("Error on the isPathClear method: Input positions "+ initPos + " and " + finPos + " do not match movement of a Rook or Bishop.");
+            System.out.println("Error on the isPathClear method: Input positions "+ initPos + " and " + finPos + " do not match movement of a Rook or Bishop.");
             return false;
         }
         
