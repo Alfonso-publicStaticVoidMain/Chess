@@ -21,4 +21,8 @@ public enum Color {
     public int initRow() {return this.initRow;}
     public int crowningRow() {return this.crowningRow;}
     
+    public Color opposite() {
+        return this==WHITE ? BLACK : WHITE;
+    }
+    
 }
