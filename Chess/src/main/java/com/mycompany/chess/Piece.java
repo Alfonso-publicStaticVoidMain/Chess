@@ -1,12 +1,16 @@
 package com.mycompany.chess;
 
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 public abstract class Piece {
     private Position pos;
     private Color color;
     private Chess game;
+    
+    protected Piece(Position pos, Color color) {
+        this.pos = pos;
+        this.color = color;
+    }
 
     public abstract boolean checkLegalMovement(Position finPos);
     public abstract boolean checkLegalMovement(Position finPos, boolean checkCheck);
