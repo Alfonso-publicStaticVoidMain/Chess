@@ -18,7 +18,13 @@ public class King extends Piece {
         Position initPos = this.getPos();
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
-        return Xmovement <= 1 && Ymovement <= 1;
+        if (Xmovement <= 1 && Ymovement <= 1) {
+            King enemyKing = this.getGame().findKing(this.getColor() == Color.WHITE ? Color.BLACK : Color.WHITE);
+            if (enemyKing == null) return true;
+            return !(Position.xDist(this.getPos(), enemyKing.getPos()) <= 1
+            || Position.yDist(this.getPos(), enemyKing.getPos()) <= 1);
+        }
+        return false;
     }
     
     /**
