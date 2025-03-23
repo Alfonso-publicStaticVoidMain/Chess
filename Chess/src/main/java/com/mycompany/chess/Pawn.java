@@ -67,7 +67,7 @@ public class Pawn extends Piece {
         int Ydirection = this.yDirection();
         int initRow = this.initRow();
         if (Ymovement * Ydirection < 0) return false;
-        
+        // TO DO: Fix problems with en passant
         if (!this.getGame().checkPiece(finPos)) {
             if (this.checkLegalEnPassant() && Xmovement == this.xDirEnPassant()) return true;
             if (Xmovement != 0) return false;
@@ -111,7 +111,7 @@ public class Pawn extends Piece {
      */
     public boolean checkLegalEnPassant() {
         if (this.getGame().getPlayRecord().isEmpty()) return false;
-        Play lastPlay = this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1);
+        Play lastPlay = this.getGame().getLastPlay();
         if (!(lastPlay.getPiece() instanceof Pawn)) return false;
         if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
         if (Math.abs(Position.xDist(this.getPos(), lastPlay.getFinPos())) != 1) return false;
