@@ -58,17 +58,15 @@ public abstract class Piece {
                 eatenPiece = chessGame.findPiece(finPos);
                 chessGame.getPieces().remove(eatenPiece);
                 if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
-            }
-            this.setPos(finPos);
-            if (this instanceof Pawn pawn) {
+            } else if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
                 if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
-                    eatenPiece = chessGame.findPiece(Position.of(finPos.x(), finPos.y() - this.getColor().yDirection()));
+                    eatenPiece = chessGame.getLastPlay().getPiece();
                     chessGame.getPieces().remove(eatenPiece);
                     if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
                 }
             }
-            
+            this.setPos(finPos);
             if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
             
             if (chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
@@ -83,7 +81,7 @@ public abstract class Piece {
         }
         return false;
     }
-    
+
     public boolean move(Position finPos, boolean checkCheck) {
         return this.move(finPos, checkCheck, true);
     }
@@ -111,7 +109,7 @@ public abstract class Piece {
     public boolean checkIfMovementCausesCheck(Position finPos) {
         Chess auxGame = this.getGame().copyGame();
         Piece copyOfPiece = auxGame.findPiece(this.getPos());
-        copyOfPiece.move(finPos, false, false);
+        copyOfPiece.move(finPos, false, true);
         return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
