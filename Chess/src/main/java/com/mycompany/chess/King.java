@@ -37,13 +37,16 @@ public class King extends Piece {
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!this.basicLegalityChecks(finPos, checkCheck)) return false;     
         Position initPos = this.getPos();
-        int Xmovement = Position.xDist(initPos, finPos);
-        int Ymovement = Position.yDist(initPos, finPos);
-        if (Xmovement <= 1 && Ymovement <= 1) {
+        int absXmovement = Math.abs(Position.xDist(initPos, finPos));
+        int absYmovement = Math.abs(Position.yDist(initPos, finPos));
+        System.out.println("[DEBUG] for Piece "+this);
+        System.out.println("absXmov = "+absXmovement+" | absYmov = "+absYmovement);
+        System.out.println("initPos = "+initPos+" | finPos = "+finPos);
+        if (absXmovement <= 1 && absYmovement <= 1) {
             King enemyKing = this.getGame().findKing(this.getColor().opposite());
             if (enemyKing == null) return true;
-            return !(Position.xDist(this.getPos(), enemyKing.getPos()) <= 1
-            || Position.yDist(this.getPos(), enemyKing.getPos()) <= 1);
+            return Position.xDist(this.getPos(), enemyKing.getPos()) > 1
+            && Position.yDist(this.getPos(), enemyKing.getPos()) > 1;
         }
         return false;
     }
