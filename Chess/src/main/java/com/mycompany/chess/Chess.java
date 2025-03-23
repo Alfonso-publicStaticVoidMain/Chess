@@ -232,7 +232,7 @@ public class Chess {
         int Ymovement = Position.yDist(initPos, finPos);
         
         if (Xmovement*Ymovement!=0 && Math.abs(Xmovement)!=Math.abs(Ymovement)) {
-            System.out.println("Error on the isPathClear method: Input positions "+ initPos + " and " + finPos + " do not match movement of a Rook or Bishop.");
+            //System.out.println("Error on the isPathClear method: Input positions "+ initPos + " and " + finPos + " do not match movement of a Rook or Bishop.");
             return false;
         }
         
