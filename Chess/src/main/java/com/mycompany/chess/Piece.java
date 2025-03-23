@@ -21,9 +21,10 @@ public abstract class Piece {
 
     /**
      * The initial row of {@code this} Piece on the board.
-     * @return Returns an integer representing the initial row of the Piece.
-     * The method will be overwritten in the {@link Pawn} class returning
-     * the initRowPawn of its color.
+     * @return Returns an integer representing the initial row of the Piece,
+     * as is stored in that Piece's Color.
+     * The method will be overwritten in the {@link Pawn} class, returning
+     * the attribute initRowPawn of its Color.
      */
     public int initRow() {
         return this.color.initRow();
@@ -92,8 +93,8 @@ public abstract class Piece {
     
     /**
      * <p>
-     * Checks if a movement of a certain Piece to a certain Position causes
-     * the King of that color to be in check.
+     * Checks if the movement of a certain Piece to a certain Position causes
+     * the King of that Piece's Color to be in check.
      * </p>
      * @param finPos Position we're attempting to move the Piece to.
      * @return Returns true if the movement causes the King of the same color
