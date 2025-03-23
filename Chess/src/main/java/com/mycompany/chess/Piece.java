@@ -115,6 +115,7 @@ public abstract class Piece {
         Chess auxGame = this.getGame().copyGame();
         Piece copyOfPiece = auxGame.findPiece(this.getPos());
         copyOfPiece.move(finPos, false, true);
+        //System.out.println("[DEBUG] Position of Piece "+copyOfPiece+" = "+copyOfPiece.getPos());
         return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
