@@ -13,24 +13,23 @@ public class Bishop extends Piece {
         Position initPos = this.getPos();
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
-        
         if (Math.abs(Xmovement) != Math.abs(Ymovement)) return false;
-        
-        int Xdirection = 0;
-        int Ydirection = 0;
-        
-        if (Xmovement > 1) Xdirection = 1;
-        else if (Xmovement < -1) Xdirection = -1;
-        if (Ymovement > 1) Ydirection = 1;
-        else if (Ymovement < -1) Ydirection = -1;
-        
-        if (Xdirection != 0 && Ydirection != 0) {
-            for (int i = 1; i < Math.abs(Ymovement); i++) {
-                if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y() + i * Ydirection))) return false;
-            }
-            return true;
-        }        
-        return false;
+        return this.getGame().isPathClear(initPos, finPos);
+//        int Xdirection = 0;
+//        int Ydirection = 0;
+//        
+//        if (Xmovement > 1) Xdirection = 1;
+//        else if (Xmovement < -1) Xdirection = -1;
+//        if (Ymovement > 1) Ydirection = 1;
+//        else if (Ymovement < -1) Ydirection = -1;
+//        
+//        if (Xdirection != 0 && Ydirection != 0) {
+//            for (int i = 1; i < Math.abs(Ymovement); i++) {
+//                if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y() + i * Ydirection))) return false;
+//            }
+//            return true;
+//        }        
+//        return false;
     }
     
     @Override
