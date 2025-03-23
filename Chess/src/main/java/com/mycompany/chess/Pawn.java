@@ -3,8 +3,7 @@ package com.mycompany.chess;
 public class Pawn extends Piece {
 
     public Pawn(Position pos, Color color) {
-        this.setPos(pos);
-        this.setColor(color);
+        super(pos, color);
     }
     
     @Override
