@@ -25,6 +25,10 @@ public class Chess {
     public List<Play> getPlayRecord() {
         return this.playRecord;
     }
+    
+    public Play getLastPlay() {
+        return this.getPlayRecord().isEmpty() ? null : this.getPlayRecord().get(this.getPlayRecord().size()-1);
+    }
 
     public Chess() {
         this.leftCastlingAvaliability.put(Color.WHITE, true);
@@ -204,6 +208,7 @@ public class Chess {
         Chess result = new Chess();
         this.pieces.stream()
             .forEach(piece -> result.pieces.add(piece.copy()));
+        result.playRecord.addAll(this.playRecord);
         result.linkPieces();
         return result;
     }
@@ -275,7 +280,7 @@ public class Chess {
                         Chess auxGame = this.copyGame();
                         King auxKing = auxGame.findKing(color);
                         Piece auxPiece = auxGame.findPiece(p.getPos());
-                        auxPiece.move(finPos, false, false);
+                        auxPiece.move(finPos, false, true);
                         if (!auxKing.checkCheck()) {
                             //System.out.println("[DEBUG] Piece " + auxPiece + " moving to " + finPos + " doesn't cause a check!");
                             return false;
