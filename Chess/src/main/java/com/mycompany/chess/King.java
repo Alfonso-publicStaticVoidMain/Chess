@@ -18,10 +18,7 @@ public class King extends Piece {
         Position initPos = this.getPos();
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
-        
-        // TO DO
-        
-        return false;
+        return Xmovement <= 1 && Ymovement <= 1;
     }
     
     /**
