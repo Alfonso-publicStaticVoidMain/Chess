@@ -12,7 +12,7 @@ public class Bishop extends Piece {
      * Checks if the proposed position would be a legal movement of the Bishop
      * within the {@code Chess} game it's in.
      * </p>
-     * @param finPos Position the Pawn is attempting to move to.
+     * @param finPos Position the Bishop is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
      * @return Returns true if the proposed movement is a legal position for
