@@ -3,8 +3,7 @@ package com.mycompany.chess;
 public class Bishop extends Piece {
 
     public Bishop(Position pos, Color color) {
-        this.setPos(pos);
-        this.setColor(color);
+        super(pos, color);
     }
     
     /**
