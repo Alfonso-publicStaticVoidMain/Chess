@@ -128,13 +128,13 @@ public class ChessMainClass {
                         game.crownPawn(pieceToMove, crowningAnswer);
                     }
                 }
-            }
-            game.printBoard();
-            System.out.printf("----------------------------------%n");
-            turnCounter++;
-            if (turnCounter > maxTurns) {
-                System.out.println("Turn limit of " + maxTurns + " reached.");
-                fin = true;
+                game.printBoard();
+                System.out.printf("----------------------------------%n");
+                turnCounter++;
+                if (turnCounter > maxTurns) {
+                    System.out.println("Turn limit of " + maxTurns + " reached.");
+                    fin = true;
+                }
             }
         }
     }
