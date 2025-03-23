@@ -1,6 +1,7 @@
 package com.mycompany.chess;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 public abstract class Piece {
     private Position pos;
