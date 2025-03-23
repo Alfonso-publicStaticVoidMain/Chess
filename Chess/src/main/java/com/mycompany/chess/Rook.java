@@ -19,22 +19,23 @@ public class Rook extends Piece {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
         if (Xmovement != 0 && Ymovement != 0) return false;
-        
-        int Xdirection = Xmovement > 0 ? 1 : -1, Ydirection = Ymovement > 0 ? 1 : -1;
-        if (Xdirection != 0) {
-            for (int i = 1; i < Math.abs(Xmovement); i++) {
-                if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y()))) return false;
-            }
-            return true;
-        }
-        
-        if (Ydirection != 0) {
-            for (int i = 1; i < Math.abs(Ymovement); i++) {
-                //System.out.println("Position "+Position.of(initPos.x(), initPos.y() + i * Ydirection) + "| Is there a Piece? "+ this.getGame().checkPiece(Position.of(initPos.x(), initPos.y() + i * Ydirection)));
-                if (this.getGame().checkPiece(Position.of(initPos.x(), initPos.y() + i * Ydirection))) return false;
-            }
-        }
-        return true;
+        return this.getGame().isPathClear(initPos, finPos);
+//        int Xdirection = (Xmovement > 0) ? 1 : (Xmovement < 0) ? -1 : 0;
+//        int Ydirection = (Ymovement > 0) ? 1 : (Ymovement < 0) ? -1 : 0;
+//        if (Xmovement != 0) {
+//            for (int i = 1; i < Math.abs(Xmovement); i++) {
+//                if (this.getGame().checkPiece(Position.of(initPos.x() + i * Xdirection, initPos.y()))) return false;
+//            }
+//            return true;
+//        }
+//        
+//        if (Ymovement != 0) {
+//            for (int i = 1; i < Math.abs(Ymovement); i++) {
+//                //System.out.println("Position "+Position.of(initPos.x(), initPos.y() + i * Ydirection) + "| Is there a Piece? "+ this.getGame().checkPiece(Position.of(initPos.x(), initPos.y() + i * Ydirection)));
+//                if (this.getGame().checkPiece(Position.of(initPos.x(), initPos.y() + i * Ydirection))) return false;
+//            }
+//        }
+//        return true;
     }
 
     @Override
