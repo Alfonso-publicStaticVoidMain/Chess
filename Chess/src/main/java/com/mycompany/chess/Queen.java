@@ -3,22 +3,41 @@ package com.mycompany.chess;
 public class Queen extends Piece {
 
     public Queen(Position pos, Color color) {
-        this.setPos(pos);
-        this.setColor(color);
+        super(pos, color);
     }
     
-    @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return this.checkLegalMovement(finPos, true);
-    }
-    
+    /**
+     * <p>
+     * Checks if the proposed position would be a legal movement of the Queen
+     * within the {@code Chess} game it's in.
+     * </p>
+     * @param finPos Position the Queen is attempting to move to.
+     * @param checkCheck State parameter to determine if we will declare the
+     * movement illegal if it causes a check of its own King.
+     * @return Returns true if the proposed movement is a legal position for
+     * {@code this} Queen, performing the following checks:
+     * 
+     * First, some common legality checks are performed within the method 
+     * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
+     * in the final Position, if we're checking for checks and the movement
+     * would cause one, or if the final Position is the same as the initial one,
+     * false is returned.
+     * 
+     * Unlike the Bishop and the Rook, we do not perform any check to verify
+     * that the Queen is moving as befits her royal status, because that check
+     * will be intrinsically done in the {@link Chess#isPathClear} method.
+     * 
+     * Finally, the method {@link Chess#isPathClear} is called to check whether
+     * or not there's any Piece in the path between the initial and final
+     * Position (both exclusive), returning false if there is.
+     */
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!this.basicLegalityChecks(finPos, checkCheck)) return false;
         Position initPos = this.getPos();
-        int Xmovement = Position.xDist(initPos, finPos);
-        int Ymovement = Position.yDist(initPos, finPos);
         return this.getGame().isPathClear(initPos, finPos);
+//        int Xmovement = Position.xDist(initPos, finPos);
+//        int Ymovement = Position.yDist(initPos, finPos);
 //        int Xdirection = 0;
 //        int Ydirection = 0;
 //        
@@ -59,6 +78,11 @@ public class Queen extends Piece {
 //            }
 //        } else return false;
 //        return true;
+    }
+    
+    @Override
+    public boolean checkLegalMovement(Position finPos) {
+        return this.checkLegalMovement(finPos, true);
     }
 
     @Override
