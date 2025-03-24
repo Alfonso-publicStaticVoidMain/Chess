@@ -95,6 +95,7 @@ public class Chess {
             .count();
         if (numberOfPiecesInPosition > 1) {
             System.out.println("Illegal number of pieces found in position " + pos);
+            System.out.println(numberOfPiecesInPosition+" pieces were found.");
             return false;
         }
         return numberOfPiecesInPosition == 1;
