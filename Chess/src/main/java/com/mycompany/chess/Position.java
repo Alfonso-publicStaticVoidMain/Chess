@@ -85,7 +85,7 @@ public class Position {
        
     public int x() {return x;}
     public int y() {return y;}
-    public List<Position> getValidPositions() {return Position.validChessPositions;}
+    public static List<Position> getValidPositions() {return Position.validChessPositions;}
     
     /**
      * <p>
