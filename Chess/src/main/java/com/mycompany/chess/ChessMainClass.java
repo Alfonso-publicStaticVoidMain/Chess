@@ -7,7 +7,7 @@ public class ChessMainClass {
 
     static Scanner keyboard = new Scanner(System.in, "ISO-8859-1");
     
-    public static Position[] printMoveMenu(Color activePlayer, Chess game) {
+    public static Position[] printMoveMenu(ChessColor activePlayer, Chess game) {
         boolean fin = false;
         Position initPos = Position.of(1, 1), finPos = Position.of(1, 1);
         do {
@@ -29,7 +29,7 @@ public class ChessMainClass {
         return new Position[] {initPos, finPos};
     }
     
-    public static char printCastlingMenu(Color activePlayer, Chess game) {
+    public static char printCastlingMenu(ChessColor activePlayer, Chess game) {
         if (game.checkLeftCastling(activePlayer) && game.checkRightCastling(activePlayer)) {
             System.out.println("You can do both left and right castling.");
             System.out.println("Do you want to do either? (L for left, R for right, 0 for none.)");
@@ -80,7 +80,7 @@ public class ChessMainClass {
         Chess game = new Chess();
         game.addStandardPieces();
         boolean fin = false;
-        Color activePlayer;
+        ChessColor activePlayer;
         
         int turnCounter = 0;
         int maxTurns = 120;
@@ -90,7 +90,7 @@ public class ChessMainClass {
         
         while (!fin) {
             boolean playDone = false;
-            activePlayer = turnCounter%2==0 ? Color.WHITE : Color.BLACK;
+            activePlayer = turnCounter%2==0 ? ChessColor.WHITE : ChessColor.BLACK;
             System.out.println("It's the turn of the " + activePlayer + " player");
             
             if (game.checkMate(activePlayer)) {
