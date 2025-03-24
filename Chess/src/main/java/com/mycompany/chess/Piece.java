@@ -4,10 +4,10 @@ import java.util.Optional;
 
 public abstract class Piece {
     private Position pos;
-    private Color color;
+    private ChessColor color;
     private Chess game;
     
-    protected Piece(Position pos, Color color) {
+    protected Piece(Position pos, ChessColor color) {
         this.pos = pos;
         this.color = color;
     }
@@ -18,8 +18,8 @@ public abstract class Piece {
     
     public Position getPos() {return this.pos;}
     public void setPos(Position pos) {this.pos = pos;}
-    public Color getColor() {return this.color;}
-    public void setColor(Color color) {this.color = color;}
+    public ChessColor getColor() {return this.color;}
+    public void setColor(ChessColor color) {this.color = color;}
     public Chess getGame() {return this.game;}
     public void setGame(Chess game) {this.game = game;}
 
