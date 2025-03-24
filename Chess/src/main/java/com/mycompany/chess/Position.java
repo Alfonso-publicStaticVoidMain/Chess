@@ -6,15 +6,88 @@ public class Position {
     private final int x;
     private final int y;
     
+    public static final Position A1 = Position.of("A1");
+    public static final Position A2 = Position.of("A2");
+    public static final Position A3 = Position.of("A3");
+    public static final Position A4 = Position.of("A4");
+    public static final Position A5 = Position.of("A5");
+    public static final Position A6 = Position.of("A6");
+    public static final Position A7 = Position.of("A7");
+    public static final Position A8 = Position.of("A8");
+
+    public static final Position B1 = Position.of("B1");
+    public static final Position B2 = Position.of("B2");
+    public static final Position B3 = Position.of("B3");
+    public static final Position B4 = Position.of("B4");
+    public static final Position B5 = Position.of("B5");
+    public static final Position B6 = Position.of("B6");
+    public static final Position B7 = Position.of("B7");
+    public static final Position B8 = Position.of("B8");
+
+    public static final Position C1 = Position.of("C1");
+    public static final Position C2 = Position.of("C2");
+    public static final Position C3 = Position.of("C3");
+    public static final Position C4 = Position.of("C4");
+    public static final Position C5 = Position.of("C5");
+    public static final Position C6 = Position.of("C6");
+    public static final Position C7 = Position.of("C7");
+    public static final Position C8 = Position.of("C8");
+
+    public static final Position D1 = Position.of("D1");
+    public static final Position D2 = Position.of("D2");
+    public static final Position D3 = Position.of("D3");
+    public static final Position D4 = Position.of("D4");
+    public static final Position D5 = Position.of("D5");
+    public static final Position D6 = Position.of("D6");
+    public static final Position D7 = Position.of("D7");
+    public static final Position D8 = Position.of("D8");
+
+    public static final Position E1 = Position.of("E1");
+    public static final Position E2 = Position.of("E2");
+    public static final Position E3 = Position.of("E3");
+    public static final Position E4 = Position.of("E4");
+    public static final Position E5 = Position.of("E5");
+    public static final Position E6 = Position.of("E6");
+    public static final Position E7 = Position.of("E7");
+    public static final Position E8 = Position.of("E8");
+
+    public static final Position F1 = Position.of("F1");
+    public static final Position F2 = Position.of("F2");
+    public static final Position F3 = Position.of("F3");
+    public static final Position F4 = Position.of("F4");
+    public static final Position F5 = Position.of("F5");
+    public static final Position F6 = Position.of("F6");
+    public static final Position F7 = Position.of("F7");
+    public static final Position F8 = Position.of("F8");
+
+    public static final Position G1 = Position.of("G1");
+    public static final Position G2 = Position.of("G2");
+    public static final Position G3 = Position.of("G3");
+    public static final Position G4 = Position.of("G4");
+    public static final Position G5 = Position.of("G5");
+    public static final Position G6 = Position.of("G6");
+    public static final Position G7 = Position.of("G7");
+    public static final Position G8 = Position.of("G8");
+
+    public static final Position H1 = Position.of("H1");
+    public static final Position H2 = Position.of("H2");
+    public static final Position H3 = Position.of("H3");
+    public static final Position H4 = Position.of("H4");
+    public static final Position H5 = Position.of("H5");
+    public static final Position H6 = Position.of("H6");
+    public static final Position H7 = Position.of("H7");
+    public static final Position H8 = Position.of("H8");
+
+    
     private static final List<Position> validChessPositions = List.of(
-        Position.of("A1"), Position.of("A2"), Position.of("A3"), Position.of("A4"), Position.of("A5"), Position.of("A6"), Position.of("A7"), Position.of("A8"),
-        Position.of("B1"), Position.of("B2"), Position.of("B3"), Position.of("B4"), Position.of("B5"), Position.of("B6"), Position.of("B7"), Position.of("B8"),
-        Position.of("C1"), Position.of("C2"), Position.of("C3"), Position.of("C4"), Position.of("C5"), Position.of("C6"), Position.of("C7"), Position.of("C8"),
-        Position.of("D1"), Position.of("D2"), Position.of("D3"), Position.of("D4"), Position.of("D5"), Position.of("D6"), Position.of("D7"), Position.of("D8"),
-        Position.of("E1"), Position.of("E2"), Position.of("E3"), Position.of("E4"), Position.of("E5"), Position.of("E6"), Position.of("E7"), Position.of("E8"),
-        Position.of("F1"), Position.of("F2"), Position.of("F3"), Position.of("F4"), Position.of("F5"), Position.of("F6"), Position.of("F7"), Position.of("F8"),
-        Position.of("G1"), Position.of("G2"), Position.of("G3"), Position.of("G4"), Position.of("G5"), Position.of("G6"), Position.of("G7"), Position.of("G8"),
-        Position.of("H1"), Position.of("H2"), Position.of("H3"), Position.of("H4"), Position.of("H5"), Position.of("H6"), Position.of("H7"), Position.of("H8")
+    A1, A2, A3, A4, A5, A6, A7, A8,
+    B1, B2, B3, B4, B5, B6, B7, B8,
+    C1, C2, C3, C4, C5, C6, C7, C8,
+    D1, D2, D3, D4, D5, D6, D7, D8,
+    E1, E2, E3, E4, E5, E6, E7, E8,
+    F1, F2, F3, F4, F5, F6, F7, F8,
+    G1, G2, G3, G4, G5, G6, G7, G8,
+    H1, H2, H3, H4, H5, H6, H7, H8
     );
     
     /**
