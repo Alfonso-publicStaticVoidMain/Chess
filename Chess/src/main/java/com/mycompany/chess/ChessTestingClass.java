@@ -53,7 +53,7 @@ public class ChessTestingClass {
 //        game.printBoard();
 //        System.out.printf("----------------------------------%n");
 //        Piece whitePawn = game.findPiece(Position.of("D2"));
-        King blackKing = game.findKing(Color.BLACK);
+        King blackKing = game.findKing(ChessColor.BLACK);
         Piece whiteQueen = game.findPiece(Position.of("D1"));
         game.getPieces().remove(game.findPiece(Position.of("D8")));
         whiteQueen.setPos(Position.of("D8"));
