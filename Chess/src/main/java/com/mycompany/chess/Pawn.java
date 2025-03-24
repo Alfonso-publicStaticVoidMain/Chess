@@ -2,7 +2,7 @@ package com.mycompany.chess;
 
 public class Pawn extends Piece {
 
-    public Pawn(Position pos, Color color) {
+    public Pawn(Position pos, ChessColor color) {
         super(pos, color);
     }
     
