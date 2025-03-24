@@ -145,7 +145,10 @@ public abstract class Piece {
     
     @Override
     public String toString() {
-        return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
+        char typeChar;
+        if (this instanceof Knight) typeChar = 'k';
+        else typeChar = Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
+        return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + typeChar;
     }
     
 }
