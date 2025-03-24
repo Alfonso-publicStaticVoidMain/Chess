@@ -240,7 +240,7 @@ public class Chess {
         int Ydirection = (Ymovement > 0) ? 1 : (Ymovement < 0) ? -1 : 0;
         int steps = Math.max(Math.abs(Xmovement), Math.abs(Ymovement));
         
-        return IntStream.rangeClosed(1, steps)
+        return IntStream.range(1, steps)
             .mapToObj(i -> Position.of(initPos.x() + i*Xdirection, initPos.y() + i*Ydirection))
             .noneMatch(position -> this.checkPiece(position));
     }
