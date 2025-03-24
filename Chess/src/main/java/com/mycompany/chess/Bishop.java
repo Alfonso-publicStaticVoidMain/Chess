@@ -2,7 +2,7 @@ package com.mycompany.chess;
 
 public class Bishop extends Piece {
 
-    public Bishop(Position pos, Color color) {
+    public Bishop(Position pos, ChessColor color) {
         super(pos, color);
     }
     
