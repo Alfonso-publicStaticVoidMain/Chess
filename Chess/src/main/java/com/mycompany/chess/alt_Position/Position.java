@@ -109,7 +109,7 @@ public enum Position {
                 .filter(position -> position.x() == x && position.y() == y)
                 .findAny()
                 .get();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with values: "+x+", "+y);
             return null;
