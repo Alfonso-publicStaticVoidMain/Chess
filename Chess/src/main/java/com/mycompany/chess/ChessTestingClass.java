@@ -1,5 +1,6 @@
 package com.mycompany.chess;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class ChessTestingClass {
@@ -17,10 +18,24 @@ public class ChessTestingClass {
     }
     
     public static void debugPositionsAPieceCanMoveTo(Piece piece) {
-        System.out.println("Positions that "+piece+" can move to:");
-        Position.getValidPositions().stream()
+        System.out.println("Positions the "+piece.getColor() + " " + piece.getClass().getSimpleName()+" can move to:");
+        List<Position> validPositionList = Position.getValidPositions().stream()
             .filter(piece::checkLegalMovement)
-            .forEach(System.out::println);
+            .toList();
+        
+        for (int y = 8; y >= 0; y--) {
+            System.out.print(y + " ");
+            for (int x = 1; x <= 8; x++) {
+                boolean printedPiece = false;
+                if (y != 0 && validPositionList.contains(Position.of(x, y))) {
+                    System.out.print("|**|");
+                    printedPiece = true;
+                }
+                if (!printedPiece && y != 0) System.out.print("|__|");
+                else if (y == 0) System.out.print("  " + Chess.convertNumberToLetter(x) + " ");
+            }
+            System.out.printf("%n");
+        }
     }
     
     public static void debugPiecesThatCanMoveToPosition(Position pos, Chess game) {
@@ -44,10 +59,7 @@ public class ChessTestingClass {
         whiteQueen.setPos(Position.of("D8"));
         game.printBoard();
         System.out.printf("----------------------------------%n");
-        debugLegalityOfMovement(whiteQueen, Position.of("D1"));
-        debugLegalityOfMovement(whiteQueen, Position.of("D6"));
-        System.out.println("Black King is in check: "+blackKing.checkCheck());
-        System.out.println("Black King is in checkmate: "+game.checkMate(Color.BLACK));
+        debugPositionsAPieceCanMoveTo(whiteQueen);
 //        game.getPieces().remove(game.findPiece(Position.of("D7")));
 //        game.getPieces().remove(game.findPiece(Position.of("E7")));
 //        game.getPieces().remove(game.findPiece(Position.of("C7")));
