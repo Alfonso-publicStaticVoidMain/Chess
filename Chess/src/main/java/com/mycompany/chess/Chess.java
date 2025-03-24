@@ -262,6 +262,13 @@ public class Chess {
      * If checkCheck is set to false, the method will return true if every
      * possible movement of the King's color would put it in check, regardless
      * of if it's currently in check or not.
+     * 
+     * @see 
+     *      {@link King#checkCheck()}
+     *      {@link Piece#checkLegalMovement(Position)}
+     *      {@link Chess#findPiece}
+     *      {@link Chess#findKing}
+     *      {@link Chess#copyGame}
      */
     public boolean checkMate(ChessColor color, boolean checkCheck) {
         King king = this.findKing(color);
@@ -323,6 +330,9 @@ public class Chess {
      * or left Rook, returns false.
      * 
      * If there's any Piece between the King and left Rook, returns false.
+     * 
+     * @see 
+     *      {@link Chess#checkPiece}
      */
     public boolean checkLeftCastling(ChessColor color) {
 //        Position kingInitPos = Position.of(5, color.initRow());
@@ -347,6 +357,9 @@ public class Chess {
      * or right Rook, returns false.
      * 
      * If there's any Piece between the King and right Rook, returns false.
+     * 
+     * @see 
+     *      {@link Chess#checkPiece}
      */
     public boolean checkRightCastling(ChessColor color) {
 //        Position kingInitPos = Position.of(5, color.initRow());
@@ -367,6 +380,8 @@ public class Chess {
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
+     * @see
+     *      {@link Chess#checkLeftCastling}
      */
     public boolean doLeftCastling(ChessColor color) {
         if (!this.checkLeftCastling(color)) return false;
@@ -387,6 +402,8 @@ public class Chess {
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
+     * @see
+     *      {@link Chess#checkRightCastling}
      */
     public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
