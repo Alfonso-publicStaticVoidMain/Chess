@@ -2,7 +2,7 @@ package com.mycompany.chess;
 
 public class Rook extends Piece {
 
-    public Rook(Position pos, Color color) {
+    public Rook(Position pos, ChessColor color) {
         super(pos, color);
     }
     
