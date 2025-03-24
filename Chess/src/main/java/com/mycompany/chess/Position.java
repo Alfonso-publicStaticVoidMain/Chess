@@ -1,8 +1,21 @@
 package com.mycompany.chess;
 
+import java.util.List;
+
 public class Position {
     private final int x;
     private final int y;
+    
+    private static final List<Position> validChessPositions = List.of(
+        Position.of("A1"), Position.of("A2"), Position.of("A3"), Position.of("A4"), Position.of("A5"), Position.of("A6"), Position.of("A7"), Position.of("A8"),
+        Position.of("B1"), Position.of("B2"), Position.of("B3"), Position.of("B4"), Position.of("B5"), Position.of("B6"), Position.of("B7"), Position.of("B8"),
+        Position.of("C1"), Position.of("C2"), Position.of("C3"), Position.of("C4"), Position.of("C5"), Position.of("C6"), Position.of("C7"), Position.of("C8"),
+        Position.of("D1"), Position.of("D2"), Position.of("D3"), Position.of("D4"), Position.of("D5"), Position.of("D6"), Position.of("D7"), Position.of("D8"),
+        Position.of("E1"), Position.of("E2"), Position.of("E3"), Position.of("E4"), Position.of("E5"), Position.of("E6"), Position.of("E7"), Position.of("E8"),
+        Position.of("F1"), Position.of("F2"), Position.of("F3"), Position.of("F4"), Position.of("F5"), Position.of("F6"), Position.of("F7"), Position.of("F8"),
+        Position.of("G1"), Position.of("G2"), Position.of("G3"), Position.of("G4"), Position.of("G5"), Position.of("G6"), Position.of("G7"), Position.of("G8"),
+        Position.of("H1"), Position.of("H2"), Position.of("H3"), Position.of("H4"), Position.of("H5"), Position.of("H6"), Position.of("H7"), Position.of("H8")
+    );
     
     /**
      * <p>
@@ -72,6 +85,7 @@ public class Position {
        
     public int x() {return x;}
     public int y() {return y;}
+    public List<Position> getValidPositions() {return Position.validChessPositions;}
     
     /**
      * <p>
