@@ -54,8 +54,8 @@ public class Chess {
      * </p>
      * @see 
      *      {@link Position#of(int, int)}
-     *      {@link Color#initRow}
-     *      {@link Color#initRowPawn}
+     *      {@link ChessColor#initRow}
+     *      {@link ChessColor#initRowPawn}
      *      {@link Chess#linkPieces}
      */
     public void addStandardPieces() {
