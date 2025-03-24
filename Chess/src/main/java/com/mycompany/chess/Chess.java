@@ -7,14 +7,14 @@ public class Chess {
     
     private List<Piece> pieces = new ArrayList<>();
     private List<Play> playRecord = new LinkedList<>();
-    private Map<Color, Boolean> leftCastlingAvaliability = new HashMap<>();
-    private Map<Color, Boolean> rightCastlingAvaliability = new HashMap<>();
+    private Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
+    private Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
 
-    public Map<Color, Boolean> getLeftCastlingAvaliability() {
+    public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {
         return this.leftCastlingAvaliability;
     }
 
-    public Map<Color, Boolean> getRightCastlingAvaliability() {
+    public Map<ChessColor, Boolean> getRightCastlingAvaliability() {
         return rightCastlingAvaliability;
     }
 
@@ -31,10 +31,10 @@ public class Chess {
     }
 
     public Chess() {
-        this.leftCastlingAvaliability.put(Color.WHITE, true);
-        this.leftCastlingAvaliability.put(Color.BLACK, true);
-        this.rightCastlingAvaliability.put(Color.WHITE, true);
-        this.rightCastlingAvaliability.put(Color.BLACK, true);
+        this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
+        this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
+        this.rightCastlingAvaliability.put(ChessColor.WHITE, true);
+        this.rightCastlingAvaliability.put(ChessColor.BLACK, true);
     }
     
     /**
@@ -59,7 +59,7 @@ public class Chess {
      *      {@link Chess#linkPieces}
      */
     public void addStandardPieces() {
-        for (Color color : Color.values()) {
+        for (ChessColor color : ChessColor.values()) {
             // Add Pawns
             IntStream.rangeClosed(1, 8)
                 .forEach(x -> this.pieces.add(new Pawn(Position.of(x, color.initRowPawn()), color)));
@@ -166,7 +166,7 @@ public class Chess {
      * @return Returns the {@link Piece} object in the Pieces Set that is the
      * only {@link King} of that color.
      */
-    public King findKing(Color color) {
+    public King findKing(ChessColor color) {
         return (King) this.pieces.stream()
             .filter(piece -> (piece instanceof King) && piece.getColor() == color)
             .findAny()
@@ -262,7 +262,7 @@ public class Chess {
      * possible movement of the King's color would put it in check, regardless
      * of if it's currently in check or not.
      */
-    public boolean checkMate(Color color, boolean checkCheck) {
+    public boolean checkMate(ChessColor color, boolean checkCheck) {
         King king = this.findKing(color);
         if (checkCheck && !king.checkCheck()) return false;
         for (Piece p : this.pieces.stream()
@@ -287,7 +287,7 @@ public class Chess {
         return true;
     }
     
-    public boolean checkMate(Color color) {
+    public boolean checkMate(ChessColor color) {
         return this.checkMate(color, true);
     }
     
@@ -323,7 +323,7 @@ public class Chess {
      * 
      * If there's any Piece between the King and left Rook, returns false.
      */
-    public boolean checkLeftCastling(Color color) {
+    public boolean checkLeftCastling(ChessColor color) {
 //        Position kingInitPos = Position.of(5, color.initRow());
 //        Position leftRookInitPos = Position.of(1, color.initRow());
 //        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
@@ -347,7 +347,7 @@ public class Chess {
      * 
      * If there's any Piece between the King and right Rook, returns false.
      */
-    public boolean checkRightCastling(Color color) {
+    public boolean checkRightCastling(ChessColor color) {
 //        Position kingInitPos = Position.of(5, color.initRow());
 //        Position rightRookInitPos = Position.of(8, color.initRow());
 //        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
@@ -367,7 +367,7 @@ public class Chess {
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
      */
-    public boolean doLeftCastling(Color color) {
+    public boolean doLeftCastling(ChessColor color) {
         if (!this.checkLeftCastling(color)) return false;
         Piece king = this.findPiece(Position.of(5, color.initRow()));
         Piece leftRook = this.findPiece(Position.of(1, color.initRow()));
@@ -387,7 +387,7 @@ public class Chess {
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
      */
-    public boolean doRightCastling(Color color) {
+    public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
         Piece king = this.findPiece(Position.of(5, color.initRow()));
         Piece rightRook = this.findPiece(Position.of(8, color.initRow()));
