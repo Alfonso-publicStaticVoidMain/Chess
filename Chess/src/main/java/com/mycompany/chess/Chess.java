@@ -424,7 +424,7 @@ public class Chess {
      * @param newType New type to convert the Pawn to. Not case sensitive.
      * @return Returns true if the crowning was succesful, false otherwise.
      */
-    public boolean crownPawn(Piece piece, String newType) {
+    public boolean crownPawn(Piece piece, String newType) throws IllegalArgumentException {
         if (!(piece instanceof Pawn)) return false;
         if (piece.getPos().y() != piece.getColor().crowningRow()) return false;
         this.pieces.remove(piece);
@@ -454,8 +454,7 @@ public class Chess {
                 return true;
             }
         }
-        System.out.println(newType + " wasn't a valid type to crown a Pawn");
-        return false;
+        throw new IllegalArgumentException(newType+" wasn't a legal type to crown a pawn into.");
     }
     
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
@@ -468,7 +467,7 @@ public class Chess {
             case 'f' -> 6;
             case 'g' -> 7;
             case 'h' -> 8;
-            default -> throw new IllegalArgumentException("Invalid letter to convert to number.");
+            default -> throw new IllegalArgumentException("Invalid letter to convert to number: "+letter);
         };
     }
     
@@ -482,7 +481,7 @@ public class Chess {
             case 6 -> 'F';
             case 7 -> 'G';
             case 8 -> 'H';
-            default -> throw new IllegalArgumentException("Invalid number to convert to letter.");
+            default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
         };
     }
 }
