@@ -9,6 +9,7 @@ public class ChessGUI {
     private JButton[][] boardButtons;
     private Chess chess;
     private Position selectedPos = null;
+    private ChessColor activePlayer = ChessColor.WHITE;
 
     public ChessGUI() {
         chess = new Chess();
@@ -29,8 +30,8 @@ public class ChessGUI {
     }
 
     private void initializeBoard() {
-        for (int y = 8; y >= 0; y--) { // Flip rows so 1 is at bottom
-            for (int x = 0; x <= 8; x++) { // Keep columns left-to-right
+        for (int y = 8; y >= 0; y--) {
+            for (int x = 0; x <= 8; x++) {
                 JButton button = new JButton();
                 button.setOpaque(true);
                 button.setBorderPainted(false);
@@ -70,17 +71,54 @@ public class ChessGUI {
         if (x == 0 || y == 0) return; // Ignore label clicks
         Position clickedPos = Position.of(x, y);
 
-        if (selectedPos == null) {
-            if (chess.checkPiece(clickedPos)) {
+        if (selectedPos == null) { // First click stores the selected position.
+            if (chess.checkPiece(clickedPos) && chess.findPiece(clickedPos).getColor() == activePlayer) {
                 selectedPos = clickedPos;
                 highlightValidMoves(selectedPos);
             }
-        } else {
+        } else { // Second click attempts to do the movement.
             if (chess.checkPiece(selectedPos)) {
                 Piece piece = chess.findPiece(selectedPos);
-                if (piece.checkLegalMovement(clickedPos)) {
-                    piece.move(clickedPos);
+                boolean playDone = false;
+                
+                if (piece instanceof King) {
+                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor())) {
+                        chess.doLeftCastling(activePlayer);
+                        playDone = true;
+                    }
+                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())) {
+                        chess.doRightCastling(activePlayer);
+                        playDone = true;
+                    }
                 }
+                
+                if (!playDone && piece.checkLegalMovement(clickedPos)) {
+                    piece.move(clickedPos);
+                    
+                    if (piece instanceof Pawn && piece.getPos().y() == piece.getColor().crowningRow()) {
+                        // Menu to crown a Pawn
+                        Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
+                        int n = JOptionPane.showOptionDialog(frame,
+                            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen",
+                            "Crowning Menu",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,     //do not use a custom Icon
+                            options,  //the titles of buttons
+                            options[0]); //default button title
+                        String newPieceType = "Queen";
+                        switch (n) {
+                            //case 0 -> newPieceType = "Queen";
+                            case 1 -> newPieceType = "Knight";
+                            case 2 -> newPieceType = "Rook";
+                            case 3 -> newPieceType = "Bishop";
+                            //case -1 -> newPieceType = "Queen";
+                        }
+                        chess.crownPawn(piece, newPieceType);
+                    }
+                    playDone = true;
+                }
+                if (playDone) activePlayer = activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
             }
             clearHighlights();
             selectedPos = null;
@@ -97,6 +135,10 @@ public class ChessGUI {
                     if (piece.checkLegalMovement(potentialMove)) {
                         boardButtons[x][y].setBackground(Color.GREEN);
                     }
+                    if (piece instanceof King &&
+                        (((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
+                        || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor()))))
+                    ) boardButtons[x][y].setBackground(Color.GREEN);
                 }
             }
         }
