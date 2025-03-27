@@ -42,7 +42,7 @@ public class ChessGUI {
                     button.setText("");
                 } else if (y == 0) {
                     // Column labels (A to H) at the bottom
-                    button.setText(String.valueOf((char) ('A' + x - 1)));
+                    button.setText(""+ Chess.convertNumberToLetter(x));
                     button.setFont(new Font("Arial", Font.BOLD, 16));
                     button.setEnabled(false);
                 } else if (x == 0) {
@@ -82,11 +82,11 @@ public class ChessGUI {
                 boolean playDone = false;
                 
                 if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor())) {
+                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(activePlayer)) {
                         chess.doLeftCastling(activePlayer);
                         playDone = true;
                     }
-                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())) {
+                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(activePlayer)) {
                         chess.doRightCastling(activePlayer);
                         playDone = true;
                     }
@@ -95,11 +95,11 @@ public class ChessGUI {
                 if (!playDone && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     
-                    if (piece instanceof Pawn && piece.getPos().y() == piece.getColor().crowningRow()) {
+                    if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) {
                         // Menu to crown a Pawn
                         Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
                         int n = JOptionPane.showOptionDialog(frame,
-                            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen",
+                            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
                             "Crowning Menu",
                             JOptionPane.DEFAULT_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
@@ -135,10 +135,10 @@ public class ChessGUI {
                     if (piece.checkLegalMovement(potentialMove)) {
                         boardButtons[x][y].setBackground(Color.GREEN);
                     }
-                    if (piece instanceof King &&
-                        (((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
-                        || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor()))))
-                    ) boardButtons[x][y].setBackground(Color.GREEN);
+                    if (piece instanceof King && (
+                        ((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
+                        || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())))
+                    )) boardButtons[x][y].setBackground(Color.GREEN);
                 }
             }
         }
@@ -160,7 +160,6 @@ public class ChessGUI {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 JButton button = boardButtons[x][y];
-
                 if (chess.checkPiece(Position.of(x, y))) {
                     Piece piece = chess.findPiece(Position.of(x, y));
                     button.setText(getPieceSymbol(piece));
