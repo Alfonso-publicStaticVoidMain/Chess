@@ -14,8 +14,8 @@ public class ChessGUI {
     private Position selectedPos = null;
 
     public ChessGUI() {
-        chess = new Chess();
-
+        chess = new Chess(); // Assuming you have a Chess class managing the game state
+        chess.addStandardPieces();
         frame = new JFrame("Chess Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
@@ -31,43 +31,44 @@ public class ChessGUI {
     }
 
     private void initializeBoard() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int y = 1; y <= 8; y++) {
+            for (int x = 1; x <= 8; x++) {
                 JButton button = new JButton();
                 button.setOpaque(true);
                 button.setBorderPainted(false);
 
                 // Set alternating colors for the chessboard
-                if ((row + col) % 2 == 0) {
+                if ((x + y) % 2 == 0) {
                     button.setBackground(Color.WHITE);
                 } else {
                     button.setBackground(Color.GRAY);
                 }
 
-                final int r = row, c = col;
-                button.addActionListener(e -> handleClick(r, c));
+                final int fx = x, fy = y;
+                button.addActionListener(e -> handleClick(fx, fy));
 
-                boardButtons[row][col] = button;
+                boardButtons[y - 1][x - 1] = button;
                 boardPanel.add(button);
             }
         }
     }
 
-    private void handleClick(int row, int col) {
-        Position clickedPos = Position.of(row, col);
+    private void handleClick(int x, int y) {
+        Position clickedPos = Position.of(x, y);
 
         if (selectedPos == null) {
-            // First click: Select a piece
+            // First click: Select a piece (only if there's a piece on this position)
             if (chess.checkPiece(clickedPos)) {
                 selectedPos = clickedPos;
                 highlightValidMoves(selectedPos);
             }
         } else {
-            // Second click: Move the piece if legal
-            
-            Piece piece = chess.findPiece(selectedPos);
-            if (piece != null && piece.checkLegalMovement(clickedPos)) {
-                piece.move(clickedPos);
+            // Second click: Move the piece only if it's a valid move
+            if (chess.checkPiece(selectedPos)) {
+                Piece piece = chess.findPiece(selectedPos);
+                if (piece.checkLegalMovement(clickedPos)) {
+                    piece.move(clickedPos);
+                }
             }
             clearHighlights();
             selectedPos = null; // Reset selection
@@ -76,13 +77,13 @@ public class ChessGUI {
     }
 
     private void highlightValidMoves(Position pos) {
-        Piece piece = chess.findPiece(pos);
-        if (piece != null) {
-            for (int row = 0; row < 8; row++) {
-                for (int col = 0; col < 8; col++) {
-                    Position potentialMove = Position.of(row, col);
+        if (chess.checkPiece(pos)) {
+            Piece piece = chess.findPiece(pos);
+            for (int y = 1; y <= 8; y++) {
+                for (int x = 1; x <= 8; x++) {
+                    Position potentialMove = Position.of(x, y);
                     if (piece.checkLegalMovement(potentialMove)) {
-                        boardButtons[row][col].setBackground(Color.YELLOW);
+                        boardButtons[y - 1][x - 1].setBackground(Color.YELLOW);
                     }
                 }
             }
@@ -90,24 +91,24 @@ public class ChessGUI {
     }
 
     private void clearHighlights() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                if ((row + col) % 2 == 0) {
-                    boardButtons[row][col].setBackground(Color.WHITE);
+        for (int y = 1; y <= 8; y++) {
+            for (int x = 1; x <= 8; x++) {
+                if ((x + y) % 2 == 0) {
+                    boardButtons[y - 1][x - 1].setBackground(Color.WHITE);
                 } else {
-                    boardButtons[row][col].setBackground(Color.GRAY);
+                    boardButtons[y - 1][x - 1].setBackground(Color.GRAY);
                 }
             }
         }
     }
 
     private void updateBoard() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                JButton button = boardButtons[row][col];
-                Piece piece = chess.findPiece(Position.of(row, col));
+        for (int y = 1; y <= 8; y++) {
+            for (int x = 1; x <= 8; x++) {
+                JButton button = boardButtons[y - 1][x - 1];
 
-                if (piece != null) {
+                if (chess.checkPiece(Position.of(x, y))) {
+                    Piece piece = chess.findPiece(Position.of(x, y));
                     button.setText(getPieceSymbol(piece));
                 } else {
                     button.setText("");
