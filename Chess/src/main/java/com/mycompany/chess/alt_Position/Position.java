@@ -96,7 +96,7 @@ public enum Position {
         }
         try {
             return Position.valueOf(pos);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with value: " + pos);
             return null;
