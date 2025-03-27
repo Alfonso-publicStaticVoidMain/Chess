@@ -105,6 +105,9 @@ public class Pawn extends Piece {
      * If the last Pawn moved didn't move 2 units in the Y direction, false is
      * returned.
      * 
+     * If the last Pawn moved's position isn't in the same Y coordinate as
+     * {@code this}, false is returned.
+     * 
      * If the final Position of the last Pawn moved isn't within 1 distance of
      * {@code this}'s current position, false is returned.
      */
@@ -113,6 +116,7 @@ public class Pawn extends Piece {
         Play lastPlay = this.getGame().getLastPlay();
         if (!(lastPlay.getPiece() instanceof Pawn)) return false;
         if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
+        if (Math.abs(Position.yDist(lastPlay.getFinPos(), this.getPos())) != 0) return false;
         if (Math.abs(Position.xDist(this.getPos(), lastPlay.getFinPos())) != 1) return false;
         return true;
     }
