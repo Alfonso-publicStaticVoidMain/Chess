@@ -19,7 +19,7 @@ public class ChessGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
 
-        boardPanel = new JPanel(new GridLayout(9, 9)); // Extra row & column
+        boardPanel = new JPanel(new GridLayout(9, 9));
         boardButtons = new JButton[9][9];
 
         initializeBoard();
