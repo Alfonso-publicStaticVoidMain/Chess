@@ -9,7 +9,7 @@ public class Chess {
     private List<Play> playRecord = new LinkedList<>();
     private Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
     private Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
-
+    
     public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {
         return this.leftCastlingAvaliability;
     }
