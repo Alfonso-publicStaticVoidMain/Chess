@@ -95,7 +95,7 @@ public class ChessGUI {
                 for (int y = 1; y <= 8; y++) {
                     Position potentialMove = Position.of(x, y);
                     if (piece.checkLegalMovement(potentialMove)) {
-                        boardButtons[x][y].setBackground(Color.YELLOW);
+                        boardButtons[x][y].setBackground(Color.GREEN);
                     }
                 }
             }
