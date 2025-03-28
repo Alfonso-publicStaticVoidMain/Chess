@@ -58,28 +58,37 @@ public abstract class Piece {
         Chess chessGame = this.getGame();
         Position initPos = this.getPos();
         Piece eatenPiece;
+        boolean playRecorded = false;
         if (this.checkLegalMovement(finPos, checkCheck)) {
             if (chessGame.checkPiece(finPos)) {
                 eatenPiece = chessGame.findPiece(finPos);
                 chessGame.getPieces().remove(eatenPiece);
-                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
+                if (recordMovement && !playRecorded) {
+                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
+                    playRecorded = true;
+                }
             } else if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
                 if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
                     eatenPiece = chessGame.getLastPlay().getPiece();
                     chessGame.getPieces().remove(eatenPiece);
-                    if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
+                    if (recordMovement && !playRecorded) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
                 }
             }
             this.setPos(finPos);
-            if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
+            if (recordMovement && !playRecorded) {
+                chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
+                playRecorded = true;
+            }
             
-            if (chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
+            if ((this instanceof King || this instanceof Rook) &&
+                chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
                 initPos.equals(Position.of(1, this.getColor().initRow()))
                 || initPos.equals(Position.of(5, this.getColor().initRow())))
                 ) chessGame.getLeftCastlingAvaliability().put(this.getColor(), false);
             
-            if (chessGame.getRightCastlingAvaliability().get(this.getColor()) && (
+            if ((this instanceof King || this instanceof Rook) &&
+                chessGame.getRightCastlingAvaliability().get(this.getColor()) && (
                 initPos.equals(Position.of(8, this.getColor().initRow()))
                 || initPos.equals(Position.of(5, this.getColor().initRow())))
                 ) chessGame.getRightCastlingAvaliability().put(this.getColor(), false);
