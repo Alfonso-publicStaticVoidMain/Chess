@@ -2,10 +2,17 @@ package com.mycompany.chess;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.*;
+import javax.swing.table.*;
 
 public class ChessGUI {
     private JFrame frame;
     private JPanel boardPanel;
+    private JPanel topPanel;
+    private JPanel rightPanel;
+    private JLabel activePlayerLabel;
+    private JTable playRecordArea;
+    private DefaultTableModel tableModel;
     private JButton[][] boardButtons;
     private Chess chess;
     private Position selectedPos = null;
@@ -17,9 +24,33 @@ public class ChessGUI {
 
         frame = new JFrame("Chess Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(1000, 600);
 
+        topPanel = new JPanel();
+        activePlayerLabel = new JLabel("Active Player: WHITE", SwingConstants.CENTER);
+        activePlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        topPanel.add(activePlayerLabel);
+        frame.add(topPanel, BorderLayout.NORTH);
+        
+        rightPanel = new JPanel(new BorderLayout());
+        String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Eaten"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        playRecordArea = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(playRecordArea);
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
+        rightPanel.setPreferredSize(new Dimension(400, 0));
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "Play History", 
+            TitledBorder.CENTER, TitledBorder.TOP, 
+            new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
+        rightPanel.add(tablePanel, BorderLayout.CENTER);
+        frame.add(rightPanel, BorderLayout.EAST);
+        
         boardPanel = new JPanel(new GridLayout(9, 9));
+        boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         boardButtons = new JButton[9][9];
 
         initializeBoard();
@@ -80,15 +111,17 @@ public class ChessGUI {
             if (chess.checkPiece(selectedPos)) {
                 Piece piece = chess.findPiece(selectedPos);
                 boolean playDone = false;
-                
+                int castlingInfo = 0;
                 if (piece instanceof King) {
                     if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(activePlayer)) {
                         chess.doLeftCastling(activePlayer);
                         playDone = true;
+                        castlingInfo = -1;
                     }
                     if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(activePlayer)) {
                         chess.doRightCastling(activePlayer);
                         playDone = true;
+                        castlingInfo = 1;
                     }
                 }
                 
@@ -118,7 +151,21 @@ public class ChessGUI {
                     }
                     playDone = true;
                 }
-                if (playDone) activePlayer = activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+                if (playDone) {
+                    activePlayer = activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+                    activePlayerLabel.setText("Active Player: "+activePlayer);
+                    if (castlingInfo != 0) {
+                        tableModel.addRow(new Object[] {castlingInfo == -1 ? "Castling (left)" : "Castling (right)", "", "", ""});
+                    } else {
+                        Play lastPlay = chess.getLastPlay();
+                        tableModel.addRow(new Object[] {
+                            lastPlay.getPiece().getSimpleName(),
+                            lastPlay.getInitPos(),
+                            lastPlay.getFinPos(),
+                            lastPlay.getPieceEaten() != null ? lastPlay.getPieceEaten().getSimpleName() : ""
+                        });
+                    }
+                }
             }
             clearHighlights();
             selectedPos = null;
