@@ -6,9 +6,9 @@ public class Play {
     private final Piece piece;
     private final Position initPos;
     private final Position finPos;
-    private final Optional<Piece> pieceEaten;
+    private final Piece pieceEaten;
 
-    public Play(Piece piece, Position initPos, Position finPos, Optional<Piece> pieceEaten) {
+    public Play(Piece piece, Position initPos, Position finPos, Piece pieceEaten) {
         this.piece = piece;
         this.initPos = initPos;
         this.finPos = finPos;
@@ -41,11 +41,7 @@ public class Play {
         return this.finPos;
     }
 
-    public Optional<Piece> getPieceEaten() {
+    public Piece getPieceEaten() {
         return this.pieceEaten;
-    }
-    
-    public boolean pieceWasEaten() {
-        return this.pieceEaten.isPresent();
     }
 }
