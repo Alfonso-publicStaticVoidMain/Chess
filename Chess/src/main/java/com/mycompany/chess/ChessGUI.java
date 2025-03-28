@@ -89,7 +89,7 @@ public class ChessGUI {
                     } else {
                         button.setBackground(Color.GRAY);
                     }
-
+                    button.setFont(new Font("Dialog", Font.PLAIN, 24));
                     final int fx = x, fy = y;
                     button.addActionListener(e -> handleClick(fx, fy));
                 }
