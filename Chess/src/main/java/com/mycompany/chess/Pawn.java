@@ -102,7 +102,7 @@ public class Pawn extends Piece {
      * 
      * If the last {@link Piece} that was moved ins't a Pawn, false is returned.
      * 
-     * If the last {@link Piece} moved isn't of the same color as {@code this},
+     * If the last {@link Piece} moved is of the same color as {@code this},
      * false is returned.
      * 
      * If the last Pawn moved didn't move 2 units in the Y direction, false is
@@ -118,7 +118,7 @@ public class Pawn extends Piece {
         if (this.getGame().getPlayRecord().isEmpty()) return false;
         Play lastPlay = this.getGame().getLastPlay();
         if (!(lastPlay.getPiece() instanceof Pawn)) return false;
-        if (lastPlay.getPiece().getColor() != this.getColor()) return false;
+        if (lastPlay.getPiece().getColor() == this.getColor()) return false;
         if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
         if (Math.abs(Position.yDist(lastPlay.getFinPos(), this.getPos())) != 0) return false;
         if (Math.abs(Position.xDist(this.getPos(), lastPlay.getFinPos())) != 1) return false;
