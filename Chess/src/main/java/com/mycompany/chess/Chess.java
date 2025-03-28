@@ -457,6 +457,12 @@ public class Chess {
                 this.pieces.add(newQueen);
                 return true;
             }
+            case "chancellor" -> {
+                Piece newChancellor = new Chancellor(piece.getPos(), piece.getColor());
+                newChancellor.setGame(this);
+                this.pieces.add(newChancellor);
+                return true;
+            }
         }
         throw new IllegalArgumentException(newType+" wasn't a legal type to crown a pawn into.");
     }
