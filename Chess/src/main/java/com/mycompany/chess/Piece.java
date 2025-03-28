@@ -62,13 +62,13 @@ public abstract class Piece {
             if (chessGame.checkPiece(finPos)) {
                 eatenPiece = chessGame.findPiece(finPos);
                 chessGame.getPieces().remove(eatenPiece);
-                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
             } else if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
                 if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
                     eatenPiece = chessGame.getLastPlay().getPiece();
                     chessGame.getPieces().remove(eatenPiece);
-                    if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, Optional.of(eatenPiece)));
+                    if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
                 }
             }
             this.setPos(finPos);
@@ -149,6 +149,10 @@ public abstract class Piece {
         if (this instanceof Knight) typeChar = 'k';
         else typeChar = Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
         return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + typeChar;
+    }
+    
+    public String getSimpleName() {
+        return this.getColor() + " " + this.getClass().getSimpleName();
     }
     
 }
