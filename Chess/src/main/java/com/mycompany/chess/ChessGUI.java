@@ -93,7 +93,6 @@ public class ChessGUI {
                     final int fx = x, fy = y;
                     button.addActionListener(e -> handleClick(fx, fy));
                 }
-
                 boardPanel.add(button);
             }
         }
