@@ -17,6 +17,7 @@ public class ChessGUI {
     private Chess chess;
     private Position selectedPos = null;
     private ChessColor activePlayer = ChessColor.WHITE;
+    private boolean endOfGame = false;
 
     public ChessGUI() {
         chess = new Chess();
@@ -100,6 +101,7 @@ public class ChessGUI {
 
     private void handleClick(int x, int y) {
         if (x == 0 || y == 0) return; // Ignore label clicks
+        if (endOfGame) return; // Don't do anything if the game has ended.
         Position clickedPos = Position.of(x, y);
 
         if (selectedPos == null) { // First click stores the selected position.
@@ -111,7 +113,8 @@ public class ChessGUI {
             if (chess.checkPiece(selectedPos)) {
                 Piece piece = chess.findPiece(selectedPos);
                 boolean playDone = false;
-                int castlingInfo = 0;
+                int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
+                
                 if (piece instanceof King) {
                     if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(activePlayer)) {
                         chess.doLeftCastling(activePlayer);
@@ -128,7 +131,7 @@ public class ChessGUI {
                 if (!playDone && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     
-                    if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) {
+                    if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) { // Pawn crowning
                         // Menu to crown a Pawn
                         Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
                         int n = JOptionPane.showOptionDialog(frame,
@@ -151,11 +154,9 @@ public class ChessGUI {
                     }
                     playDone = true;
                 }
-                if (playDone) {
-                    activePlayer = activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
-                    activePlayerLabel.setText("Active Player: "+activePlayer);
+                if (playDone) { // Record the play (special case for castling) and update the active player
                     if (castlingInfo != 0) {
-                        tableModel.addRow(new Object[] {castlingInfo == -1 ? "Castling (left)" : "Castling (right)", "", "", ""});
+                        tableModel.addRow(new Object[] {activePlayer + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
                     } else {
                         Play lastPlay = chess.getLastPlay();
                         tableModel.addRow(new Object[] {
@@ -165,11 +166,36 @@ public class ChessGUI {
                             lastPlay.getPieceEaten() != null ? lastPlay.getPieceEaten().getSimpleName() : ""
                         });
                     }
+                    activePlayer = activePlayer.opposite();
+                    activePlayerLabel.setText("Active Player: "+activePlayer);
                 }
             }
             clearHighlights();
             selectedPos = null;
             updateBoard();
+            if (chess.checkMate(activePlayer)) {
+                JOptionPane.showConfirmDialog(
+                    frame,
+                    activePlayer + " is in checkmate.\n"+activePlayer.opposite()+" wins.",
+                    "End of the game",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null
+                );
+                tableModel.addRow(new Object[] {activePlayer.opposite()+" wins.", "---", "---", "---"});
+                endOfGame = true;
+            } else if (chess.checkMate(activePlayer, false)) {
+                JOptionPane.showConfirmDialog(
+                    frame,
+                    activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
+                    "End of the game",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null
+                );
+                tableModel.addRow(new Object[] {"The game is a draw.", "---", "---", "---"});
+                endOfGame = true;
+            }
         }
     }
 
