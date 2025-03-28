@@ -6,15 +6,15 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 public class ChessGUI {
-    private JFrame frame;
-    private JPanel boardPanel;
-    private JPanel topPanel;
-    private JPanel rightPanel;
-    private JLabel activePlayerLabel;
-    private JTable playRecordArea;
-    private DefaultTableModel tableModel;
-    private JButton[][] boardButtons;
-    private Chess chess;
+    private final JFrame frame;
+    private final JPanel boardPanel;
+    private final JPanel topPanel;
+    private final JPanel rightPanel;
+    private final JLabel activePlayerLabel;
+    private final JTable playRecordArea;
+    private final DefaultTableModel tableModel;
+    private final JButton[][] boardButtons;
+    private final Chess chess;
     private Position selectedPos = null;
     private ChessColor activePlayer = ChessColor.WHITE;
     private boolean endOfGame = false;
