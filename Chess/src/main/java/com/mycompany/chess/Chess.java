@@ -341,6 +341,8 @@ public class Chess {
 //            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
 //        ) return false;
         if (!this.getLeftCastlingAvaliability().get(color)) return false;
+        King king = this.findKing(color);
+        if (king.checkCheck(Position.of(4, color.initRow())) || king.checkCheck(Position.of(3, color.initRow()))) return false;
         return IntStream.rangeClosed(2, 4)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
@@ -368,6 +370,8 @@ public class Chess {
 //            || this.checkHistoryOfMovementsFromPosition(rightRookInitPos)
 //        ) return false;
         if (!this.getRightCastlingAvaliability().get(color)) return false;
+        King king = this.findKing(color);
+        if (king.checkCheck(Position.of(6, color.initRow())) || king.checkCheck(Position.of(7, color.initRow()))) return false;
         return IntStream.rangeClosed(6, 7)
             .allMatch(i -> !this.checkPiece(Position.of(i, color.initRow())));
     }
