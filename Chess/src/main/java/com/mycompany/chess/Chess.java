@@ -20,26 +20,21 @@ public class Chess {
     private Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
     private Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
     
-    public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {
-        return this.leftCastlingAvaliability;
-    }
-
-    public Map<ChessColor, Boolean> getRightCastlingAvaliability() {
-        return rightCastlingAvaliability;
-    }
-
-    public List<Piece> getPieces() {
-        return this.pieces;
-    }
-
-    public List<Play> getPlayRecord() {
-        return this.playRecord;
-    }
+    public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {return leftCastlingAvaliability;}
+    public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
+    public List<Piece> getPieces() {return this.pieces;}
+    public List<Play> getPlayRecord() {return this.playRecord;}
     
     public Play getLastPlay() {
         return this.getPlayRecord().isEmpty() ? null : this.getPlayRecord().get(this.getPlayRecord().size()-1);
     }
 
+    /**
+     * <p>
+     * Empty constructor that simply adds the default true castling
+     * avaliabilities for each color.
+     * </p>
+     */
     public Chess() {
         this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
         this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
