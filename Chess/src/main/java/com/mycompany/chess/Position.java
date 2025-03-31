@@ -3,9 +3,16 @@ package com.mycompany.chess;
 import java.util.List;
 
 public class Position {
+    /**
+     * Integer attributes storing the X and Y coordinates of the Position.
+     */
     private final int x;
     private final int y;
     
+    /**
+     * A series of Fields representing each of the valid positions in a
+     * chess board.
+     */
     public static final Position A1 = Position.of("A1");
     public static final Position A2 = Position.of("A2");
     public static final Position A3 = Position.of("A3");
@@ -78,7 +85,9 @@ public class Position {
     public static final Position H7 = Position.of("H7");
     public static final Position H8 = Position.of("H8");
 
-    
+    /**
+     * List containing all possible chess positions.
+     */
     private static final List<Position> validChessPositions = List.of(
     A1, A2, A3, A4, A5, A6, A7, A8,
     B1, B2, B3, B4, B5, B6, B7, B8,
@@ -89,6 +98,10 @@ public class Position {
     G1, G2, G3, G4, G5, G6, G7, G8,
     H1, H2, H3, H4, H5, H6, H7, H8
     );
+    
+    public int x() {return x;}
+    public int y() {return y;}
+    public static List<Position> validPositions() {return Position.validChessPositions;}
     
     /**
      * <p>
@@ -155,10 +168,6 @@ public class Position {
             return null;
         }
     }
-       
-    public int x() {return x;}
-    public int y() {return y;}
-    public static List<Position> getValidPositions() {return Position.validChessPositions;}
     
     /**
      * <p>
