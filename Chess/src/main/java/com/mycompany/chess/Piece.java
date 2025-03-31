@@ -3,8 +3,17 @@ package com.mycompany.chess;
 import java.util.Optional;
 
 public abstract class Piece {
+    /**
+     * The {@link Position} the Piece has in the chess board.
+     */
     private Position pos;
+    /**
+     * {@link Color} of the Piece, storing certain qualities of that Piece.
+     */
     private ChessColor color;
+    /**
+     * {@link Chess} game where the Piece is being played at.
+     */
     private Chess game;
     
     protected Piece(Position pos, ChessColor color) {
@@ -12,8 +21,21 @@ public abstract class Piece {
         this.color = color;
     }
 
-    public abstract boolean checkLegalMovement(Position finPos);
+    /**
+     * <p>
+     * Method to check if the proposed Position would be a legal movement for
+     * the Piece. checkLegalMovement(Position, boolean) defaults the checkCheck
+     * parameter to true.
+     * </p>
+     * @param finPos Position we're attempting to move the Piece to.
+     * @param checkCheck State parameter to track if we want to declare a
+     * movement illegal if it causes a check.
+     * @return Returns true if the movement is legal for the Piece, false
+     * otherwise. Each class implementing Piece will account for the specific
+     * conditions that Piece has limiting its movement.
+     */
     public abstract boolean checkLegalMovement(Position finPos, boolean checkCheck);
+    public abstract boolean checkLegalMovement(Position finPos);
     public abstract Piece copy();
     
     public Position getPos() {return this.pos;}
@@ -38,6 +60,9 @@ public abstract class Piece {
      * <p>
      * If the movement is legal, moves {@code this} Piece to the specified
      * Position.
+     * 
+     * move(Position, boolean) defaults recordMovement to true.
+     * move(Position) defaults both recordMovement and checkCheck to true.
      * </p>
      * @param finPos Position we're trying to move the Piece to.
      * @param checkCheck State parameter to check if the movement should be
