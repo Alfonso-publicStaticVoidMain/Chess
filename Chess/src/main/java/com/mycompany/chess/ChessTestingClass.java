@@ -19,7 +19,7 @@ public class ChessTestingClass {
     
     public static void debugPositionsAPieceCanMoveTo(Piece piece) {
         System.out.println("Positions the "+piece.getColor() + " " + piece.getClass().getSimpleName()+" can move to:");
-        List<Position> validPositionList = Position.getValidPositions().stream()
+        List<Position> validPositionList = Position.validPositions().stream()
             .filter(piece::checkLegalMovement)
             .toList();
         
