@@ -340,11 +340,6 @@ public class Chess {
      *      {@link Chess#checkPiece}
      */
     public boolean checkLeftCastling(ChessColor color) {
-//        Position kingInitPos = Position.of(5, color.initRow());
-//        Position leftRookInitPos = Position.of(1, color.initRow());
-//        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
-//            || this.checkHistoryOfMovementsFromPosition(leftRookInitPos)
-//        ) return false;
         if (!this.getLeftCastlingAvaliability().get(color)) return false;
         King king = this.findKing(color);
         if (king.checkCheck(Position.of(4, color.initRow())) || king.checkCheck(Position.of(3, color.initRow()))) return false;
@@ -369,11 +364,6 @@ public class Chess {
      *      {@link Chess#checkPiece}
      */
     public boolean checkRightCastling(ChessColor color) {
-//        Position kingInitPos = Position.of(5, color.initRow());
-//        Position rightRookInitPos = Position.of(8, color.initRow());
-//        if (this.checkHistoryOfMovementsFromPosition(kingInitPos)
-//            || this.checkHistoryOfMovementsFromPosition(rightRookInitPos)
-//        ) return false;
         if (!this.getRightCastlingAvaliability().get(color)) return false;
         King king = this.findKing(color);
         if (king.checkCheck(Position.of(6, color.initRow())) || king.checkCheck(Position.of(7, color.initRow()))) return false;
@@ -472,6 +462,16 @@ public class Chess {
         throw new IllegalArgumentException(newType+" wasn't a legal type to crown a pawn into.");
     }
     
+    /**
+     * <p>
+     * Static method to convert a letter to a number.
+     * </p>
+     * @param letter Letter to convert.
+     * @return The integer number representning its position in the english
+     * alphabet.
+     * @throws IllegalArgumentException If the letter is anything other than
+     * [a-h].
+     */
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
         return switch (Character.toLowerCase(letter)) {
             case 'a' -> 1;
@@ -486,6 +486,15 @@ public class Chess {
         };
     }
     
+    /**
+     * <p>
+     * Static method to convert a number to a letter.
+     * </p>
+     * @param num Number to convert to a letter.
+     * @return The letter in the number's position in the english alphabet.
+     * @throws IllegalArgumentException If the number isn't within 1 and 8 (both
+     * inclusive).
+     */
     public static char convertNumberToLetter(int num) throws IllegalArgumentException {
         return switch (num) {
             case 1 -> 'A';
