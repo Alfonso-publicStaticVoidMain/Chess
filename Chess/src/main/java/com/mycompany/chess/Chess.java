@@ -8,17 +8,17 @@ public class Chess {
     /**
      * List containing all pieces of the game.
      */
-    private List<Piece> pieces = new ArrayList<>();
+    private final List<Piece> pieces = new ArrayList<>();
     /**
      * List containing all Plays of the game.
      */
-    private List<Play> playRecord = new LinkedList<>();
+    private final List<Play> playRecord = new LinkedList<>();
     /**
      * Two map attributes representing the current ability of each color to do
      * left and right castling respectivaly.
      */
-    private Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
-    private Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
+    private final Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
+    private final Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
     
     public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {return leftCastlingAvaliability;}
     public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
