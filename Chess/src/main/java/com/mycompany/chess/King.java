@@ -7,10 +7,10 @@ public class King extends Piece {
     }
     
     /**
-     * <p>
+     * 
      * Checks if the proposed position would be a legal movement of the King
      * within the {@code Chess} game it's in.
-     * </p>
+     * 
      * @param finPos Position the King is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
@@ -54,10 +54,10 @@ public class King extends Piece {
     }
     
     /**
-     * <p>
+     * 
      * Checks whether {@code this} King would be in check if it moved to the
      * specified position.
-     * </p>
+     * 
      * @param finPos The position the King is trying to move to.
      * @return Returns true if no piece of the opposing color can make a legal
      * move to the piece {@code this} is attempting to move to, with the ability
