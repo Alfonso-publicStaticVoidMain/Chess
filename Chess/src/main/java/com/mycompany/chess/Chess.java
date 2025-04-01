@@ -4,16 +4,12 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 /**
- * Chess class
- * 
  * Contains information regarding a standard chess game: The pieces currently
  * involved in it, a record of all plays done, and trakcs the castling
  * avaliability for each color (separately for left and right castling).
- * 
  * @author Alfonso Gallego
  * @version 1.0
  */
-
 public class Chess {
     
     /**
@@ -72,10 +68,8 @@ public class Chess {
     }
 
     /**
-     * <p>
      * Empty constructor that simply adds the default true castling
      * avaliabilities for each color.
-     * </p>
      */
     public Chess() {
         this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
@@ -85,10 +79,8 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Sets the game of each piece in {@code this} game's piece list
      * to {@code this}.
-     * </p>
      */
     public void linkPieces() {
         this.pieces.stream()
@@ -96,14 +88,12 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Adds the standard Chess pieces to {@code this} game's pieces list.
-     * </p>
      * @see 
-     *      {@link Position#of(int, int)}
-     *      {@link ChessColor#initRow}
-     *      {@link ChessColor#initRowPawn}
-     *      {@link Chess#linkPieces}
+     *      Position#of(int, int)
+     *      ChessColor#initRow
+     *      ChessColor#initRowPawn
+     *      Chess#linkPieces
      */
     public void addStandardPieces() {
         for (ChessColor color : ChessColor.values()) {
@@ -128,9 +118,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks whether's there's a piece or not in the specified position.
-     * </p>
      * @param pos Position to check.
      * @return Returns true if there's a {@link Piece} in the {@link Position},
      * false otherwise. If somehow there's 2 or more pieces in the position,
@@ -151,9 +139,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Returns the Piece present in the specified position, if there's one.
-     * </p>
      * @param pos Position to get the Piece from.
      * @return Returns the {@link Piece} found in the {@link Position}, if one
      * can be found there. Otherwise, it returns {@code null} and prints an
@@ -171,18 +157,16 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks whether there's a Piece in the specified position that is the
      * same color as another Piece.
-     * </p>
      * @param piece Piece whose color we will compare to.
      * @param pos Position we'll check for a Piece of that color.
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is the same as {@code piece}. False if there's
      * no piece or if there's a piece of a different color.
      * @see
-     *      {@link Chess#checkPiece}
-     *      {@link Chess#findPiece}
+     *      Chess#checkPiece
+     *      Chess#findPiece
      */
     public boolean checkPieceSameColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -190,18 +174,16 @@ public class Chess {
     }
 
     /**
-     * <p>
      * Checks whether there's a Piece in the specified position that is the
      * opposite color as another Piece.
-     * </p>
      * @param piece Piece whose color we will compare to.
      * @param pos Position we'll check for a Piece of that color.
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is different than {@code piece}'s.
      * False if there's no piece or if there's a piece of the same color.
      * @see
-     *      {@link Chess#checkPiece}
-     *      {@link Chess#findPiece}
+     *      Chess#checkPiece
+     *      Chess#findPiece
      */    
     public boolean checkPieceDiffColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -209,9 +191,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Finds and returns the King piece of the specified color.
-     * </p>
      * @param color Color of the seeked King.
      * @return Returns the {@link Piece} object in the Pieces Set that is the
      * only {@link King} of that color.
@@ -224,9 +204,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Prints the current state of the board.
-     * </p>
      * @deprecated Method only used within {@link ChessMainClass} to play
      * the game via console. Honestly, not recommended, it's really boring.
      */
@@ -250,12 +228,10 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Returns a copy of {@code this} Chess game.
-     * </p>
      * @return Returns a copy of {@code this} Chess game.
      * @see
-     *      {@link Chess#linkPieces}
+     *      Chess#linkPieces
      */
     public Chess copyGame() {
         Chess result = new Chess();
@@ -267,10 +243,8 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks the collision along a path following a Rook or Bishop-like
      * movement, ie, in a straight line or a diagonal.
-     * </p>
      * @param initPos Initial Position of the movement.
      * @param finPos Final Position of the movement.
      * @return Returns true if there's no {@link Piece} along the trajectory
@@ -278,7 +252,7 @@ public class Chess {
      * The method will return false if the movement isn't on a straight line or
      * diagonal.
      * @see
-     *      {@link Chess#checkPiece}
+     *      Chess#checkPiece
      */
     public boolean isPathClear(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
@@ -299,9 +273,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks if the player of the given Color is in checkmate.
-     * </p>
      * @param color Color we want to check checkmate for.
      * @param checkCheck State parameter to track whether or not we want to
      * take into account if the King is currently in check. Setting it to false
@@ -316,11 +288,11 @@ public class Chess {
      * of if it's currently in check or not.
      * 
      * @see 
-     *      {@link King#checkCheck()}
-     *      {@link Piece#checkLegalMovement(Position)}
-     *      {@link Chess#findPiece}
-     *      {@link Chess#findKing}
-     *      {@link Chess#copyGame}
+     *      King#checkCheck()
+     *      Piece#checkLegalMovement(Position)
+     *      Chess#findPiece
+     *      Chess#findKing
+     *      Chess#copyGame
      */
     public boolean checkMate(ChessColor color, boolean checkCheck) {
         King king = this.findKing(color);
@@ -358,10 +330,8 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks whether there's a recorded Play whose initial position is the
      * specified Position.
-     * </p>
      * @param pos
      * @return Returns true if in the {@code playRecord} list of {@link Play}s
      * there's one that has initial position {@code pos}.
@@ -377,9 +347,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks if left castling is possible in this Chess game.
-     * </p>
      * @param color Color for which to check castling.
      * @return Returns true if the castling is possible for the {@code Color}
      * parameter, performing the following checks:
@@ -390,7 +358,7 @@ public class Chess {
      * If there's any Piece between the King and left Rook, returns false.
      * 
      * @see 
-     *      {@link Chess#checkPiece}
+     *      Chess#checkPiece
      */
     public boolean checkLeftCastling(ChessColor color) {
         if (!this.getLeftCastlingAvaliability().get(color)) return false;
@@ -401,9 +369,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Checks if right castling is possible in this Chess game.
-     * </p>
      * @param color Color for which to check castling.
      * @return Returns true if the castling is possible for the {@code Color}
      * parameter, performing the following checks:
@@ -414,7 +380,7 @@ public class Chess {
      * If there's any Piece between the King and right Rook, returns false.
      * 
      * @see 
-     *      {@link Chess#checkPiece}
+     *      Chess#checkPiece
      */
     public boolean checkRightCastling(ChessColor color) {
         if (!this.getRightCastlingAvaliability().get(color)) return false;
@@ -425,15 +391,13 @@ public class Chess {
     }
     
     /**
-     * <p>
      * If left castling is legal, reassigns the positions of the appropiate
      * King and Rook to do that castling.
-     * </p>
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
      * @see
-     *      {@link Chess#checkLeftCastling}
+     *      Chess#checkLeftCastling
      */
     public boolean doLeftCastling(ChessColor color) {
         if (!this.checkLeftCastling(color)) return false;
@@ -447,15 +411,13 @@ public class Chess {
     }
     
     /**
-     * <p>
      * If right castling is legal, reassigns the positions of the appropiate
      * King and Rook to do that castling.
-     * </p>
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
      * @see
-     *      {@link Chess#checkRightCastling}
+     *      Chess#checkRightCastling
      */
     public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
@@ -469,9 +431,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Crowns a Pawn and transforms it to a new type of Piece.
-     * </p>
      * @param piece Piece to crown. Must be a Pawn.
      * @param newType New type to convert the Pawn to. Not case sensitive.
      * @return Returns true if the crowning was succesful, false otherwise.
@@ -516,9 +476,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Static method to convert a letter to a number.
-     * </p>
      * @param letter Letter to convert.
      * @return The integer number representning its position in the english
      * alphabet.
@@ -540,9 +498,7 @@ public class Chess {
     }
     
     /**
-     * <p>
      * Static method to convert a number to a letter.
-     * </p>
      * @param num Number to convert to a letter.
      * @return The letter in the number's position in the english alphabet.
      * @throws IllegalArgumentException If the number isn't within 1 and 8 (both
