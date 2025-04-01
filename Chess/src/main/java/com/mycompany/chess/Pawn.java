@@ -1,30 +1,48 @@
 package com.mycompany.chess;
 
+/**
+ * Class representing the Pawn piece.
+ * @author Alfonso Gallego
+ */
 public class Pawn extends Piece {
 
     public Pawn(Position pos, ChessColor color) {
         super(pos, color);
     }
     
+    /**
+     * Getter for the initial row of this pawn, as dictated by its color.
+     * @return 2 if this Pawn's {@link ChessColor} is WHITE, 7 if its BLACK.
+     */
     @Override
     public int initRow() {
         return this.getColor().initRowPawn();
     }
     
+    /**
+     * Getter for the Y direction of this pawn, as dictated by its color.
+     * @return 1 if this Pawn's {@link ChessColor} is WHITE, -1 if its BLACK.
+     */
     public int yDirection() {
         return this.getColor().yDirection();
     }
     
+    /**
+     * Overloaded version of the {@link Pawn#checkLegalMovement(Position, boolean)}
+     * method, defaulting the value of boolean checkCheck to true.
+     * @param finPos Position we're attempting to move {@code this} Pawn to.
+     * @return True if the movement is legal for the Piece and doing it wouldn't
+     * cause a check for its color, false otherwise.
+     */
     @Override
     public boolean checkLegalMovement(Position finPos) {
         return checkLegalMovement(finPos, true);
     }
     
     /**
-     * <p>
      * Checks if the proposed position would be a legal movement of the Pawn
      * within the {@code Chess} game it's in.
-     * </p>
+     * 
      * @param finPos Position the Pawn is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
@@ -89,10 +107,9 @@ public class Pawn extends Piece {
     }
     
     /**
-     * <p>
      * Checks if {@code this} Pawn can make a legal En Passant move, according
      * to the last play recorded in the game.
-     * </p>
+     * 
      * @return Returns true if the {@link Pawn} is able to do an En Passant
      * move given the last play stored in the {@code playRecord} attribute
      * of {@code this.game}.
@@ -126,23 +143,24 @@ public class Pawn extends Piece {
     }
     
     /**
-     * <p>
      * If {@code this} Pawn can make a legal En Passant move, returns the
      * direction in the X axis it must move to succesfully make that move.
-     * </p>
      * @return Returns the direction {@code this} Pawn must move to make an
      * En Passant move on the last moved Pawn, if able, ie, the distance in
      * the X axis between {@code this}'s current position and the final position
      * of the last moved Pawn in the {@link Chess} game's {@code playRecord}
-     * attribute.
-     * 
-     * If unable to move En Passant, returns 0.
+     * attribute. If unable to move En Passant, returns 0.
      */
     public int xDirEnPassant() {
         if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1).getFinPos());
         return 0;
     }
 
+    /**
+     * Copies this Pawn as a new Pawn.
+     * @return A Pawn object with the same {@link Position} and {@link ChessColor},
+     * but with no game.
+     */
     @Override
     public Piece copy() {
         return new Pawn(this.getPos(), this.getColor());
