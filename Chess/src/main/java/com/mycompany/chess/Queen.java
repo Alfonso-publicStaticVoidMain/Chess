@@ -7,10 +7,10 @@ public class Queen extends Piece {
     }
     
     /**
-     * <p>
+     * 
      * Checks if the proposed position would be a legal movement of the Queen
      * within the {@code Chess} game it's in.
-     * </p>
+     * 
      * @param finPos Position the Queen is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
