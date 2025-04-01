@@ -21,8 +21,7 @@ public abstract class Piece {
 
     /**
      * Method to check if the proposed Position would be a legal movement for
-     * the Piece. checkLegalMovement(Position, boolean) defaults the checkCheck
-     * parameter to true.
+     * the Piece.
      * 
      * @param finPos Position we're attempting to move the Piece to.
      * @param checkCheck State parameter to track if we want to declare a
