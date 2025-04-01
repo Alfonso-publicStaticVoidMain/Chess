@@ -3,6 +3,17 @@ package com.mycompany.chess;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * Chess class
+ * 
+ * Contains information regarding a standard chess game: The pieces currently
+ * involved in it, a record of all plays done, and trakcs the castling
+ * avaliability for each color (separately for left and right castling).
+ * 
+ * @author Alfonso Gallego
+ * @version 1.0
+ */
+
 public class Chess {
     
     /**
@@ -22,9 +33,32 @@ public class Chess {
     private final Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
     private final Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
     
+    /**
+     * Getter for the left castling avaliability attribute.
+     * @return The Map of right castling avaliability of {@code this} game,
+     * mapping each possible color to a boolean representing if it still has
+     * the ability to do a left castling.
+     */
     public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {return leftCastlingAvaliability;}
+
+    /**
+     * Getter for the right castling avaliability attribute.
+     * @return The Map of right castling avaliability of {@code this} game,
+     * mapping each possible color to a boolean representing if it still has
+     * the ability to do a right castling.
+     */
     public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
+
+    /**
+     * Getter for the pieces attribute.
+     * @return The List of Pieces of {@code this} game.
+     */
     public List<Piece> getPieces() {return this.pieces;}
+
+    /**
+     * Getter for the playRecord attribute.
+     * @return The List of Plays of {@code this} game.
+     */
     public List<Play> getPlayRecord() {return this.playRecord;}
     
     /**
@@ -266,7 +300,7 @@ public class Chess {
     
     /**
      * <p>
-     * Checks if the King of the given Color is in checkmate.
+     * Checks if the player of the given Color is in checkmate.
      * </p>
      * @param color Color we want to check checkmate for.
      * @param checkCheck State parameter to track whether or not we want to
@@ -275,7 +309,7 @@ public class Chess {
      * but every possible movement for its color would put it in check.
      * @return If checkCheck is set to true, the method will return true if
      * the King is currently in check and no possible movement of its color
-     * would solve that.
+     * would change that.
      * 
      * If checkCheck is set to false, the method will return true if every
      * possible movement of the King's color would put it in check, regardless
@@ -313,6 +347,12 @@ public class Chess {
         return true;
     }
     
+    /**
+     * Checks if the player of a given color is in checkmate, defaulting the
+     * {@code checkCheck} argument of the previous method to true.
+     * @param color Color of the player to check checkmate for.
+     * @return True if that player is in checkmate, false otherwise.
+     */
     public boolean checkMate(ChessColor color) {
         return this.checkMate(color, true);
     }
