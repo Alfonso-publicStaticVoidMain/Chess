@@ -11,6 +11,8 @@ public class Chess {
     private final List<Piece> pieces = new ArrayList<>();
     /**
      * List containing all Plays of the game.
+     * A LinkedList is employed because normally only the latest Play will
+     * be accessed.
      */
     private final List<Play> playRecord = new LinkedList<>();
     /**
@@ -25,6 +27,12 @@ public class Chess {
     public List<Piece> getPieces() {return this.pieces;}
     public List<Play> getPlayRecord() {return this.playRecord;}
     
+    /**
+     * Gets the last {@link Play} stored in the {@code playRecord} attribute.
+     * @return Returns the last {@link Play} in the {@code playRecord}
+     * attirbute of {@code this}, or {@code null} if that attribute is still
+     * empty.
+     */
     public Play getLastPlay() {
         return this.getPlayRecord().isEmpty() ? null : this.getPlayRecord().get(this.getPlayRecord().size()-1);
     }
