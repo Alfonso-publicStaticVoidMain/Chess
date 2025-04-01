@@ -40,6 +40,11 @@ public abstract class Piece {
      * cause a check for its color, false otherwise.
      */
     public abstract boolean checkLegalMovement(Position finPos);
+    /**
+     * Copies {@code this} Piece as a new Piece of its type.
+     * @return A new Piece of the appropiate class, with the same {@link Position}
+     * and {@link ChessColor}, but with no game associated to it.
+     */
     public abstract Piece copy();
     
     public Position getPos() {return this.pos;}
