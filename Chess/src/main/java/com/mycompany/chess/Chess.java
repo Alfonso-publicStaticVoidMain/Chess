@@ -103,15 +103,17 @@ public class Chess {
      * it prints an error message and returns false.
      */
     public boolean checkPiece(Position pos) {
-        long numberOfPiecesInPosition = this.pieces.stream()
-            .filter(piece -> piece.getPos().equals(pos))
-            .count();
-        if (numberOfPiecesInPosition > 1) {
-            System.out.println("Illegal number of pieces found in position " + pos);
-            System.out.println(numberOfPiecesInPosition+" pieces were found.");
-            return false;
-        }
-        return numberOfPiecesInPosition == 1;
+        return this.pieces.stream()
+            .anyMatch(piece -> piece.getPos().equals(pos));
+//        long numberOfPiecesInPosition = this.pieces.stream()
+//            .filter(piece -> piece.getPos().equals(pos))
+//            .count();
+//        if (numberOfPiecesInPosition > 1) {
+//            System.out.println("Illegal number of pieces found in position " + pos);
+//            System.out.println(numberOfPiecesInPosition+" pieces were found.");
+//            return false;
+//        }
+//        return numberOfPiecesInPosition == 1;
     }
     
     /**
@@ -191,7 +193,10 @@ public class Chess {
      * <p>
      * Prints the current state of the board.
      * </p>
+     * @deprecated Method only used within {@link ChessMainClass} to play
+     * the game via console. Honestly, not recommended, it's really boring.
      */
+    @Deprecated
     public void printBoard() {
         for (int y = 8; y >= 0; y--) {
             System.out.print(y + " ");
@@ -255,7 +260,7 @@ public class Chess {
         int steps = Math.max(Math.abs(Xmovement), Math.abs(Ymovement));
         
         return IntStream.range(1, steps)
-            .mapToObj(i -> Position.of(initPos.x() + i*Xdirection, initPos.y() + i*Ydirection))
+            .mapToObj(n -> Position.of(initPos.x() + n*Xdirection, initPos.y() + n*Ydirection))
             .noneMatch(position -> this.checkPiece(position));
     }
     
