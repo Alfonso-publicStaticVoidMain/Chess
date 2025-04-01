@@ -4,9 +4,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 /**
- * Contains information regarding a standard chess game: The pieces currently
- * involved in it, a record of all plays done, and trakcs the castling
- * avaliability for each color (separately for left and right castling).
+ * Contains information regarding a standard chess game.
  * @author Alfonso Gallego
  * @version 1.0
  */
