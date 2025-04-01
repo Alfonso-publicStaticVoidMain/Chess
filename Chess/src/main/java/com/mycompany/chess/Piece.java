@@ -1,7 +1,5 @@
 package com.mycompany.chess;
 
-import java.util.Optional;
-
 public abstract class Piece {
     /**
      * The {@link Position} the Piece has in the chess board.
