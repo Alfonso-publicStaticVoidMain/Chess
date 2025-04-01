@@ -159,7 +159,7 @@ public class Pawn extends Piece {
     /**
      * Copies this Pawn as a new Pawn.
      * @return A Pawn object with the same {@link Position} and {@link ChessColor},
-     * but with no game.
+     * but with no game associated to it.
      */
     @Override
     public Piece copy() {
