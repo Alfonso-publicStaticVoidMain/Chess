@@ -36,7 +36,8 @@ public abstract class Piece {
      * Overloaded version of the {@link Piece#checkLegalMovement(Position, boolean)}
      * method, defaulting the value of boolean checkCheck to true.
      * @param finPos Position we're attempting to move {@code this} Piece to.
-     * @return True if the movement is legal for the Piece, false otherwise.
+     * @return True if the movement is legal for the Piece and doing it wouldn't
+     * cause a check for its color, false otherwise.
      */
     public abstract boolean checkLegalMovement(Position finPos);
     public abstract Piece copy();
