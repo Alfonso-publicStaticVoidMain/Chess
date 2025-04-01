@@ -20,11 +20,11 @@ public abstract class Piece {
     }
 
     /**
-     * <p>
+     * 
      * Method to check if the proposed Position would be a legal movement for
      * the Piece. checkLegalMovement(Position, boolean) defaults the checkCheck
      * parameter to true.
-     * </p>
+     * 
      * @param finPos Position we're attempting to move the Piece to.
      * @param checkCheck State parameter to track if we want to declare a
      * movement illegal if it causes a check.
@@ -55,13 +55,13 @@ public abstract class Piece {
     }
     
     /**
-     * <p>
+     * 
      * If the movement is legal, moves {@code this} Piece to the specified
      * Position.
      * 
      * move(Position, boolean) defaults recordMovement to true.
      * move(Position) defaults both recordMovement and checkCheck to true.
-     * </p>
+     * 
      * @param finPos Position we're trying to move the Piece to.
      * @param checkCheck State parameter to check if the movement should be
      * declared illegal if it'd cause a check.
@@ -73,9 +73,9 @@ public abstract class Piece {
      * Then the movement is recorded into {@code this}'s game's playRecord
      * attribute.
      * @see
-     *      {@link Piece#checkLegalMovement(Position, boolean)}
-     *      {@link Pawn#xDirEnPassant}
-     *      {@link Chess#findPiece}
+     *      Piece#checkLegalMovement(Position, boolean)
+     *      Pawn#xDirEnPassant
+     *      Chess#findPiece(Position)
      */
     public boolean move(Position finPos, boolean checkCheck, boolean recordMovement) {
         Chess chessGame = this.getGame();
@@ -128,20 +128,20 @@ public abstract class Piece {
     }
     
     /**
-     * <p>
+     * 
      * Checks if the movement of a certain Piece to a certain Position causes
      * the King of that Piece's Color to be in check.
-     * </p>
+     * 
      * @param finPos Position we're attempting to move the Piece to.
      * @return Returns true if the movement causes the King of the same color
      * as the {@code piece} to be in check after moving it to {@code finPos}.
      * To achieve this, it copies the game into an auxiliary game, performs the
      * movement there, and then checks if the auxiliary King is in check.
      * @see
-     *      {@link Chess#findPiece}
-     *      {@link Chess#findKing}
-     *      {@link Piece#move(Position, boolean)}
-     *      {@link King#checkCheck()}
+     *      Chess#findPiece
+     *      Chess#findKing
+     *      Piece#move(Position, boolean)
+     *      King#checkCheck()
      */
     public boolean checkIfMovementCausesCheck(Position finPos) {
         Chess auxGame = this.getGame().copyGame();
@@ -152,12 +152,12 @@ public abstract class Piece {
     }
     
     /**
-     * <p>
+     * 
      * Method that performs basic legality checks on a piece movement.
      * It is intended to be referenced by the implementations of the
      * {@link Piece#checkLegalMovement(Position, boolean)} method
      * on each of the child classes of Piece.
-     * </p>
+     * 
      * @param finPos Position we want to move the piece to.
      * @param checkCheck State parameter to track if we need to declare the 
      * movement illegal if it causes a check.
@@ -165,9 +165,8 @@ public abstract class Piece {
      *      There's a piece of the same color in the final position.
      *      We are checking for checks and the movement causes one.
      *      The final position is the same as the initial position.
-     * @see
-     *      {@link Chess#checkPieceSameColorAs(Piece, Position)}
-     *      {@link Chess#checkIfMovementCausesCheck(Piece, Position)}
+     * @see Chess#checkPieceSameColorAs(Piece, Position)
+     * @see Chess#checkIfMovementCausesCheck(Piece, Position)
      */
     public boolean basicLegalityChecks(Position finPos, boolean checkCheck) {
         if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
@@ -175,6 +174,14 @@ public abstract class Piece {
         return !this.getPos().equals(finPos);
     }
     
+    /**
+     * Represents {@code this} Piece as a 2-character string summarizing its
+     * color and type.
+     * @return A concatenation of a character being the first letter of the
+     * color of {@code this} with the first letter of {@code this}'s class,
+     * differentiating Kings and Knights by using 'K' for the former and 'k'
+     * for the latter.
+     */
     @Override
     public String toString() {
         char typeChar;
@@ -183,6 +190,12 @@ public abstract class Piece {
         return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + typeChar;
     }
     
+    /**
+     * Returns a name of {@code this} representing its color and its type
+     * of piece.
+     * @return A concatenation of the name of the color of {@code this} Piece,
+     * a blank space, and the simple name of {@code this}'s class.
+     */
     public String getSimpleName() {
         return this.getColor() + " " + this.getClass().getSimpleName();
     }
