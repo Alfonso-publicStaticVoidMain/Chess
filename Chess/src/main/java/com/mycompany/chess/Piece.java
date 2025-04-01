@@ -20,7 +20,6 @@ public abstract class Piece {
     }
 
     /**
-     * 
      * Method to check if the proposed Position would be a legal movement for
      * the Piece. checkLegalMovement(Position, boolean) defaults the checkCheck
      * parameter to true.
@@ -28,11 +27,17 @@ public abstract class Piece {
      * @param finPos Position we're attempting to move the Piece to.
      * @param checkCheck State parameter to track if we want to declare a
      * movement illegal if it causes a check.
-     * @return Returns true if the movement is legal for the Piece, false
-     * otherwise. Each class implementing Piece will account for the specific
-     * conditions that Piece has limiting its movement.
+     * @return True if the movement is legal for the Piece, false Otherwise.
+     * Each class implementing Piece will account for the specific conditions
+     * that Piece has limiting its movement.
      */
     public abstract boolean checkLegalMovement(Position finPos, boolean checkCheck);
+    /**
+     * Overloaded version of the {@link Piece#checkLegalMovement(Position, boolean)}
+     * method, defaulting the value of boolean checkCheck to true.
+     * @param finPos Position we're attempting to move {@code this} Piece to.
+     * @return True if the movement is legal for the Piece, false otherwise.
+     */
     public abstract boolean checkLegalMovement(Position finPos);
     public abstract Piece copy();
     
@@ -72,10 +77,9 @@ public abstract class Piece {
      * that position, eliminates it from its game's playRecord.
      * Then the movement is recorded into {@code this}'s game's playRecord
      * attribute.
-     * @see
-     *      Piece#checkLegalMovement(Position, boolean)
-     *      Pawn#xDirEnPassant
-     *      Chess#findPiece(Position)
+     * @see Piece#checkLegalMovement(Position, boolean)
+     * @see Pawn#xDirEnPassant
+     * @see Chess#findPiece(Position)
      */
     public boolean move(Position finPos, boolean checkCheck, boolean recordMovement) {
         Chess chessGame = this.getGame();
@@ -137,11 +141,10 @@ public abstract class Piece {
      * as the {@code piece} to be in check after moving it to {@code finPos}.
      * To achieve this, it copies the game into an auxiliary game, performs the
      * movement there, and then checks if the auxiliary King is in check.
-     * @see
-     *      Chess#findPiece
-     *      Chess#findKing
-     *      Piece#move(Position, boolean)
-     *      King#checkCheck()
+     * @see Chess#findPiece
+     * @see Chess#findKing
+     * @see Piece#move(Position, boolean)
+     * @see King#checkCheck()
      */
     public boolean checkIfMovementCausesCheck(Position finPos) {
         Chess auxGame = this.getGame().copyGame();
@@ -152,7 +155,6 @@ public abstract class Piece {
     }
     
     /**
-     * 
      * Method that performs basic legality checks on a piece movement.
      * It is intended to be referenced by the implementations of the
      * {@link Piece#checkLegalMovement(Position, boolean)} method
@@ -166,7 +168,7 @@ public abstract class Piece {
      *      We are checking for checks and the movement causes one.
      *      The final position is the same as the initial position.
      * @see Chess#checkPieceSameColorAs(Piece, Position)
-     * @see Chess#checkIfMovementCausesCheck(Piece, Position)
+     * @see Piece#checkIfMovementCausesCheck(Position)
      */
     public boolean basicLegalityChecks(Position finPos, boolean checkCheck) {
         if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
