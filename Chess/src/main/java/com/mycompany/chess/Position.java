@@ -182,27 +182,6 @@ public class Position {
     
     /**
      * <p>
-     * Returns a new Position constructed by moving {@code this} Position 
-     * the specified distances in the X and Y axis.
-     * </p>
-     * @param xDist Distance in the X axis to move.
-     * @param yDist Distance in the Y axis to move.
-     * @return If it is within the Chess board, returns the Position
-     * constructed by moving {@code this} the desired distances. Otherwise,
-     * prints the exception thrown by the Position constructor and an error
-     * message.
-     */
-    public Position move(int xDist, int yDist) {
-        try {
-            return new Position(this.x+xDist, this.y+yDist);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e);
-            return null;
-        }
-    }
-    
-    /**
-     * <p>
      * Calculates the signed distance in the X axis between two positions,
      * </p>
      * @param initPos The initial position.
