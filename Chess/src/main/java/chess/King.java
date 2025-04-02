@@ -51,18 +51,6 @@ public class King extends Piece {
     }
     
     /**
-     * Overloaded version of the {@link King#checkLegalMovement(Position, boolean)}
-     * method, defaulting the value of boolean checkCheck to true.
-     * @param finPos Position we're attempting to move {@code this} King to.
-     * @return True if the movement is legal for the King and doing it
-     * wouldn't cause a check for its color, false otherwise.
-     */
-    @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return this.checkLegalMovement(finPos, true);
-    }
-    
-    /**
      * Checks whether {@code this} King would be in check if it moved to the
      * specified position.
      * @param finPos The position the King is trying to move to.
