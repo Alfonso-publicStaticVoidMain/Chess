@@ -93,8 +93,6 @@ public class Chess {
     /**
      * Adds the standard Chess pieces to {@code this} game's pieces list.
      * @see Position#of(int, int)
-     * @see ChessColor#initRow
-     * @see ChessColor#initRowPawn
      * @see Chess#linkPieces
      */
     public void addStandardPieces() {
@@ -122,9 +120,9 @@ public class Chess {
     /**
      * Checks whether's there's a piece or not in the specified position.
      * @param pos Position to check.
-     * @return Returns true if there's a {@link Piece} in the {@link Position},
-     * false otherwise. If somehow there's 2 or more pieces in the position,
-     * it prints an error message and returns false.
+     * @return Returns true if there's a {@link Piece} in the given 
+     * {@link Position}, false otherwise. If somehow there's 2 or more pieces
+     * in that position, it prints an error message and returns false.
      */
     public boolean checkPiece(Position pos) {
         return this.pieces.stream()
