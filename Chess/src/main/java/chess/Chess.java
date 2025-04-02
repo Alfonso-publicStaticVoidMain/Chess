@@ -121,8 +121,7 @@ public class Chess {
      * Checks whether's there's a piece or not in the specified position.
      * @param pos Position to check.
      * @return Returns true if there's a {@link Piece} in the given 
-     * {@link Position}, false otherwise. If somehow there's 2 or more pieces
-     * in that position, it prints an error message and returns false.
+     * {@link Position}, false otherwise.
      */
     public boolean checkPiece(Position pos) {
         return this.pieces.stream()
@@ -141,9 +140,9 @@ public class Chess {
     /**
      * Returns the Piece present in the specified position, if there's one.
      * @param pos Position to get the Piece from.
-     * @return Returns the {@link Piece} found in the {@link Position}, if one
-     * can be found there. Otherwise, it returns {@code null} and prints an
-     * error message.
+     * @return The {@link Piece} found in the {@link Position}, if one can be
+     * found there. Otherwise, it returns {@code null} and prints an error
+     * message.
      */
     public Piece findPiece(Position pos) {
         if (this.checkPiece(pos)) {
