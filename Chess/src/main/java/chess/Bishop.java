@@ -43,18 +43,6 @@ public class Bishop extends Piece {
         if (Math.abs(Xmovement) != Math.abs(Ymovement)) return false;
         return this.getGame().isPathClear(initPos, finPos);
     }
-    
-    /**
-     * Overloaded version of the {@link Bishop#checkLegalMovement(Position, boolean)}
-     * method, defaulting the value of boolean checkCheck to true.
-     * @param finPos Position we're attempting to move {@code this} Bishop to.
-     * @return True if the movement is legal for the Bishop and doing it
-     * wouldn't cause a check for its color, false otherwise.
-     */
-    @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return this.checkLegalMovement(finPos, true);
-    }
 
     /**
      * Copies this Bishop as a new Bishop object.
