@@ -121,22 +121,22 @@ public abstract class Piece {
     public boolean move(Position finPos, boolean checkCheck, boolean recordMovement) {
         Chess chessGame = this.getGame();
         Position initPos = this.getPos();
-        Piece eatenPiece;
+        Piece capturedPiece;
         boolean playRecorded = false;
         if (this.checkLegalMovement(finPos, checkCheck)) {
             if (chessGame.checkPiece(finPos)) {
-                eatenPiece = chessGame.findPiece(finPos);
-                chessGame.getPieces().remove(eatenPiece);
+                capturedPiece = chessGame.findPiece(finPos);
+                chessGame.getPieces().remove(capturedPiece);
                 if (recordMovement && !playRecorded) {
-                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
+                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
                     playRecorded = true;
                 }
             } else if (this instanceof Pawn pawn) {
                 int Xmovement = Position.xDist(initPos, finPos);
                 if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
-                    eatenPiece = chessGame.getLastPlay().getPiece();
-                    chessGame.getPieces().remove(eatenPiece);
-                    if (recordMovement && !playRecorded) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, eatenPiece));
+                    capturedPiece = chessGame.getLastPlay().getPiece();
+                    chessGame.getPieces().remove(capturedPiece);
+                    if (recordMovement && !playRecorded) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
                 }
             }
             this.setPos(finPos);
