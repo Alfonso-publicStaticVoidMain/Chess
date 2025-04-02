@@ -5,6 +5,10 @@ import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+/**
+ * Class to implement a GUI for chess.
+ * @author agall
+ */
 public class ChessGUI {
     private final JFrame frame;
     private final JPanel boardPanel;
