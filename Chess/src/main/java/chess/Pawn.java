@@ -28,18 +28,6 @@ public class Pawn extends Piece {
     }
     
     /**
-     * Overloaded version of the {@link Pawn#checkLegalMovement(Position, boolean)}
-     * method, defaulting the value of boolean checkCheck to true.
-     * @param finPos Position we're attempting to move {@code this} Pawn to.
-     * @return True if the movement is legal for the Pawn and doing it wouldn't
-     * cause a check for its color, false otherwise.
-     */
-    @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return checkLegalMovement(finPos, true);
-    }
-    
-    /**
      * Checks if the proposed position would be a legal movement of the Pawn
      * within the {@code Chess} game it's in.
      * 
@@ -104,6 +92,18 @@ public class Pawn extends Piece {
         }
         return true;
     }
+    
+    /**
+     * Overloaded version of the {@link Pawn#checkLegalMovement(Position, boolean)}
+     * method, defaulting the value of boolean checkCheck to true.
+     * @param finPos Position we're attempting to move {@code this} Pawn to.
+     * @return True if the movement is legal for the Pawn and doing it wouldn't
+     * cause a check for its color, false otherwise.
+     */
+    @Override
+    public boolean checkLegalMovement(Position finPos) {
+        return checkLegalMovement(finPos, true);
+    }    
     
     /**
      * Checks if {@code this} Pawn can make a legal En Passant capture,
