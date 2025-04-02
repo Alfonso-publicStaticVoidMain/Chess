@@ -34,7 +34,7 @@ public class ChessGUI {
         frame.add(topPanel, BorderLayout.NORTH);
         
         rightPanel = new JPanel(new BorderLayout());
-        String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Eaten"};
+        String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Captured"};
         tableModel = new DefaultTableModel(columnNames, 0);
         playRecordArea = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(playRecordArea);
@@ -162,7 +162,7 @@ public class ChessGUI {
                             lastPlay.getPiece().getSimpleName(),
                             lastPlay.getInitPos(),
                             lastPlay.getFinPos(),
-                            lastPlay.getPieceEaten() != null ? lastPlay.getPieceEaten().getSimpleName() : ""
+                            lastPlay.getPieceCaptured() != null ? lastPlay.getPieceCaptured().getSimpleName() : ""
                         });
                     }
                     activePlayer = activePlayer.opposite();
