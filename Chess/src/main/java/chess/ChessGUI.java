@@ -7,7 +7,8 @@ import javax.swing.table.*;
 
 /**
  * Class to implement a GUI for chess.
- * @author agall
+ * @author Alfonso Gallego
+ * @version 1.0
  */
 public class ChessGUI {
     private final JFrame frame;
