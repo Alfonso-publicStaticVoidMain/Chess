@@ -36,16 +36,19 @@ public abstract class Piece {
      * @param checkCheck State parameter to track if we want to declare a
      * movement illegal if it causes a check.
      * @return True if the movement is legal for the Piece, false otherwise.
-     * Each class implementing Piece will account for the specific conditions
-     * that Piece has limiting its movement.
-     * If the checkCheck parameter is set to false, this method will return
-     * true if the movement is legal, even if it'd cause a check for its player.
+     * <br><br>
+     * Each class implementing Piece will account for the specific limitations
+     * of that Piece.
+     * <br><br>
+     * If the {@code checkCheck} parameter is set to false, this method will
+     * return true if the movement is legal, even if it'd cause a check for its
+     * player.
      */
     public abstract boolean checkLegalMovement(Position finPos, boolean checkCheck);
     
     /**
      * Overloaded version of the {@link Piece#checkLegalMovement(Position, boolean)}
-     * method, defaulting the value of boolean checkCheck to true.
+     * method, defaulting the value of {@code checkCheck} to true.
      * @param finPos Position we're attempting to move {@code this} Piece to.
      * @return True if the movement is legal for the Piece and doing it wouldn't
      * cause a check for its player, false otherwise.
@@ -108,12 +111,13 @@ public abstract class Piece {
      * declared illegal if it'd cause a check.
      * @param recordMovement State parameter to track if the movement should
      * be added to the playRecord attribute of the Chess game of {@code this}.
-     * @return Returns true if the movement was sucessfully done. In that case,
+     * @return True if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
-     * into account the posiblity of an En Passant capture for Pawns.
-     * If recordMovement is set to true, the movement is recorded into
-     * {@code this}'s game's playRecord attribute.
+     * into account the possiblity of an En Passant capture for Pawns.
+     * <br><br>
+     * If {@code recordMovement} is set to true, the movement is recorded into
+     * {@code this}'s game's {@code playRecord} attribute.
      * @see Piece#checkLegalMovement(Position, boolean)
      * @see Pawn#xDirEnPassant
      * @see Chess#findPiece(Position)
@@ -162,14 +166,14 @@ public abstract class Piece {
 
     /**
      * Overloaded version of {@link Piece#move(Position, boolean, boolean)},
-     * defaulting recordMovement to true.
+     * defaulting {@code recordMovement} to true.
      * @param finPos Position we're trying to move {@code this} Piece to.
      * @param checkCheck State parameter to check if the movement should be
      * declared illegal if it'd cause a check.
-     * @return Returns true if the movement was sucessfully done. In that case,
+     * @return True if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
-     * into account the posiblity of an En Passant capture for Pawns.
+     * into account the possiblity of an En Passant capture for Pawns.
      * @see Piece#move(chess.Position, boolean, boolean) 
      */
     public boolean move(Position finPos, boolean checkCheck) {
@@ -178,12 +182,12 @@ public abstract class Piece {
     
     /**
      * Overloaded version of {@link Piece#move(Position, boolean, boolean)},
-     * defaulting checkCheck and recordMovement to true.
+     * defaulting {@code checkCheck} and {@code recordMovement} to true.
      * @param finPos Position we're attempting {@code this} Piece to.
-     * @return Returns true if the movement was sucessfully done. In that case,
+     * @return True if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
-     * into account the posiblity of an En Passant capture for Pawns.
+     * into account the possiblity of an En Passant capture for Pawns.
      * @see Piece#move(chess.Position, boolean, boolean) 
      */
     public boolean move(Position finPos) {
@@ -191,11 +195,12 @@ public abstract class Piece {
     }
     
     /**
-     * Checks if the movement of {@code this} Piece to the given Position causes
-     * the King of that Piece's Color to be in check.
+     * Checks if the movement of {@code this} Piece to the given
+     * {@link Position} causes the {@link King} of that Piece's color to be in
+     * check.
      * @param finPos Position we're attempting to move the Piece to.
-     * @return Returns true if the movement causes the King of the same color
-     * as the {@code piece} to be in check after moving it to {@code finPos}.
+     * @return True if the movement causes the {@link King} of the same color
+     * as the {@code this} to be in check after moving it to {@code finPos}.
      * To achieve this, it copies the game into an auxiliary game, performs the
      * movement there, and then checks if the auxiliary King is in check.
      * @see Chess#findPiece
@@ -213,7 +218,7 @@ public abstract class Piece {
     }
     
     /**
-     * Method that performs basic legality checks on a proposed piece movement.
+     * Performs some common legality checks on a proposed piece movement.
      * It is intended to be referenced by the implementations of the
      * {@link Piece#checkLegalMovement(Position, boolean)} method
      * on each of the child classes of Piece.
@@ -223,7 +228,8 @@ public abstract class Piece {
      * @return Returns false if either of the following happens:
      * <ul>
      * <li>There's a piece of the same color in the final position.</li>
-     * <li>We are checking for checks and the movement causes one.</li>
+     * <li>We are checking for checks ({@code checkCheck} is set to true) and
+     * the movement causes one.</li>
      * <li>The final position is the same as the initial position.</li>
      * </ul>
      * @see Chess#checkPieceSameColorAs(Piece, Position)

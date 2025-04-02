@@ -11,20 +11,21 @@ import java.util.stream.IntStream;
 public class Chess {
     
     /**
-     * List containing all pieces of the game.
+     * List containing all pieces currently in the game.
      */
     private final List<Piece> pieces = new ArrayList<>();
+    
     /**
-     * List containing all Plays of the game.
-     * A LinkedList is employed because normally only the latest Play will
-     * be accessed.
+     * List containing all Plays done in the game thus far.
      */
     private final List<Play> playRecord = new LinkedList<>();
+    
     /**
      * Map attribute representing the avaliability of left castling for each
      * player.
      */
     private final Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
+    
     /**
      * Map attribute representing the avaliability of right castling for each
      * player.
@@ -34,16 +35,16 @@ public class Chess {
     /**
      * Getter for the left castling avaliability attribute.
      * @return The Map of right castling avaliability of {@code this} game,
-     * mapping each possible color to a boolean representing if it still has
-     * the ability to do a left castling.
+     * mapping each color to a boolean representing if it still has the ability
+     * to do a left castling.
      */
     public Map<ChessColor, Boolean> getLeftCastlingAvaliability() {return leftCastlingAvaliability;}
 
     /**
      * Getter for the right castling avaliability attribute.
      * @return The Map of right castling avaliability of {@code this} game,
-     * mapping each possible color to a boolean representing if it still has
-     * the ability to do a right castling.
+     * mapping each color to a boolean representing if it still has the ability
+     * to do a right castling.
      */
     public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
 
@@ -91,11 +92,10 @@ public class Chess {
     
     /**
      * Adds the standard Chess pieces to {@code this} game's pieces list.
-     * @see 
-     *      Position#of(int, int)
-     *      ChessColor#initRow
-     *      ChessColor#initRowPawn
-     *      Chess#linkPieces
+     * @see Position#of(int, int)
+     * @see ChessColor#initRow
+     * @see ChessColor#initRowPawn
+     * @see Chess#linkPieces
      */
     public void addStandardPieces() {
         for (ChessColor color : ChessColor.values()) {
@@ -229,8 +229,11 @@ public class Chess {
     
     /**
      * Returns a copy of {@code this} Chess game.
-     * @return Returns a copy of {@code this} Chess game.
+     * @return Returns a copy of {@code this} Chess game, in which each of its
+     * Pieces is a copy of each Piece in the original game, using the
+     * {@link Piece#copy} method.
      * @see Chess#linkPieces
+     * @see Piece#copy
      */
     public Chess copyGame() {
         Chess result = new Chess();
@@ -247,7 +250,7 @@ public class Chess {
      * @param initPos Initial Position of the movement.
      * @param finPos Final Position of the movement.
      * @return Returns true if there's no {@link Piece} along the trajectory
-     * of the movement from initPos to finPos, both exclusive.
+     * of the movement from {@code initPos} to {@code finPos}, both exclusive.
      * The method will return false if the movement isn't on a straight line or
      * diagonal.
      * @see Chess#checkPiece
@@ -277,13 +280,13 @@ public class Chess {
      * take into account if the King is currently in check. Setting it to false
      * will mean that this method will return true if the King is not in check
      * but every possible movement for its color would put it in check.
-     * @return If checkCheck is set to true, the method will return true if
-     * the King is currently in check and no possible movement of its color
+     * @return If {@code checkCheck} is set to true, the method will return true
+     * if the King is currently in check and no possible movement of its color
      * would change that.
      * 
-     * If checkCheck is set to false, the method will return true if every
-     * possible movement of the King's color would put it in check, regardless
-     * of if it's currently in check or not.
+     * If {@code checkCheck} is set to false, the method will return true if 
+     * every possible movement of the King's color would put it in check,
+     * regardless of if it's currently in check or not.
      * 
      * @see King#checkCheck()
      * @see Piece#checkLegalMovement(Position)
@@ -317,8 +320,8 @@ public class Chess {
     }
     
     /**
-     * Checks if the player of a given color is in checkmate, defaulting the
-     * {@code checkCheck} argument of the previous method to true.
+     * Overloaded version of {@link Chess#checkMate(chess.ChessColor, boolean)},
+     * defaulting the {@code checkCheck} argument to true.
      * @param color Color of the player to check checkmate for.
      * @return True if that player is in checkmate, false otherwise.
      * @see Chess#checkMate(ChessColor, boolean)
@@ -330,7 +333,7 @@ public class Chess {
     /**
      * Checks whether there's a recorded Play whose initial position is the
      * specified Position.
-     * @param pos
+     * @param pos {@link Position} to check movements from.
      * @return Returns true if in the {@code playRecord} list of {@link Play}s
      * there's one that has initial position {@code pos}.
      * @deprecated Now that the castling avaliability is tracked within the
@@ -345,17 +348,16 @@ public class Chess {
     }
     
     /**
-     * Checks if left castling is possible in this Chess game.
+     * Checks if left castling is possible in this Chess game for a given
+     * player.
      * @param color Color for which to check castling.
-     * @return Returns true if the castling is possible for the {@code Color}
-     * parameter, performing the following checks:
-     * 
-     * If there is any recorded movement from the initial position of the King
-     * or left Rook, returns false.
-     * 
+     * @return True if the castling is possible for the {@code Color} player,
+     * performing the following checks:
+     * <br><br>
      * If there's any Piece between the King and left Rook, or if the King 
-     * would be in check in any of those Positions, returns false.
-     * 
+     * would be in check in any of the Positions it has to move through,
+     * returns false.
+     * <br><br>
      * @see Chess#findKing 
      * @see Chess#checkPiece
      */
@@ -368,17 +370,16 @@ public class Chess {
     }
     
     /**
-     * Checks if right castling is possible in this Chess game.
+     * Checks if right castling is possible in this Chess game for a given
+     * player.
      * @param color Color for which to check castling.
-     * @return Returns true if the castling is possible for the {@code Color}
-     * parameter, performing the following checks:
-     * 
-     * If there is any recorded movement from the initial position of the King
-     * or right Rook, returns false.
-     * 
-     * If there's any Piece between the King and left Rook, or if the King 
-     * would be in check in any of those Positions, returns false.
-     * 
+     * @return True if the castling is possible for the {@code Color} player,
+     * performing the following checks:
+     * <br><br>
+     * If there's any Piece between the King and right Rook, or if the King 
+     * would be in check in any of the Positions it has to move through,
+     * returns false.
+     * <br><br>
      * @see Chess#findKing 
      * @see Chess#checkPiece
      */
@@ -391,11 +392,11 @@ public class Chess {
     }
     
     /**
-     * If left castling is legal, reassigns the positions of the appropiate
-     * King and Rook to do that castling.
-     * @param color Color of the player doing the castling.
-     * @return Returns true if the castling was done succesfully, false if it
-     * wasn't a legal play.
+     * If left castling is legal for the given player, reassigns the positions
+     * of the appropiate King and Rook to do it.
+     * @param color Player doing the castling.
+     * @return True if the castling was done succesfully, false if it wasn't a
+     * legal play.
      * @see Chess#checkLeftCastling
      * @see Chess#findPiece
      */
@@ -411,12 +412,12 @@ public class Chess {
     }
     
     /**
-     * If right castling is legal, reassigns the positions of the appropiate
-     * King and Rook to do that castling.
-     * @param color Color of the player doing the castling.
-     * @return Returns true if the castling was done succesfully, false if it
-     * wasn't a legal play.
-     * @see Chess#checkRightCastling
+     * If right castling is legal for the given player, reassigns the positions
+     * of the appropiate King and Rook to do it.
+     * @param color Player doing the castling.
+     * @return True if the castling was done succesfully, false if it wasn't a
+     * legal play.
+     * @see Chess#checkLeftCastling
      * @see Chess#findPiece
      */
     public boolean doRightCastling(ChessColor color) {
@@ -434,9 +435,9 @@ public class Chess {
      * Crowns a Pawn and transforms it to a new type of Piece.
      * @param piece Piece to crown. Must be a Pawn.
      * @param newType New type to convert the Pawn to. Not case sensitive.
-     * @return Returns true if the crowning was succesful, false otherwise.
+     * @return True if the crowning was succesful, false otherwise.
      * If the Piece argument wasn't a Pawn, returns false.
-     * @throws IllegalArgumentException if the new type to convert the Pawn
+     * @throws IllegalArgumentException If the new type to convert the Pawn
      * into isn't the simple class name of any of the implemented Piece
      * subclasses, which currently are:
      * <ul>

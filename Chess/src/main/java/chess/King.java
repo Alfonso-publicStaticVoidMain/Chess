@@ -16,20 +16,20 @@ public class King extends Piece {
      * @param finPos Position the King is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
-     * @return Returns true if the proposed movement is a legal position for
+     * @return True if the proposed final Position is a legal movement for
      * {@code this} King, performing the following checks:
-     * 
+     * <br><br>
      * First, some common legality checks are performed within the method 
      * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
      * in the final Position, if we're checking for checks and the movement
      * would cause one, or if the final Position is the same as the initial one,
      * false is returned.
-     * 
+     * <br><br>
      * Then, it is checked whether or not the proposed final Position would
      * match the movement of a King, ie, if the absolute value of the
      * movement in the X axis and in the Y axis both are at most 1, and if
      * the final Position isn't adjacent to the King of the opposing color.
-     * 
+     * <br><br>
      * If for any reason we wanted to include a King Piece in a Chess game
      * where there's no King of the opposing color, an extra check for when
      * the {@link Chess#findKing} method returns null has been included for

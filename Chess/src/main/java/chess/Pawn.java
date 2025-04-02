@@ -30,33 +30,32 @@ public class Pawn extends Piece {
     /**
      * Checks if the proposed position would be a legal movement of the Pawn
      * within the {@code Chess} game it's in.
-     * 
      * @param finPos Position the Pawn is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check for its player.
-     * @return Returns true if the proposed movement is a legal position for
+     * @return True if the proposed final Position is a legal movement for
      * {@code this} Pawn, performing the following checks:
-     * 
+     * <br><br>
      * First, some common legality checks are performed within the method 
      * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
      * in the final Position, if we're checking for checks (checkCheck is true)
      * and the movement would cause one, or if the final Position is the same
      * as the initial one, false is returned.
-     * 
+     * <br><br>
      * Then we check if the movement in the Y axis is in the same direction
      * as the Pawn's movement, dictated by its color. If this doesn't happen,
      * ie, if the direction and the movement have different signs, false
      * is returned.
-     * 
+     * <br><br>
      * If there isn't a Piece in the final Position we check if the Pawn is
-     * trying to move En Passant. Otherwise, if the movement in the X axis
+     * trying to capture En Passant. Otherwise, if the movement in the X axis
      * isn't 0, false is returned.
-     * 
+     * <br><br>
      * Then, if the movement in the Y axis in absolute value is greater than 2,
      * or if it's greater than 1 while the starting row isn't the same as the
      * initial row of the Pawn, or if the movement is 2 and there's a Piece in
      * the middle, false is returned.
-     * 
+     * <br><br>
      * If there's a Piece in the final Position (which must be of a different
      * color because of the previous legality checks), we check if the
      * absolute value of the movement in the X axis is 1 and the movement in the

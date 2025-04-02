@@ -15,24 +15,24 @@ public class Chancellor extends Piece {
     /**
      * Checks if the proposed position would be a legal movement of the 
      * Chancellor within the {@code Chess} game it's in.
-     * @param finPos Position the Rook is attempting to move to.
+     * @param finPos Position the Chancellor is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
-     * @return Returns true if the proposed movement is a legal position for
+     * @return True if the proposed final Position is a legal movement for
      * {@code this} Chancellor, performing the following checks:
-     * 
+     * <br><br>
      * First, some common legality checks are performed within the method 
      * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
      * in the final Position, if we're checking for checks and the movement
      * would cause one, or if the final Position is the same as the initial one,
      * false is returned.
-     * 
+     * <br><br>
      * Then, it is checked whether or not the proposed final Position would
      * match the movement of a Knight, ie, if the absolute value of the 
      * movement in the X axis plus in the Y axis is exactly equal to 3, and
      * both absolute values are within 1 and 2 (inclusive). In that case, true
      * is returned.
-     * 
+     * <br><br>
      * Then, it is checked whether or not the proposed final Position would
      * match the movement of a Rook, ie, if exactly one of the movements along
      * each of the axis is zero. If both are nonzero, false is returned.
