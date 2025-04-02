@@ -166,9 +166,8 @@ public class Chess {
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is the same as {@code piece}. False if there's
      * no piece or if there's a piece of a different color.
-     * @see
-     *      Chess#checkPiece
-     *      Chess#findPiece
+     * @see Chess#checkPiece
+     * @see Chess#findPiece
      */
     public boolean checkPieceSameColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -183,9 +182,8 @@ public class Chess {
      * @return Returns true if in the {@link Position} there's a
      * {@link Piece} whose color is different than {@code piece}'s.
      * False if there's no piece or if there's a piece of the same color.
-     * @see
-     *      Chess#checkPiece
-     *      Chess#findPiece
+     * @see Chess#checkPiece
+     * @see Chess#findPiece
      */    
     public boolean checkPieceDiffColorAs(Piece piece, Position pos) {
         if (!this.checkPiece(pos)) return false;
@@ -232,8 +230,7 @@ public class Chess {
     /**
      * Returns a copy of {@code this} Chess game.
      * @return Returns a copy of {@code this} Chess game.
-     * @see
-     *      Chess#linkPieces
+     * @see Chess#linkPieces
      */
     public Chess copyGame() {
         Chess result = new Chess();
@@ -253,8 +250,7 @@ public class Chess {
      * of the movement from initPos to finPos, both exclusive.
      * The method will return false if the movement isn't on a straight line or
      * diagonal.
-     * @see
-     *      Chess#checkPiece
+     * @see Chess#checkPiece
      */
     public boolean isPathClear(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
@@ -289,12 +285,11 @@ public class Chess {
      * possible movement of the King's color would put it in check, regardless
      * of if it's currently in check or not.
      * 
-     * @see 
-     *      King#checkCheck()
-     *      Piece#checkLegalMovement(Position)
-     *      Chess#findPiece
-     *      Chess#findKing
-     *      Chess#copyGame
+     * @see King#checkCheck()
+     * @see Piece#checkLegalMovement(Position)
+     * @see Chess#findPiece
+     * @see Chess#findKing
+     * @see Chess#copyGame
      */
     public boolean checkMate(ChessColor color, boolean checkCheck) {
         King king = this.findKing(color);
@@ -326,6 +321,7 @@ public class Chess {
      * {@code checkCheck} argument of the previous method to true.
      * @param color Color of the player to check checkmate for.
      * @return True if that player is in checkmate, false otherwise.
+     * @see Chess#checkMate(ChessColor, boolean)
      */
     public boolean checkMate(ChessColor color) {
         return this.checkMate(color, true);
@@ -357,10 +353,11 @@ public class Chess {
      * If there is any recorded movement from the initial position of the King
      * or left Rook, returns false.
      * 
-     * If there's any Piece between the King and left Rook, returns false.
+     * If there's any Piece between the King and left Rook, or if the King 
+     * would be in check in any of those Positions, returns false.
      * 
-     * @see 
-     *      Chess#checkPiece
+     * @see Chess#findKing 
+     * @see Chess#checkPiece
      */
     public boolean checkLeftCastling(ChessColor color) {
         if (!this.getLeftCastlingAvaliability().get(color)) return false;
@@ -379,10 +376,11 @@ public class Chess {
      * If there is any recorded movement from the initial position of the King
      * or right Rook, returns false.
      * 
-     * If there's any Piece between the King and right Rook, returns false.
+     * If there's any Piece between the King and left Rook, or if the King 
+     * would be in check in any of those Positions, returns false.
      * 
-     * @see 
-     *      Chess#checkPiece
+     * @see Chess#findKing 
+     * @see Chess#checkPiece
      */
     public boolean checkRightCastling(ChessColor color) {
         if (!this.getRightCastlingAvaliability().get(color)) return false;
@@ -398,8 +396,8 @@ public class Chess {
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
-     * @see
-     *      Chess#checkLeftCastling
+     * @see Chess#checkLeftCastling
+     * @see Chess#findPiece
      */
     public boolean doLeftCastling(ChessColor color) {
         if (!this.checkLeftCastling(color)) return false;
@@ -418,8 +416,8 @@ public class Chess {
      * @param color Color of the player doing the castling.
      * @return Returns true if the castling was done succesfully, false if it
      * wasn't a legal play.
-     * @see
-     *      Chess#checkRightCastling
+     * @see Chess#checkRightCastling
+     * @see Chess#findPiece
      */
     public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
@@ -437,6 +435,17 @@ public class Chess {
      * @param piece Piece to crown. Must be a Pawn.
      * @param newType New type to convert the Pawn to. Not case sensitive.
      * @return Returns true if the crowning was succesful, false otherwise.
+     * If the Piece argument wasn't a Pawn, returns false.
+     * @throws IllegalArgumentException if the new type to convert the Pawn
+     * into isn't the simple class name of any of the implemented Piece
+     * subclasses, which currently are:
+     * <ul>
+     * <li>Knight</li>
+     * <li>Bishop</li>
+     * <li>Rook</li>
+     * <li>Queen</li>
+     * <li>Chancellor</li>
+     * </ul>
      */
     public boolean crownPawn(Piece piece, String newType) throws IllegalArgumentException {
         if (!(piece instanceof Pawn)) return false;
@@ -484,6 +493,7 @@ public class Chess {
      * alphabet.
      * @throws IllegalArgumentException If the letter is anything other than
      * [a-h].
+     * @hidden 
      */
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
         return switch (Character.toLowerCase(letter)) {
@@ -505,6 +515,7 @@ public class Chess {
      * @return The letter in the number's position in the english alphabet.
      * @throws IllegalArgumentException If the number isn't within 1 and 8 (both
      * inclusive).
+     * @hidden 
      */
     public static char convertNumberToLetter(int num) throws IllegalArgumentException {
         return switch (num) {
