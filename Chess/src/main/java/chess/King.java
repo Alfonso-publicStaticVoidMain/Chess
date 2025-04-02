@@ -61,14 +61,12 @@ public class King extends Piece {
     public boolean checkCheck(Position finPos) {    
         return this.getGame().pieces().stream()
             .filter(piece -> piece.getColor() != this.getColor())
-            .filter(piece -> 
+            .anyMatch(piece -> 
                 (piece instanceof Pawn) ?
                     Position.yDist(piece.getPos(), finPos) == piece.getColor().yDirection()
                     && Math.abs(Position.xDist(piece.getPos(), finPos)) == 1
                 : piece.checkLegalMovement(finPos, false)
-            )
-            .count()
-            != 0;
+            );
     }
     
     /**
