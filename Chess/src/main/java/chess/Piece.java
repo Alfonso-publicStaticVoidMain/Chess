@@ -50,7 +50,7 @@ public abstract class Piece {
      * @return True if the movement is legal for the Piece and doing it wouldn't
      * cause a check for its player, false otherwise.
      */
-    public abstract boolean checkLegalMovement(Position finPos);
+    public boolean checkLegalMovement(Position finPos) {return this.checkLegalMovement(finPos, true);}
     
     /**
      * Copies {@code this} Piece as a new Piece of its type.
