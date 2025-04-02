@@ -53,19 +53,6 @@ public class Chancellor extends Piece {
         if (Xmovement != 0 && Ymovement != 0) return false;
         return this.getGame().isPathClear(initPos, finPos);
     }
-    
-    /**
-     * Overloaded version of the {@link Chancellor#checkLegalMovement(Position, boolean)}
-     * method, defaulting the value of boolean checkCheck to true.
-     * @param finPos Position we're attempting to move {@code this} Chancellor
-     * to.
-     * @return True if the movement is legal for the Chancellor and doing it
-     * wouldn't cause a check for its color, false otherwise.
-     */
-    @Override
-    public boolean checkLegalMovement(Position finPos) {
-        return checkLegalMovement(finPos, true);
-    }
 
     /**
      * Copies this Chancellor as a new Chancellor object.
