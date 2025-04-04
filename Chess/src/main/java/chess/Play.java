@@ -1,7 +1,7 @@
 package chess;
 
 /**
- * Class representing a Play in a chess game, storing the Piece that was moved,
+ * Record representing a Play in a chess game, storing the Piece that was moved,
  * its initial and final Positions, and the Piece that was captured, if any.
  * @author Alfonso Gallego
  */

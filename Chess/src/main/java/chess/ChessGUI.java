@@ -131,7 +131,7 @@ public class ChessGUI {
                     }
                 }
                 
-                if (!playDone && piece.checkLegalMovement(clickedPos)) {
+                if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     
                     if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) { // Pawn crowning

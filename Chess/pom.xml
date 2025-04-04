@@ -10,5 +10,6 @@
         <maven.compiler.source>24</maven.compiler.source>
         <maven.compiler.target>24</maven.compiler.target>
         <exec.mainClass>com.mycompany.chess.Chess</exec.mainClass>
+        <show>private</show>
     </properties>
 </project>

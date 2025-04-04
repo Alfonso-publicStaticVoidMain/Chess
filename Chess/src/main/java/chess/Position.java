@@ -328,7 +328,7 @@ public record Position(int x, int y) {
     
     /**
      * Static factory method to create new Positions from a String representing
-     * the algebraic notation of the position (A1, A2, etc.)
+     * the position in algebraic chess notation (A1, A2, etc.)
      * @param pos String representing the position.
      * @return Returns a new Position constructed by converting the first char
      * of the String to an integer, to store it as the x coordinate of the
@@ -344,7 +344,10 @@ public record Position(int x, int y) {
             return null;
         }
         try {
-            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
+            final int x = Chess.convertLetterToNumber(pos.charAt(0));
+            final int y = Integer.parseInt(""+pos.charAt(1));
+            if (x >= 1 && x <= 8 && y >= 1 && y <= 8) return new Position(x, y);
+            else throw new IllegalArgumentException(pos+" represents coordinates ("+x+", "+y+"), which are outside the chess board");
         } catch (IllegalArgumentException e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with value: " + pos);
