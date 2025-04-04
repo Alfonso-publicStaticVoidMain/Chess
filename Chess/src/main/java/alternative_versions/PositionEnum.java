@@ -3,10 +3,10 @@ package alternative_versions;
 import java.util.stream.Stream;
 
 /**
- * Alternative version of the Position class but viewed as an enum class.
+ * Alternative version of the PositionEnum class but viewed as an enum class.
  * @author Alfonso Gallego
  */
-public enum Position {
+public enum PositionEnum {
 
     /**
      *
@@ -331,48 +331,48 @@ public enum Position {
     private final int x;
     private final int y;
     
-    Position(int x, int y) {
+    PositionEnum(int x, int y) {
         this.x = x;
         this.y = y;
     }
     
     /**
      * Getter for the x attribute.
-     * @return The X coordinate of {@code this} Position.
+     * @return The X coordinate of {@code this} PositionEnum.
      */
     public int x() {return x;}
 
     /**
      * Getter for the y attribute.
-     * @return The Y coordinate of {@code this} Position.
+     * @return The Y coordinate of {@code this} PositionEnum.
      */
     public int y() {return y;}
     
     /**
      * Checks whether a pair of integers is a valid coordinate of the chess
      * board.
-     * @param x The x coordinate of the supposed Position.
-     * @param y The y coordinate of the supposed Position.
+     * @param x The x coordinate of the supposed PositionEnum.
+     * @param y The y coordinate of the supposed PositionEnum.
      * @return Returns true if both x and y are between (and including) 1 and 8.
      */
     public static boolean isValid(int x, int y) {return (x >= 1 && x <= 8 && y >= 1 && y <= 8);}
     
     /**
-     * Returns the chess board Position represented by the given String.
+     * Returns the chess board PositionEnum represented by the given String.
      * @param pos String representing the position.
      * @return Returns the enum value whose name is the same as the given 
      * String, if avaliable. If the String has a different length than 2 or if
      * there's no enum value representing it, prints an error message and
      * returns {@code null}.
      */
-    public static Position of(String pos) {
+    public static PositionEnum of(String pos) {
         if (pos.length()!=2) {
             System.out.println("Error occurred while trying to create the position with value: " + pos);
             System.out.println("The specified String doesn't have length 2.");
             return null;
         }
         try {
-            return Position.valueOf(pos);
+            return PositionEnum.valueOf(pos);
         } catch (Exception e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with value: " + pos);
@@ -381,17 +381,17 @@ public enum Position {
     }
     
     /**
-     * Returns the chess board Position whose X and Y coordinates are the given
-     * x and y parameters.
+     * Returns the chess board PositionEnum whose X and Y coordinates are the given
+ x and y parameters.
      * @param x Value of the X coordinate.
      * @param y Value of the Y coordinate.
      * @return Returns the enum value whose X and Y coordinates are x and y
      * respectively. If there's none, prints an error message and returns
      * {@code null}.
      */
-    public static Position of(int x, int y) {
+    public static PositionEnum of(int x, int y) {
         try {
-            return Stream.of(Position.values())
+            return Stream.of(PositionEnum.values())
                 .filter(position -> position.x() == x && position.y() == y)
                 .findAny()
                 .get();

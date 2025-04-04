@@ -8,15 +8,16 @@ import java.util.List;
  * position, respectively.
  * @author Alfonso Gallego
  */
-public class Position {
-    /**
-     * The X coordinate of the position.
-     */
-    private final int x;
-    /**
-     * The Y coordinate of the position.
-     */
-    private final int y;
+record Position(int x, int y) {
+//public class Position {
+//    /**
+//     * The X coordinate of the position.
+//     */
+//    private final int x;
+//    /**
+//     * The Y coordinate of the position.
+//     */
+//    private final int y;
     
     /**
      * Field storing the A1 position of the chess board.
@@ -296,17 +297,17 @@ public class Position {
     H1, H2, H3, H4, H5, H6, H7, H8
     );
     
-    /**
-     * Getter for the x attribute of the Position.
-     * @return The X coordinate of the Position.
-     */
-    public int x() {return x;}
-    
-    /**
-     * Getter for the y attribute of the Position.
-     * @return The Y coordinate of the Position.
-     */
-    public int y() {return y;}
+//    /**
+//     * Getter for the x attribute of the Position.
+//     * @return The X coordinate of the Position.
+//     */
+//    public int x() {return x;}
+//    
+//    /**
+//     * Getter for the y attribute of the Position.
+//     * @return The Y coordinate of the Position.
+//     */
+//    public int y() {return y;}
     
     /**
      * Static method to obtain all possible chess positions.
@@ -315,17 +316,21 @@ public class Position {
     public static List<Position> validPositions() {return Position.validChessPositions;}
     
     /**
-     * Private constructor of the factory class Position. It only allows for
-     * the creation of Positions that are within the Chess board.
+     * Constructor of the record Position. If it received parameters that are
+     * outside the [1,8] interval, returns the (0,0) Position and prints an
+     * error message.
      * @param x X coordinate of the position.
      * @param y Y coordinate of the position.
-     * @throws IllegalArgumentException if the x and y values represent a
-     * position that'd be outside of the chess board.
      */
-    private Position(int x, int y) throws IllegalArgumentException {
-        if (!isValid(x, y)) throw new IllegalArgumentException("Invalid position on the board.");
-        this.x = x;
-        this.y = y;
+    public Position(int x, int y) {
+        if (x >= 1 && x <= 8 && y >= 1 && y <= 8) {
+            this.x = x;
+            this.y = y;
+        } else {
+            System.out.println("Error, parameters x="+x+" and y="+y+" represent a Position outside the chess board.");
+            this.x=0;
+            this.y=0;
+        }
     }
     
     /**
@@ -345,13 +350,14 @@ public class Position {
             System.out.println("The specified String doesn't have length 2.");
             return null;
         }
-        try {
-            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e);
-            System.out.println("Error occurred while trying to create the position with value: " + pos);
-            return null;
-        }
+        return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
+//        try {
+//            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e);
+//            System.out.println("Error occurred while trying to create the position with value: " + pos);
+//            return null;
+//        }
     }
     
     /**
@@ -365,23 +371,15 @@ public class Position {
      * is printed and {@code null} is returned.
      */
     public static Position of(int x, int y) {
-        try {
-            return new Position(x, y);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e);
-            System.out.println("Error occurred while trying to create the position with values: "+x+", "+y);
-            return null;
-        }
+        return new Position(x, y);
+//        try {
+//            return new Position(x, y);
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e);
+//            System.out.println("Error occurred while trying to create the position with values: "+x+", "+y);
+//            return null;
+//        }
     }
-    
-    /**
-     * Checks whether a pair of integers is a valid coordinate of the chess
-     * board.
-     * @param x The x coordinate of the supposed Position.
-     * @param y The y coordinate of the supposed Position.
-     * @return Returns true if both x and y are between (and including) 1 and 8.
-     */
-    public static boolean isValid(int x, int y) {return (x >= 1 && x <= 8 && y >= 1 && y <= 8);}
     
     /**
      * Calculates the signed distance in the X axis between two positions.

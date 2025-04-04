@@ -2,12 +2,13 @@ chess\ChessColor.class
 chess\Piece.class
 chess\Bishop.class
 chess\Rook.class
+alternative_versions\PositionEnum.class
 chess\StopWatch.class
 chess\Pawn.class
 chess\ChessMainClass.class
+alternative_versions\PositionClass.class
 chess\ChessGUI.class
 chess\Chess.class
-alternative_versions\Position.class
 chess\Chancellor.class
 chess\Queen.class
 chess\Knight.class
