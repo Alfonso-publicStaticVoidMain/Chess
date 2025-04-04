@@ -126,28 +126,24 @@ public abstract class Piece {
         Chess chessGame = this.getGame();
         Position initPos = this.getPos();
         Piece capturedPiece;
-        boolean playRecorded = false;
         if (this.checkLegalMovement(finPos, checkCheck)) {
             if (chessGame.checkPiece(finPos)) {
                 capturedPiece = chessGame.findPiece(finPos);
-                chessGame.getPieces().remove(capturedPiece);
-                if (recordMovement && !playRecorded) {
+                chessGame.pieces().remove(capturedPiece);
+                if (recordMovement) {
                     chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
-                    playRecorded = true;
                 }
-            } else if (this instanceof Pawn pawn) {
-                int Xmovement = Position.xDist(initPos, finPos);
-                if (pawn.checkLegalEnPassant() && Xmovement == pawn.xDirEnPassant()) {
-                    capturedPiece = chessGame.getLastPlay().getPiece();
-                    chessGame.getPieces().remove(capturedPiece);
-                    if (recordMovement && !playRecorded) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
+            } else if (this instanceof Pawn pawn && pawn.checkLegalEnPassant() && pawn.xDirEnPassant() == Position.xDist(initPos, finPos)) {
+                capturedPiece = chessGame.getLastPlay().piece();
+                chessGame.pieces().remove(capturedPiece);
+                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
+                
+            } else {
+                if (recordMovement) {
+                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
                 }
             }
             this.setPos(finPos);
-            if (recordMovement && !playRecorded) {
-                chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
-                playRecorded = true;
-            }
             
             if ((this instanceof King || this instanceof Rook) &&
                 chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (

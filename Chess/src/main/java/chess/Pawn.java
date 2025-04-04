@@ -126,11 +126,11 @@ public class Pawn extends Piece {
     public boolean checkLegalEnPassant() {
         if (this.getGame().getPlayRecord().isEmpty()) return false;
         Play lastPlay = this.getGame().getLastPlay();
-        if (!(lastPlay.getPiece() instanceof Pawn)) return false;
-        if (lastPlay.getPiece().getColor() == this.getColor()) return false;
-        if (Math.abs(Position.yDist(lastPlay.getInitPos(), lastPlay.getFinPos())) != 2) return false;
-        if (Math.abs(Position.yDist(lastPlay.getFinPos(), this.getPos())) != 0) return false;
-        if (Math.abs(Position.xDist(this.getPos(), lastPlay.getFinPos())) != 1) return false;
+        if (!(lastPlay.piece() instanceof Pawn)) return false;
+        if (lastPlay.piece().getColor() == this.getColor()) return false;
+        if (Math.abs(Position.yDist(lastPlay.initPos(), lastPlay.finPos())) != 2) return false;
+        if (Math.abs(Position.yDist(lastPlay.finPos(), this.getPos())) != 0) return false;
+        if (Math.abs(Position.xDist(this.getPos(), lastPlay.finPos())) != 1) return false;
         return true;
     }
     
@@ -144,7 +144,7 @@ public class Pawn extends Piece {
      * attribute. If unable to move En Passant, returns 0.
      */
     public int xDirEnPassant() {
-        if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1).getFinPos());
+        if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1).finPos());
         return 0;
     }
 

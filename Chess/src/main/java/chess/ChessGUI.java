@@ -163,10 +163,10 @@ public class ChessGUI {
                     } else {
                         Play lastPlay = chess.getLastPlay();
                         tableModel.addRow(new Object[] {
-                            lastPlay.getPiece().getSimpleName(),
-                            lastPlay.getInitPos(),
-                            lastPlay.getFinPos(),
-                            lastPlay.getPieceCaptured() != null ? lastPlay.getPieceCaptured().getSimpleName() : ""
+                            lastPlay.piece().getSimpleName(),
+                            lastPlay.initPos(),
+                            lastPlay.finPos(),
+                            lastPlay.pieceCaptured() != null ? lastPlay.pieceCaptured().getSimpleName() : ""
                         });
                     }
                     activePlayer = activePlayer.opposite();
@@ -238,7 +238,7 @@ public class ChessGUI {
                 JButton button = boardButtons[x][y];
                 if (chess.checkPiece(Position.of(x, y))) {
                     Piece piece = chess.findPiece(Position.of(x, y));
-                    button.setText(getPieceSymbol(piece));
+                    button.setText(pieceSymbol(piece));
                 } else {
                     button.setText("");
                 }
@@ -246,7 +246,7 @@ public class ChessGUI {
         }
     }
 
-    private String getPieceSymbol(Piece piece) {
+    private String pieceSymbol(Piece piece) {
         if (piece instanceof Pawn) return piece.getColor() == ChessColor.WHITE ? "♙" : "♟";
         if (piece instanceof Knight) return piece.getColor() == ChessColor.WHITE ? "♘" : "♞";
         if (piece instanceof Bishop) return piece.getColor() == ChessColor.WHITE ? "♗" : "♝";

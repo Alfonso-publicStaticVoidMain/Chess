@@ -52,7 +52,7 @@ public class Chess {
      * Getter for the pieces attribute.
      * @return The List of Pieces of {@code this} game.
      */
-    public List<Piece> getPieces() {return this.pieces;}
+    public List<Piece> pieces() {return this.pieces;}
 
     /**
      * Getter for the playRecord attribute.
@@ -344,7 +344,7 @@ public class Chess {
     @Deprecated
     public boolean checkHistoryOfMovementsFromPosition(Position pos) {
         return this.playRecord.stream()
-            .anyMatch(play -> play.getInitPos().equals(pos));
+            .anyMatch(play -> play.initPos().equals(pos));
     }
     
     /**

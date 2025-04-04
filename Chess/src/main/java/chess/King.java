@@ -59,7 +59,7 @@ public class King extends Piece {
      * to eat (accounting for Pawns different movement when eating).
      */
     public boolean checkCheck(Position finPos) {    
-        return this.getGame().getPieces().stream()
+        return this.getGame().pieces().stream()
             .filter(piece -> piece.getColor() != this.getColor())
             .filter(piece -> 
                 (piece instanceof Pawn) ?
