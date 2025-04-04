@@ -8,7 +8,7 @@ import java.util.List;
  * position, respectively.
  * @author Alfonso Gallego
  */
-record Position(int x, int y) {
+public record Position(int x, int y) {
 //public class Position {
 //    /**
 //     * The X coordinate of the position.

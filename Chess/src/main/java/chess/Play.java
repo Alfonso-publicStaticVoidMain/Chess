@@ -6,7 +6,7 @@ package chess;
  * @author Alfonso Gallego
  */
 //public class Play {
-record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured) {
+public record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured) {
 //    /**
 //     * The {@link Piece} that was moved.
 //     */
