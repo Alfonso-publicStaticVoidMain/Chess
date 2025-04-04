@@ -316,21 +316,14 @@ record Position(int x, int y) {
     public static List<Position> validPositions() {return Position.validChessPositions;}
     
     /**
-     * Constructor of the record Position. If it received parameters that are
-     * outside the [1,8] interval, returns the (0,0) Position and prints an
+     * Constructor of the record Position.
      * error message.
      * @param x X coordinate of the position.
      * @param y Y coordinate of the position.
      */
     public Position(int x, int y) {
-        if (x >= 1 && x <= 8 && y >= 1 && y <= 8) {
-            this.x = x;
-            this.y = y;
-        } else {
-            System.out.println("Error, parameters x="+x+" and y="+y+" represent a Position outside the chess board.");
-            this.x=0;
-            this.y=0;
-        }
+        this.x = x;
+        this.y = y;
     }
     
     /**
@@ -340,8 +333,8 @@ record Position(int x, int y) {
      * @return Returns a new Position constructed by converting the first char
      * of the String to an integer, to store it as the x coordinate of the
      * position, and storing the second as the y coordinate.
-     * If the String doesn't have length 2, or if the position it'd represent
-     * is not within the Chess board, an error message is printed and 
+     * If the String doesn't have length 2, or if its characters don't represent
+     * a position in algebraic notation, an error message is printed and 
      * {@code null} is returned.
      */
     public static Position of(String pos) {
@@ -350,19 +343,18 @@ record Position(int x, int y) {
             System.out.println("The specified String doesn't have length 2.");
             return null;
         }
-        return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
-//        try {
-//            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
-//        } catch (IllegalArgumentException e) {
-//            System.out.println(e);
-//            System.out.println("Error occurred while trying to create the position with value: " + pos);
-//            return null;
-//        }
+        try {
+            return new Position(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+            System.out.println("Error occurred while trying to create the position with value: " + pos);
+            return null;
+        }
     }
     
     /**
-     * Static factory method to create new Positions. In this case, from a
-     * pair of integers representing the X and Y coordinates of the Position.
+     * Static factory method to create new Positions from a pair of integers
+     * representing the X and Y coordinates of the Position.
      * @param x X coordinate of the new Position.
      * @param y Y coordinate of the new Position.
      * @return Returns a new Position constructed by storing the two integers
@@ -371,7 +363,9 @@ record Position(int x, int y) {
      * is printed and {@code null} is returned.
      */
     public static Position of(int x, int y) {
-        return new Position(x, y);
+        if (x >= 1 && x <= 8 && y >= 1 && y <= 8) return new Position(x, y);
+        System.out.println("Error occurred while trying to create the position with values: "+x+", "+y);
+        return null;
 //        try {
 //            return new Position(x, y);
 //        } catch (IllegalArgumentException e) {
