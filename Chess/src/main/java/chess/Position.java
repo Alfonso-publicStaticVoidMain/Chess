@@ -7,6 +7,8 @@ import java.util.List;
  * int attributes x and y, representing the X and Y coordinate of the
  * position, respectively.
  * @author Alfonso Gallego
+ * @param x X coordinate of the Position.
+ * @param y Y coordinate of the Position.
  */
 public record Position(int x, int y) {
 //public class Position {

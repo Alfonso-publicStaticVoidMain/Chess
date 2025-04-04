@@ -4,6 +4,10 @@ package chess;
  * Record representing a Play in a chess game, storing the Piece that was moved,
  * its initial and final Positions, and the Piece that was captured, if any.
  * @author Alfonso Gallego
+ * @param piece {@link Piece} that was moved in the Play.
+ * @param initPos Initial {@link Position} of the movement.
+ * @param finPos Final {@link Position} of the movement.
+ * @param pieceCaptured {@link Piece} captured in the Play, if any.
  */
 //public class Play {
 public record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured) {

@@ -11,7 +11,7 @@ public abstract class Piece {
      */
     private Position pos;
     /**
-     * {@link Color} of the Piece, storing certain qualities of that Piece.
+     * {@link ChessColor} of the Piece, storing certain qualities of that Piece.
      */
     private ChessColor color;
     /**
