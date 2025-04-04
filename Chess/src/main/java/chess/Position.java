@@ -3,7 +3,7 @@ package chess;
 import java.util.List;
 
 /**
- * Class representing the valid positions of a chess board. Contains two
+ * Record representing the valid positions of a chess board. Contains two
  * int attributes x and y, representing the X and Y coordinate of the
  * position, respectively.
  * @author Alfonso Gallego
