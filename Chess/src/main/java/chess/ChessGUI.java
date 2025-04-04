@@ -15,7 +15,7 @@ public class ChessGUI {
     private final JPanel topPanel;
     private final JPanel rightPanel;
     private final JLabel activePlayerLabel;
-    private final JTable playRecordArea;
+    private final JTable playHistoryArea;
     private final DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
     private final Chess chess;
@@ -40,8 +40,8 @@ public class ChessGUI {
         rightPanel = new JPanel(new BorderLayout());
         String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Captured"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        playRecordArea = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(playRecordArea);
+        playHistoryArea = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(playHistoryArea);
         rightPanel.add(scrollPane, BorderLayout.CENTER);
         rightPanel.setPreferredSize(new Dimension(400, 0));
         JPanel tablePanel = new JPanel(new BorderLayout());

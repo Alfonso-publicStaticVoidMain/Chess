@@ -136,8 +136,7 @@ public class ChessMainClass {
                     }
                 }
                 game.printBoard();
-                System.out.println("[DEBUG]: Play Record:");
-                game.getPlayRecord().stream()
+                game.getPlayHistory().stream()
                     .forEach(System.out::println);
                 System.out.printf("----------------------------------%n");
                 turnCounter++;

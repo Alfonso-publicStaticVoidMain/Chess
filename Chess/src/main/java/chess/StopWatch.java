@@ -6,6 +6,7 @@ package chess;
  * With the modification to use nanoTime() given by user Nikita Bosik.
  * @author user1007522
  * @author Nikita Bosik
+ * @hidden 
  */
 public class StopWatch {
 

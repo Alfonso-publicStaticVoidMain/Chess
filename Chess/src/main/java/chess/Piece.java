@@ -110,14 +110,14 @@ public abstract class Piece {
      * @param checkCheck State parameter to check if the movement should be
      * declared illegal if it'd cause a check.
      * @param recordMovement State parameter to track if the movement should
-     * be added to the playRecord attribute of the Chess game of {@code this}.
+     * be added to the playHistory attribute of the Chess game of {@code this}.
      * @return True if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
      * into account the possiblity of an En Passant capture for Pawns.
      * <br><br>
      * If {@code recordMovement} is set to true, the movement is recorded into
-     * {@code this}'s game's {@code playRecord} attribute.
+     * {@code this}'s game's {@code playHistory} attribute.
      * @see Piece#checkLegalMovement(Position, boolean)
      * @see Pawn#xDirEnPassant
      * @see Chess#findPiece(Position)
@@ -131,16 +131,16 @@ public abstract class Piece {
                 capturedPiece = chessGame.findPiece(finPos);
                 chessGame.pieces().remove(capturedPiece);
                 if (recordMovement) {
-                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
+                    chessGame.getPlayHistory().add(new Play(this, initPos, finPos, capturedPiece));
                 }
             } else if (this instanceof Pawn pawn && pawn.checkLegalEnPassant() && pawn.xDirEnPassant() == Position.xDist(initPos, finPos)) {
                 capturedPiece = chessGame.getLastPlay().piece();
                 chessGame.pieces().remove(capturedPiece);
-                if (recordMovement) chessGame.getPlayRecord().add(new Play(this, initPos, finPos, capturedPiece));
+                if (recordMovement) chessGame.getPlayHistory().add(new Play(this, initPos, finPos, capturedPiece));
                 
             } else {
                 if (recordMovement) {
-                    chessGame.getPlayRecord().add(new Play(this, initPos, finPos));
+                    chessGame.getPlayHistory().add(new Play(this, initPos, finPos));
                 }
             }
             this.setPos(finPos);

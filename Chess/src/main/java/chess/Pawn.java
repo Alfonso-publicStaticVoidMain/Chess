@@ -108,7 +108,7 @@ public class Pawn extends Piece {
      * Checks if {@code this} Pawn can make a legal En Passant capture,
      * taking into account the last play recorded in its game.
      * @return Returns true if the {@link Pawn} is able to do an En Passant
-     * move given the last play stored in the {@code playRecord} attribute
+     * move given the last play stored in the {@code playHistory} attribute
      * of {@code this.game}.
      * 
      * False will be returned in any of the following cases:
@@ -124,7 +124,7 @@ public class Pawn extends Piece {
      * </ul>
      */
     public boolean checkLegalEnPassant() {
-        if (this.getGame().getPlayRecord().isEmpty()) return false;
+        if (this.getGame().getPlayHistory().isEmpty()) return false;
         Play lastPlay = this.getGame().getLastPlay();
         if (!(lastPlay.piece() instanceof Pawn)) return false;
         if (lastPlay.piece().getColor() == this.getColor()) return false;
@@ -140,11 +140,11 @@ public class Pawn extends Piece {
      * @return Returns the direction {@code this} Pawn must move to make an
      * En Passant capture on the last moved Pawn, if able, ie, the distance in
      * the X axis between {@code this}'s current position and the final position
-     * of the last moved Pawn in the {@link Chess} game's {@code playRecord}
+     * of the last moved Pawn in the {@link Chess} game's {@code playHistory}
      * attribute. If unable to move En Passant, returns 0.
      */
     public int xDirEnPassant() {
-        if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayRecord().get(this.getGame().getPlayRecord().size()-1).finPos());
+        if (this.checkLegalEnPassant()) return Position.xDist(this.getPos(), this.getGame().getPlayHistory().get(this.getGame().getPlayHistory().size()-1).finPos());
         return 0;
     }
 

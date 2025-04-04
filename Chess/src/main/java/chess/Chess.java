@@ -18,7 +18,7 @@ public class Chess {
     /**
      * List containing all Plays done in the game thus far.
      */
-    private final List<Play> playRecord = new LinkedList<>();
+    private final List<Play> playHistory = new LinkedList<>();
     
     /**
      * Map attribute representing the avaliability of left castling for each
@@ -55,19 +55,19 @@ public class Chess {
     public List<Piece> pieces() {return this.pieces;}
 
     /**
-     * Getter for the playRecord attribute.
+     * Getter for the playHistory attribute.
      * @return The List of Plays of {@code this} game.
      */
-    public List<Play> getPlayRecord() {return this.playRecord;}
+    public List<Play> getPlayHistory() {return this.playHistory;}
     
     /**
-     * Gets the last {@link Play} stored in the {@code playRecord} attribute.
-     * @return Returns the last {@link Play} in the {@code playRecord}
+     * Gets the last {@link Play} stored in the {@code playHistory} attribute.
+     * @return Returns the last {@link Play} in the {@code playHistory}
      * attirbute of {@code this}, or {@code null} if that attribute is still
      * empty.
      */
     public Play getLastPlay() {
-        return this.getPlayRecord().isEmpty() ? null : this.getPlayRecord().get(this.getPlayRecord().size()-1);
+        return this.getPlayHistory().isEmpty() ? null : this.getPlayHistory().get(this.getPlayHistory().size()-1);
     }
 
     /**
@@ -239,7 +239,7 @@ public class Chess {
         Chess result = new Chess();
         this.pieces.stream()
             .forEach(piece -> result.pieces.add(piece.copy()));
-        result.playRecord.addAll(this.playRecord);
+        result.playHistory.addAll(this.playHistory);
         result.linkPieces();
         return result;
     }
@@ -334,7 +334,7 @@ public class Chess {
      * Checks whether there's a recorded Play whose initial position is the
      * specified Position.
      * @param pos {@link Position} to check movements from.
-     * @return Returns true if in the {@code playRecord} list of {@link Play}s
+     * @return Returns true if in the {@code playHistory} list of {@link Play}s
      * there's one that has initial position {@code pos}.
      * @deprecated Now that the castling avaliability is tracked within the
      * {@code Chess} class itself and updated on each movement in the
@@ -343,7 +343,7 @@ public class Chess {
      */
     @Deprecated
     public boolean checkHistoryOfMovementsFromPosition(Position pos) {
-        return this.playRecord.stream()
+        return this.playHistory.stream()
             .anyMatch(play -> play.initPos().equals(pos));
     }
     
