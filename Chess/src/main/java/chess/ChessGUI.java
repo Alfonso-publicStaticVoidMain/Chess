@@ -11,7 +11,7 @@ import javax.swing.table.*;
  * @version 1.0
  */
 public class ChessGUI {
-    private final JFrame frame;
+    private final JFrame mainFrame;
     private final JPanel boardPanel;
     private final JPanel topPanel;
     private final JPanel rightPanel;
@@ -28,15 +28,15 @@ public class ChessGUI {
         chess = new Chess();
         chess.addStandardPieces();
 
-        frame = new JFrame("Chess Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
+        mainFrame = new JFrame("Chess Game");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(1000, 600);
 
         topPanel = new JPanel();
         activePlayerLabel = new JLabel("Active Player: WHITE", SwingConstants.CENTER);
         activePlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         topPanel.add(activePlayerLabel);
-        frame.add(topPanel, BorderLayout.NORTH);
+        mainFrame.add(topPanel, BorderLayout.NORTH);
         
         rightPanel = new JPanel(new BorderLayout());
         String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Captured"};
@@ -53,7 +53,7 @@ public class ChessGUI {
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         rightPanel.add(tablePanel, BorderLayout.CENTER);
-        frame.add(rightPanel, BorderLayout.EAST);
+        mainFrame.add(rightPanel, BorderLayout.EAST);
         
         boardPanel = new JPanel(new GridLayout(9, 9));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -62,8 +62,8 @@ public class ChessGUI {
         initializeBoard();
         updateBoard();
 
-        frame.add(boardPanel);
-        frame.setVisible(true);
+        mainFrame.add(boardPanel);
+        mainFrame.setVisible(true);
     }
 
     private void initializeBoard() {
@@ -138,7 +138,7 @@ public class ChessGUI {
                     if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) { // Pawn crowning
                         // Menu to crown a Pawn
                         Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
-                        int n = JOptionPane.showOptionDialog(frame,
+                        int n = JOptionPane.showOptionDialog(mainFrame,
                             "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
                             "Crowning Menu",
                             JOptionPane.DEFAULT_OPTION,
@@ -179,7 +179,7 @@ public class ChessGUI {
             updateBoard();
             if (chess.checkMate(activePlayer)) {
                 JOptionPane.showConfirmDialog(
-                    frame,
+                    mainFrame,
                     activePlayer + " is in checkmate.\n"+activePlayer.opposite()+" wins.",
                     "End of the game",
                     JOptionPane.OK_CANCEL_OPTION,
@@ -190,7 +190,7 @@ public class ChessGUI {
                 endOfGame = true;
             } else if (chess.checkMate(activePlayer, false)) {
                 JOptionPane.showConfirmDialog(
-                    frame,
+                    mainFrame,
                     activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
                     "End of the game",
                     JOptionPane.OK_CANCEL_OPTION,
