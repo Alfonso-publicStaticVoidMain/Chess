@@ -11,8 +11,8 @@ import java.util.Scanner;
 /**
  * Main class designed to play a chess game via console inputs and outputs.
  * @author Alfonso Gallego
- * @deprecated Now that the {@link ChessGUI} class is fully working, playing
- * via console is completely obsolete.
+ * @deprecated Now that the GUI is fully working, playing via console is
+ * completely obsolete.
  */
 @Deprecated
 public class ChessMainClass {

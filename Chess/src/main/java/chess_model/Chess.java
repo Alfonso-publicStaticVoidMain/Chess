@@ -254,8 +254,8 @@ public class Chess {
     
     /**
      * Prints the current state of the board.
-     * @deprecated Method only used within {@link ChessMainClass} to play
-     * the game via console. Honestly, not recommended, it's really boring.
+     * @deprecated Method only used to play the game via console.
+     * Honestly, not recommended, it's really boring.
      */
     @Deprecated
     public void printBoard() {
