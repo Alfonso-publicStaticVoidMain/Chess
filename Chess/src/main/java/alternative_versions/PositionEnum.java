@@ -382,7 +382,7 @@ public enum PositionEnum {
     
     /**
      * Returns the chess board PositionEnum whose X and Y coordinates are the given
- x and y parameters.
+     * x and y parameters.
      * @param x Value of the X coordinate.
      * @param y Value of the Y coordinate.
      * @return Returns the enum value whose X and Y coordinates are x and y

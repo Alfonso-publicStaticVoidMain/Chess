@@ -1,5 +1,6 @@
 package chess_model;
 
+import chess_controller.ChessController;
 import java.util.List;
 
 /**
@@ -346,7 +347,7 @@ public record Position(int x, int y) {
             return null;
         }
         try {
-            final int x = Chess.convertLetterToNumber(pos.charAt(0));
+            final int x = ChessController.convertLetterToNumber(pos.charAt(0));
             final int y = Integer.parseInt(""+pos.charAt(1));
             if (x >= 1 && x <= 8 && y >= 1 && y <= 8) return new Position(x, y);
             else throw new IllegalArgumentException(pos+" represents coordinates ("+x+", "+y+"), which are outside the chess board");
@@ -435,7 +436,7 @@ public record Position(int x, int y) {
      */
     @Override
     public String toString() {
-        return "" + Chess.convertNumberToLetter(this.x) + this.y;
+        return "" + ChessController.convertNumberToLetter(this.x) + this.y;
     }
 
 }

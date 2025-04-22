@@ -13,7 +13,7 @@ public class ChessMainGUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Chess chess = new Chess();
+            Chess chess = Chess.standardGame();
             ChessGUI view = new ChessGUI();
             ChessController controller = new ChessController(chess, view);
         });

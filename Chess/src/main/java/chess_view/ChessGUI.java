@@ -23,16 +23,10 @@ public class ChessGUI {
     private final JScrollPane scrollPane;
     private final DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
-    private final Chess chess;
-    private Position selectedPos = null;
-    private boolean endOfGame = false;
     
     private ChessController controller;
 
     public ChessGUI() {
-        chess = new Chess();
-        chess.addStandardPieces();
-
         mainFrame = new JFrame("Chess Game");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 600);
@@ -68,14 +62,6 @@ public class ChessGUI {
         mainFrame.setVisible(true);
     }
     
-    public ChessColor activePlayer() {
-        return this.controller.getGame().getActivePlayer();
-    }
-    
-    public void changeActivePlayer() {
-        this.controller.getGame().changeActivePlayer();
-    }
-    
     public void setController(ChessController controller) {
         this.controller = controller;
     }
@@ -93,7 +79,7 @@ public class ChessGUI {
                     button.setText("");
                 } else if (y == 0) {
                     // Column labels (A to H) at the bottom
-                    button.setText(""+ Chess.convertNumberToLetter(x));
+                    button.setText(""+ ChessController.convertNumberToLetter(x));
                     button.setFont(new Font("Arial", Font.BOLD, 16));
                     button.setEnabled(false);
                 } else if (x == 0) {
@@ -110,114 +96,115 @@ public class ChessGUI {
                     }
                     button.setFont(new Font("Dialog", Font.PLAIN, 24));
                     final int fx = x, fy = y;
-                    button.addActionListener(e -> handleClick(fx, fy));
+                    button.addActionListener(e -> this.controller.handleClick(fx, fy));
                 }
                 boardPanel.add(button);
             }
         }
     }
 
-    private void handleClick(int x, int y) {
-        if (x == 0 || y == 0) return; // Ignore label clicks
-        if (endOfGame) return; // Don't do anything if the game has ended.
-        Position clickedPos = Position.of(x, y);
-
-        if (selectedPos == null) { // First click stores the selected position.
-            if (chess.checkPiece(clickedPos) && chess.findPiece(clickedPos).getColor() == this.activePlayer()) {
-                selectedPos = clickedPos;
-                highlightValidMoves(selectedPos);
-            }
-        } else { // Second click attempts to do the movement.
-            if (chess.checkPiece(selectedPos)) {
-                Piece piece = chess.findPiece(selectedPos);
-                boolean playDone = false;
-                int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
-                
-                if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(this.activePlayer())) {
-                        chess.doLeftCastling(this.activePlayer());
-                        playDone = true;
-                        castlingInfo = -1;
-                    }
-                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(this.activePlayer())) {
-                        chess.doRightCastling(this.activePlayer());
-                        playDone = true;
-                        castlingInfo = 1;
-                    }
-                }
-                
-                if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
-                    piece.move(clickedPos);
-                    
-                    if (piece instanceof Pawn && piece.getPos().y() == this.activePlayer().crowningRow()) { // Pawn crowning
-                        // Menu to crown a Pawn
-                        Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
-                        int n = JOptionPane.showOptionDialog(mainFrame,
-                            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
-                            "Crowning Menu",
-                            JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,     //do not use a custom Icon
-                            options,  //the titles of buttons
-                            options[0]); //default button title
-                        String newPieceType = "Queen";
-                        switch (n) {
-                            //case 0 -> newPieceType = "Queen";
-                            case 1 -> newPieceType = "Knight";
-                            case 2 -> newPieceType = "Rook";
-                            case 3 -> newPieceType = "Bishop";
-                            //case -1 -> newPieceType = "Queen";
-                        }
-                        chess.crownPawn(piece, newPieceType);
-                    }
-                    playDone = true;
-                }
-                if (playDone) { // Record the play (special case for castling) and update the active player
-                    if (castlingInfo != 0) {
-                        tableModel.addRow(new Object[] {this.activePlayer() + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
-                    } else {
-                        Play lastPlay = chess.getLastPlay();
-                        tableModel.addRow(new Object[] {
-                            lastPlay.piece().getSimpleName(),
-                            lastPlay.initPos(),
-                            lastPlay.finPos(),
-                            lastPlay.pieceCaptured() != null ? lastPlay.pieceCaptured().getSimpleName() : ""
-                        });
-                    }
-                    this.changeActivePlayer();
-                    activePlayerLabel.setText("Active Player: "+this.activePlayer());
-                }
-            }
-            clearHighlights();
-            selectedPos = null;
-            updateBoard();
-            if (chess.checkMate(this.activePlayer())) {
-                JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    this.activePlayer() + " is in checkmate.\n"+this.activePlayer().opposite()+" wins.",
-                    "End of the game",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null
-                );
-                tableModel.addRow(new Object[] {this.activePlayer().opposite()+" wins.", "---", "---", "---"});
-                endOfGame = true;
-            } else if (chess.checkMate(this.activePlayer(), false)) {
-                JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    this.activePlayer()+" isn't in check but every move would cause a check.\nThe game is a draw.",
-                    "End of the game",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null
-                );
-                tableModel.addRow(new Object[] {"The game is a draw.", "---", "---", "---"});
-                endOfGame = true;
-            }
-        }
-    }
+//    private void handleClick(int x, int y) {
+//        if (x == 0 || y == 0) return; // Ignore label clicks
+//        if (endOfGame) return; // Don't do anything if the game has ended.
+//        Position clickedPos = Position.of(x, y);
+//
+//        if (selectedPos == null) { // First click stores the selected position.
+//            if (chess.checkPiece(clickedPos) && chess.findPiece(clickedPos).getColor() == this.activePlayer()) {
+//                selectedPos = clickedPos;
+//                highlightValidMoves(selectedPos);
+//            }
+//        } else { // Second click attempts to do the movement.
+//            if (chess.checkPiece(selectedPos)) {
+//                Piece piece = chess.findPiece(selectedPos);
+//                boolean playDone = false;
+//                int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
+//                
+//                if (piece instanceof King) {
+//                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(this.activePlayer())) {
+//                        chess.doLeftCastling(this.activePlayer());
+//                        playDone = true;
+//                        castlingInfo = -1;
+//                    }
+//                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(this.activePlayer())) {
+//                        chess.doRightCastling(this.activePlayer());
+//                        playDone = true;
+//                        castlingInfo = 1;
+//                    }
+//                }
+//                
+//                if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
+//                    piece.move(clickedPos);
+//                    
+//                    if (piece instanceof Pawn && piece.getPos().y() == this.activePlayer().crowningRow()) { // Pawn crowning
+//                        // Menu to crown a Pawn
+//                        Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
+//                        int n = JOptionPane.showOptionDialog(mainFrame,
+//                            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
+//                            "Crowning Menu",
+//                            JOptionPane.DEFAULT_OPTION,
+//                            JOptionPane.QUESTION_MESSAGE,
+//                            null,     //do not use a custom Icon
+//                            options,  //the titles of buttons
+//                            options[0]); //default button title
+//                        String newPieceType = "Queen";
+//                        switch (n) {
+//                            //case 0 -> newPieceType = "Queen";
+//                            case 1 -> newPieceType = "Knight";
+//                            case 2 -> newPieceType = "Rook";
+//                            case 3 -> newPieceType = "Bishop";
+//                            //case -1 -> newPieceType = "Queen";
+//                        }
+//                        chess.crownPawn(piece, newPieceType);
+//                    }
+//                    playDone = true;
+//                }
+//                if (playDone) { // Record the play (special case for castling) and update the active player
+//                    if (castlingInfo != 0) {
+//                        tableModel.addRow(new Object[] {this.activePlayer() + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
+//                    } else {
+//                        Play lastPlay = chess.getLastPlay();
+//                        tableModel.addRow(new Object[] {
+//                            lastPlay.piece().getSimpleName(),
+//                            lastPlay.initPos(),
+//                            lastPlay.finPos(),
+//                            lastPlay.pieceCaptured() != null ? lastPlay.pieceCaptured().getSimpleName() : ""
+//                        });
+//                    }
+//                    this.changeActivePlayer();
+//                    activePlayerLabel.setText("Active Player: "+this.activePlayer());
+//                }
+//            }
+//            clearHighlights();
+//            selectedPos = null;
+//            updateBoard();
+//            if (chess.checkMate(this.activePlayer())) {
+//                JOptionPane.showConfirmDialog(
+//                    mainFrame,
+//                    this.activePlayer() + " is in checkmate.\n"+this.activePlayer().opposite()+" wins.",
+//                    "End of the game",
+//                    JOptionPane.OK_CANCEL_OPTION,
+//                    JOptionPane.INFORMATION_MESSAGE,
+//                    null
+//                );
+//                tableModel.addRow(new Object[] {this.activePlayer().opposite()+" wins.", "---", "---", "---"});
+//                endOfGame = true;
+//            } else if (chess.checkMate(this.activePlayer(), false)) {
+//                JOptionPane.showConfirmDialog(
+//                    mainFrame,
+//                    this.activePlayer()+" isn't in check but every move would cause a check.\nThe game is a draw.",
+//                    "End of the game",
+//                    JOptionPane.OK_CANCEL_OPTION,
+//                    JOptionPane.INFORMATION_MESSAGE,
+//                    null
+//                );
+//                tableModel.addRow(new Object[] {"The game is a draw.", "---", "---", "---"});
+//                endOfGame = true;
+//            }
+//        }
+//    }
 
     public void highlightValidMoves(Position pos) {
+        Chess chess = this.controller.getGame();
         if (chess.checkPiece(pos)) {
             Piece piece = chess.findPiece(pos);
             for (int x = 1; x <= 8; x++) {
@@ -229,7 +216,9 @@ public class ChessGUI {
                     if (piece instanceof King && (
                         ((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
                         || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())))
-                    )) boardButtons[x][y].setBackground(Color.GREEN);
+                    )) {
+                        boardButtons[x][y].setBackground(Color.GREEN);
+                    }
                 }
             }
         }
@@ -248,6 +237,7 @@ public class ChessGUI {
     }
 
     public void updateBoard() {
+        Chess chess = this.controller.getGame();
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 JButton button = boardButtons[x][y];
@@ -259,6 +249,68 @@ public class ChessGUI {
                 }
             }
         }
+    }
+    
+    public String pawnCrowningMenu(Piece piece) {
+        Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
+        int n = JOptionPane.showOptionDialog(mainFrame,
+            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
+            "Crowning Menu",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,     //do not use a custom Icon
+            options,  //the titles of buttons
+            options[0]); //default button title
+        String newPieceType = "Queen";
+        switch (n) {
+            //case 0 -> newPieceType = "Queen";
+            case 1 -> newPieceType = "Knight";
+            case 2 -> newPieceType = "Rook";
+            case 3 -> newPieceType = "Bishop";
+            //case -1 -> newPieceType = "Queen";
+        }
+        return newPieceType;
+    }
+    
+    public void updateActivePlayer() {
+        activePlayerLabel.setText("Active Player: "+this.controller.activePlayer());
+    }
+    
+    public void updatePlayHistory(int castlingInfo, Play lastPlay) {
+        if (castlingInfo != 0) {
+            tableModel.addRow(new Object[] {this.controller.activePlayer() + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
+        } else {
+            tableModel.addRow(new Object[] {
+                lastPlay.piece().getSimpleName(),
+                lastPlay.initPos(),
+                lastPlay.finPos(),
+                lastPlay.pieceCaptured() != null ? lastPlay.pieceCaptured().getSimpleName() : ""
+            });
+        }
+    }
+    
+    public void checkMessage(ChessColor playerWhoWins) {
+        JOptionPane.showConfirmDialog(
+            mainFrame,
+            playerWhoWins.opposite()+" is in checkmate.\n"+playerWhoWins+" wins.",
+            "End of the game",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.INFORMATION_MESSAGE,
+            null
+        );
+        tableModel.addRow(new Object[] {playerWhoWins+" wins.", "---", "---", "---"});
+    }
+    
+    public void drawMessage(ChessColor activePlayer) {
+        JOptionPane.showConfirmDialog(
+            mainFrame,
+            activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
+            "End of the game",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.INFORMATION_MESSAGE,
+            null
+        );
+        tableModel.addRow(new Object[] {"The game is a draw.", "---", "---", "---"});
     }
 
 //    private String pieceSymbol(Piece piece) {

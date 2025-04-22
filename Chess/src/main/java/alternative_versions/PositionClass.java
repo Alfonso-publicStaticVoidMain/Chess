@@ -1,5 +1,6 @@
 package alternative_versions;
 
+import chess_controller.ChessController;
 import chess_model.Chess;
 import java.util.List;
 
@@ -348,7 +349,7 @@ public class PositionClass {
             return null;
         }
         try {
-            return new PositionClass(Chess.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
+            return new PositionClass(ChessController.convertLetterToNumber(pos.charAt(0)), Integer.parseInt(""+pos.charAt(1)));
         } catch (IllegalArgumentException e) {
             System.out.println(e);
             System.out.println("Error occurred while trying to create the position with value: " + pos);
@@ -440,7 +441,7 @@ public class PositionClass {
      */
     @Override
     public String toString() {
-        return "" + Chess.convertNumberToLetter(this.x) + this.y;
+        return "" + ChessController.convertNumberToLetter(this.x) + this.y;
     }
 
 }

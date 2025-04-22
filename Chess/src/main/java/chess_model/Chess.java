@@ -1,5 +1,6 @@
 package chess_model;
 
+import chess_controller.ChessController;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -61,7 +62,7 @@ public class Chess {
      * Getter for the active player attribute.
      * @return The color of the active player.
      */
-    public ChessColor getActivePlayer() {
+    public ChessColor activePlayer() {
         return activePlayer;
     }
     
@@ -119,6 +120,17 @@ public class Chess {
         this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
         this.rightCastlingAvaliability.put(ChessColor.WHITE, true);
         this.rightCastlingAvaliability.put(ChessColor.BLACK, true);
+    }
+    
+    /**
+     * Factory method to create a standard game.
+     * @return A game with all the standard game pieces on their respective
+     * starting position.
+     */
+    public static Chess standardGame() {
+        Chess chess = new Chess();
+        chess.addStandardPieces();
+        return chess;
     }
     
     /**
@@ -258,7 +270,7 @@ public class Chess {
                     }
                 }
                 if (!printedPiece && y != 0) System.out.print("|__|");
-                else if (y == 0) System.out.print("  " + convertNumberToLetter(x) + " ");
+                else if (y == 0) System.out.print("  " + ChessController.convertNumberToLetter(x) + " ");
             }
             System.out.printf("%n");
         }  
@@ -524,48 +536,5 @@ public class Chess {
         throw new IllegalArgumentException(newType+" wasn't a legal type to crown a pawn into.");
     }
     
-    /**
-     * Static method to convert a letter to a number.
-     * @param letter Letter to convert.
-     * @return The integer number representning its position in the english
-     * alphabet.
-     * @throws IllegalArgumentException If the letter is anything other than
-     * [a-h].
-     * @hidden 
-     */
-    public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
-        return switch (Character.toLowerCase(letter)) {
-            case 'a' -> 1;
-            case 'b' -> 2;
-            case 'c' -> 3;
-            case 'd' -> 4;
-            case 'e' -> 5;
-            case 'f' -> 6;
-            case 'g' -> 7;
-            case 'h' -> 8;
-            default -> throw new IllegalArgumentException("Invalid letter to convert to number: "+letter);
-        };
-    }
     
-    /**
-     * Static method to convert a number to a letter.
-     * @param num Number to convert to a letter.
-     * @return The letter in the number's position in the english alphabet.
-     * @throws IllegalArgumentException If the number isn't within 1 and 8 (both
-     * inclusive).
-     * @hidden 
-     */
-    public static char convertNumberToLetter(int num) throws IllegalArgumentException {
-        return switch (num) {
-            case 1 -> 'A';
-            case 2 -> 'B';
-            case 3 -> 'C';
-            case 4 -> 'D';
-            case 5 -> 'E';
-            case 6 -> 'F';
-            case 7 -> 'G';
-            case 8 -> 'H';
-            default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
-        };
-    }
 }
