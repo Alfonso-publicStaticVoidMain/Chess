@@ -1,5 +1,10 @@
-package chess;
+package chess_main;
 
+import chess_model.Chess;
+import chess_model.ChessColor;
+import chess_model.Pawn;
+import chess_model.Piece;
+import chess_model.Position;
 import java.util.List;
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Class representing the Knight piece.
@@ -57,6 +57,11 @@ public class Knight extends Piece {
     @Override
     public Piece copy() {
         return new Knight(this.getPos(), this.getColor());
+    }
+
+    @Override
+    public String toString() {
+        return this.getColor() == ChessColor.WHITE ? "♘" : "♞";
     }
     
 }

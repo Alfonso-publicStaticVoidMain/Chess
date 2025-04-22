@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Abstract class representing chess Pieces, to be extended by child classes

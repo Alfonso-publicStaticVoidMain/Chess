@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -31,6 +31,46 @@ public class Chess {
      * player.
      */
     private final Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
+    
+    /**
+     * Color of the currently active player.
+     */
+    private ChessColor activePlayer = ChessColor.WHITE;
+
+    /**
+     * Boolean attribute to track if the game has ended.
+     */
+    private boolean endOfGame = false;
+
+    /**
+     * Getter for the {@code endOfGame} attribute.
+     * @return True if the game has ended, false otherwise.
+     */
+    public boolean isEndOfGame() {
+        return endOfGame;
+    }
+    
+    /**
+     * Sets the {@code endOfGame} attribute to true, effectively ending the game.
+     */
+    public void endGame() {
+        this.endOfGame = true;
+    }
+    
+    /**
+     * Getter for the active player attribute.
+     * @return The color of the active player.
+     */
+    public ChessColor getActivePlayer() {
+        return activePlayer;
+    }
+    
+    /**
+     * If the active player is white, it changes to black and viceversa.
+     */
+    public void changeActivePlayer() {
+        this.activePlayer = this.activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+    }
     
     /**
      * Getter for the left castling avaliability attribute.

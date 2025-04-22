@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Class representing the Bishop piece.
@@ -52,6 +52,11 @@ public class Bishop extends Piece {
     @Override
     public Piece copy() {
         return new Bishop(this.getPos(), this.getColor());
+    }
+    
+    @Override
+    public String toString() {
+        return this.getColor() == ChessColor.WHITE ? "♗" : "♝";
     }
     
 }

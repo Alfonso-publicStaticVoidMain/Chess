@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Enum class representing the two colors of chess: black and white. It has

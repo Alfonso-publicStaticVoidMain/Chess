@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Class representing the Pawn piece.
@@ -156,6 +156,11 @@ public class Pawn extends Piece {
     @Override
     public Piece copy() {
         return new Pawn(this.getPos(), this.getColor());
+    }
+
+    @Override
+    public String toString() {
+        return this.getColor() == ChessColor.WHITE ? "♙" : "♟";
     }
     
 }

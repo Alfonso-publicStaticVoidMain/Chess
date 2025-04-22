@@ -1,6 +1,6 @@
 package alternative_versions;
 
-import chess.*;
+import chess_model.Chess;
 import java.util.List;
 
 /**

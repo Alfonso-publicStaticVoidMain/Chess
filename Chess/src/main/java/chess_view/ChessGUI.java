@@ -1,5 +1,7 @@
-package chess;
+package chess_view;
 
+import chess_controller.ChessController;
+import chess_model.*;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
@@ -17,12 +19,15 @@ public class ChessGUI {
     private final JPanel rightPanel;
     private final JLabel activePlayerLabel;
     private final JTable playHistoryArea;
+    private final JPanel tablePanel;
+    private final JScrollPane scrollPane;
     private final DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
     private final Chess chess;
     private Position selectedPos = null;
-    private ChessColor activePlayer = ChessColor.WHITE;
     private boolean endOfGame = false;
+    
+    private ChessController controller;
 
     public ChessGUI() {
         chess = new Chess();
@@ -42,10 +47,10 @@ public class ChessGUI {
         String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Captured"};
         tableModel = new DefaultTableModel(columnNames, 0);
         playHistoryArea = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(playHistoryArea);
+        scrollPane = new JScrollPane(playHistoryArea);
         rightPanel.add(scrollPane, BorderLayout.CENTER);
         rightPanel.setPreferredSize(new Dimension(400, 0));
-        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(), "Play History", 
             TitledBorder.CENTER, TitledBorder.TOP, 
@@ -59,14 +64,23 @@ public class ChessGUI {
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         boardButtons = new JButton[9][9];
 
-        initializeBoard();
-        updateBoard();
-
         mainFrame.add(boardPanel);
         mainFrame.setVisible(true);
     }
-
-    private void initializeBoard() {
+    
+    public ChessColor activePlayer() {
+        return this.controller.getGame().getActivePlayer();
+    }
+    
+    public void changeActivePlayer() {
+        this.controller.getGame().changeActivePlayer();
+    }
+    
+    public void setController(ChessController controller) {
+        this.controller = controller;
+    }
+    
+    public void initializeBoard() {
         for (int y = 8; y >= 0; y--) {
             for (int x = 0; x <= 8; x++) {
                 JButton button = new JButton();
@@ -109,7 +123,7 @@ public class ChessGUI {
         Position clickedPos = Position.of(x, y);
 
         if (selectedPos == null) { // First click stores the selected position.
-            if (chess.checkPiece(clickedPos) && chess.findPiece(clickedPos).getColor() == activePlayer) {
+            if (chess.checkPiece(clickedPos) && chess.findPiece(clickedPos).getColor() == this.activePlayer()) {
                 selectedPos = clickedPos;
                 highlightValidMoves(selectedPos);
             }
@@ -120,13 +134,13 @@ public class ChessGUI {
                 int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
                 
                 if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(activePlayer)) {
-                        chess.doLeftCastling(activePlayer);
+                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(this.activePlayer())) {
+                        chess.doLeftCastling(this.activePlayer());
                         playDone = true;
                         castlingInfo = -1;
                     }
-                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(activePlayer)) {
-                        chess.doRightCastling(activePlayer);
+                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(this.activePlayer())) {
+                        chess.doRightCastling(this.activePlayer());
                         playDone = true;
                         castlingInfo = 1;
                     }
@@ -135,7 +149,7 @@ public class ChessGUI {
                 if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     
-                    if (piece instanceof Pawn && piece.getPos().y() == activePlayer.crowningRow()) { // Pawn crowning
+                    if (piece instanceof Pawn && piece.getPos().y() == this.activePlayer().crowningRow()) { // Pawn crowning
                         // Menu to crown a Pawn
                         Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
                         int n = JOptionPane.showOptionDialog(mainFrame,
@@ -160,7 +174,7 @@ public class ChessGUI {
                 }
                 if (playDone) { // Record the play (special case for castling) and update the active player
                     if (castlingInfo != 0) {
-                        tableModel.addRow(new Object[] {activePlayer + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
+                        tableModel.addRow(new Object[] {this.activePlayer() + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
                     } else {
                         Play lastPlay = chess.getLastPlay();
                         tableModel.addRow(new Object[] {
@@ -170,28 +184,28 @@ public class ChessGUI {
                             lastPlay.pieceCaptured() != null ? lastPlay.pieceCaptured().getSimpleName() : ""
                         });
                     }
-                    activePlayer = activePlayer.opposite();
-                    activePlayerLabel.setText("Active Player: "+activePlayer);
+                    this.changeActivePlayer();
+                    activePlayerLabel.setText("Active Player: "+this.activePlayer());
                 }
             }
             clearHighlights();
             selectedPos = null;
             updateBoard();
-            if (chess.checkMate(activePlayer)) {
+            if (chess.checkMate(this.activePlayer())) {
                 JOptionPane.showConfirmDialog(
                     mainFrame,
-                    activePlayer + " is in checkmate.\n"+activePlayer.opposite()+" wins.",
+                    this.activePlayer() + " is in checkmate.\n"+this.activePlayer().opposite()+" wins.",
                     "End of the game",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
                     null
                 );
-                tableModel.addRow(new Object[] {activePlayer.opposite()+" wins.", "---", "---", "---"});
+                tableModel.addRow(new Object[] {this.activePlayer().opposite()+" wins.", "---", "---", "---"});
                 endOfGame = true;
-            } else if (chess.checkMate(activePlayer, false)) {
+            } else if (chess.checkMate(this.activePlayer(), false)) {
                 JOptionPane.showConfirmDialog(
                     mainFrame,
-                    activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
+                    this.activePlayer()+" isn't in check but every move would cause a check.\nThe game is a draw.",
                     "End of the game",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
@@ -203,7 +217,7 @@ public class ChessGUI {
         }
     }
 
-    private void highlightValidMoves(Position pos) {
+    public void highlightValidMoves(Position pos) {
         if (chess.checkPiece(pos)) {
             Piece piece = chess.findPiece(pos);
             for (int x = 1; x <= 8; x++) {
@@ -221,7 +235,7 @@ public class ChessGUI {
         }
     }
 
-    private void clearHighlights() {
+    public void clearHighlights() {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 if ((x + y) % 2 == 0) {
@@ -233,13 +247,13 @@ public class ChessGUI {
         }
     }
 
-    private void updateBoard() {
+    public void updateBoard() {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 JButton button = boardButtons[x][y];
                 if (chess.checkPiece(Position.of(x, y))) {
                     Piece piece = chess.findPiece(Position.of(x, y));
-                    button.setText(pieceSymbol(piece));
+                    button.setText(piece.toString());
                 } else {
                     button.setText("");
                 }
@@ -247,17 +261,14 @@ public class ChessGUI {
         }
     }
 
-    private String pieceSymbol(Piece piece) {
-        if (piece instanceof Pawn) return piece.getColor() == ChessColor.WHITE ? "♙" : "♟";
-        if (piece instanceof Knight) return piece.getColor() == ChessColor.WHITE ? "♘" : "♞";
-        if (piece instanceof Bishop) return piece.getColor() == ChessColor.WHITE ? "♗" : "♝";
-        if (piece instanceof Rook) return piece.getColor() == ChessColor.WHITE ? "♖" : "♜";
-        if (piece instanceof Queen) return piece.getColor() == ChessColor.WHITE ? "♕" : "♛";
-        if (piece instanceof King) return piece.getColor() == ChessColor.WHITE ? "♔" : "♚";
-        return "?";
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ChessGUI::new);
-    }
+//    private String pieceSymbol(Piece piece) {
+//        if (piece instanceof Pawn) return piece.getColor() == ChessColor.WHITE ? "♙" : "♟";
+//        if (piece instanceof Knight) return piece.getColor() == ChessColor.WHITE ? "♘" : "♞";
+//        if (piece instanceof Bishop) return piece.getColor() == ChessColor.WHITE ? "♗" : "♝";
+//        if (piece instanceof Rook) return piece.getColor() == ChessColor.WHITE ? "♖" : "♜";
+//        if (piece instanceof Queen) return piece.getColor() == ChessColor.WHITE ? "♕" : "♛";
+//        if (piece instanceof King) return piece.getColor() == ChessColor.WHITE ? "♔" : "♚";
+//        return "?";
+//    }
+    
 }

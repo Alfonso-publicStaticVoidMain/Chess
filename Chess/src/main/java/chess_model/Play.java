@@ -1,4 +1,4 @@
-package chess;
+package chess_model;
 
 /**
  * Record representing a Play in a chess game, storing the Piece that was moved,
