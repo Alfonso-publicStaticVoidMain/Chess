@@ -52,18 +52,21 @@ public class ChessGUI extends JFrame {
         resetButton.setBorderPainted(false);
         resetButton.setFont(new Font("Arial", Font.BOLD, 16));
         resetButton.setText("Reset");
+        resetButton.setActionCommand("reset");
         
         saveButton = new JButton();
         saveButton.setOpaque(true);
         saveButton.setBorderPainted(false);
         saveButton.setFont(new Font("Arial", Font.BOLD, 16));
         saveButton.setText("Save");
+        saveButton.setActionCommand("save");
         
         loadButton = new JButton();
         loadButton.setOpaque(true);
         loadButton.setBorderPainted(false);
         loadButton.setFont(new Font("Arial", Font.BOLD, 16));
         loadButton.setText("Load");
+        loadButton.setActionCommand("load");
         
         topPanel.add(activePlayerLabel, BorderLayout.WEST);
         topPanel.add(Box.createRigidArea(new Dimension(150, 0)), BorderLayout.EAST);
@@ -101,9 +104,14 @@ public class ChessGUI extends JFrame {
         this.controller = controller;
         this.initializeBoard(); // Also adds actionListener to the board buttons
         this.updateBoard();
-        resetButton.addActionListener(e -> controller.resetClick());
-        saveButton.addActionListener(e -> controller.saveClick());
-        loadButton.addActionListener(e -> controller.loadClick());
+        for (JButton[] buttonArray : boardButtons) {
+            for (JButton button : buttonArray) {
+                button.addActionListener(this.controller);
+            }
+        }
+        resetButton.addActionListener(this.controller);
+        saveButton.addActionListener(this.controller);
+        loadButton.addActionListener(this.controller);
     }
     
     public void initializeBoard() {
@@ -135,8 +143,11 @@ public class ChessGUI extends JFrame {
                         button.setBackground(Color.GRAY);
                     }
                     button.setFont(new Font("Dialog", Font.PLAIN, 24));
-                    final int fx = x, fy = y;
-                    button.addActionListener(e -> controller.handleClick(fx, fy));
+                    button.setActionCommand("boardButton");
+                    button.putClientProperty("x", x);
+                    button.putClientProperty("y", y);
+//                    final int fx = x, fy = y;
+//                    button.addActionListener(e -> controller.handleClick(fx, fy));
                 }
                 boardPanel.add(button);
             }

@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import javax.swing.JButton;
 
 /**
  *
@@ -64,7 +65,7 @@ public class ChessController implements ActionListener {
         if (x == 0 || y == 0) return; // Ignore label clicks
         if (game.isGameFinished()) return; // Don't do anything if the game has ended.
         Position clickedPos = Position.of(x, y);
-        
+        boolean redHighlights = false;
         if (selectedPos == null) { // First click stores the selected position.
             if (game.checkPiece(clickedPos) && game.findPiece(clickedPos).getColor() == game.getActivePlayer()) {
                 selectedPos = clickedPos;
@@ -100,6 +101,7 @@ public class ChessController implements ActionListener {
                 
                 if (piece instanceof King && !piece.checkLegalMovement(clickedPos)) {
                     view.highlightPiecesThatCanCapture(clickedPos);
+                    redHighlights = true;
                 }
                 
                 if (playDone) { // Record the play (special case for castling) and update the active player
@@ -108,7 +110,7 @@ public class ChessController implements ActionListener {
                     view.updateActivePlayer();
                 }
             }
-            view.clearHighlights();
+            if (!redHighlights) view.clearHighlights();
             selectedPos = null;
             view.updateBoard();
             
@@ -212,9 +214,22 @@ public class ChessController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String command = e.getActionCommand();
+        JButton clickedButton = (JButton) e.getSource();
+        if (command.equals("boardButton")) {
+            int x = (int) clickedButton.getClientProperty("x");
+            int y = (int) clickedButton.getClientProperty("y");
+            this.handleClick(x, y);
+        }
+        if (command.equals("reset")) {
+            this.resetClick();
+        }
+        if (command.equals("save")) {
+            this.saveClick();
+        }
+        if (command.equals("load")) {
+            this.loadClick();
+        }
     }
     
 }
