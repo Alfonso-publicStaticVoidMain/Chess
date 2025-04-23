@@ -2,10 +2,15 @@ package chess_view;
 
 import chess_controller.ChessController;
 import chess_model.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
@@ -24,7 +29,7 @@ public class ChessGUI {
     private final JTable playHistoryArea;
     private final JPanel tablePanel;
     private final JScrollPane scrollPane;
-    private final DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
     private final JButton resetButton;
     private final JButton saveButton;
@@ -72,8 +77,7 @@ public class ChessGUI {
         
         // Right panel - Play History
         rightPanel = new JPanel(new BorderLayout());
-        String[] columnNames = {"Piece", "Initial Pos", "Final Pos", "Piece Captured"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new DefaultTableModel(new String[] {"Piece", "Initial Pos", "Final Pos", "Piece Captured"}, 0);
         playHistoryArea = new JTable(tableModel);
         scrollPane = new JScrollPane(playHistoryArea);
         rightPanel.add(scrollPane, BorderLayout.CENTER);
@@ -97,7 +101,7 @@ public class ChessGUI {
     
     public void setController(ChessController controller) {
         this.controller = controller;
-        this.initializeBoard(); // Adds actionListener to the board buttons
+        this.initializeBoard(); // Also adds actionListener to the board buttons
         this.updateBoard();
         resetButton.addActionListener(e -> controller.resetClick());
         saveButton.addActionListener(e -> controller.saveClick());
@@ -161,6 +165,27 @@ public class ChessGUI {
             }
         }
     }
+    
+    public void highlightPiecesThatCanCapture(Position pos) {
+        Chess chess = controller.getGame();
+        if (chess.checkPiece(pos) && chess.findPiece(pos) instanceof King) {
+            chess.getPieces().stream()
+                .filter(piece -> // Filter to all pieces that could move and capture to the given position, accounting for Pawn's special movement when capturing
+                (piece instanceof Pawn) ?
+                    Position.yDist(piece.getPos(), pos) == piece.getColor().yDirection()
+                    && Math.abs(Position.xDist(piece.getPos(), pos)) == 1
+                : piece.checkLegalMovement(pos, false))
+                .map(piece -> boardButtons[piece.getPos().x()-1][piece.getPos().y()-1]) // Map each piece to the button representing its position
+                .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
+                    Color originalColor = button.getBackground();
+                    button.setBackground(Color.RED);
+
+                    Timer timer = new Timer(1000, e -> button.setBackground(originalColor));
+                    timer.setRepeats(false);
+                    timer.start();
+                });
+        }
+    }
 
     public void clearHighlights() {
         for (int x = 1; x <= 8; x++) {
@@ -175,7 +200,7 @@ public class ChessGUI {
     }
 
     public void updateBoard() {
-        Chess chess = this.controller.getGame();
+        Chess chess = controller.getGame();
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 JButton button = boardButtons[x][y];
@@ -211,9 +236,14 @@ public class ChessGUI {
         activePlayerLabel.setText("Active Player: "+controller.getGame().getActivePlayer());
     }
     
-    public void updatePlayHistory(int castlingInfo, Play lastPlay) {
-        if (castlingInfo != 0) {
-            tableModel.addRow(new Object[] {controller.getGame().getActivePlayer() + " "+ (castlingInfo == -1 ? "Castling (left)" : "Castling (right)"), "", "", ""});
+    public void updatePlayHistory(Play lastPlay) {
+        if (lastPlay.castlingInfo() != 0) {
+            tableModel.addRow(new Object[] {
+                lastPlay.piece().getSimpleName(),
+                lastPlay.initPos(),
+                lastPlay.finPos(),
+                lastPlay.castlingInfo() == -1 ? "L.Castling" : "R.Castling"
+            });
         } else {
             tableModel.addRow(new Object[] {
                 lastPlay.piece().getSimpleName(),
@@ -282,6 +312,17 @@ public class ChessGUI {
             return fileChooser.getSelectedFile();
         }
         throw new IOException("No file selected.");
+    }
+    
+    public void resetPlayHistory() {
+        tableModel.setRowCount(0);
+    }
+    
+    public void reloadPlayHistory() {
+        resetPlayHistory();
+        for (Play play : controller.getGame().getPlayHistory()) {
+            updatePlayHistory(play);
+        }
     }
 
 //    private String pieceSymbol(Piece piece) {

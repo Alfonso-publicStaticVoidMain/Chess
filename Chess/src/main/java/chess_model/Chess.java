@@ -448,6 +448,7 @@ public class Chess implements Serializable {
         leftRook.setPos(Position.of(4, color.initRow()));
         this.getLeftCastlingAvaliability().put(color, false);
         this.getRightCastlingAvaliability().put(color, false);
+        this.playHistory.add(new Play(king, Position.of(5, color.initRow()), Position.of(3, color.initRow()), -1));
         return true;
     }
     
@@ -468,6 +469,7 @@ public class Chess implements Serializable {
         rightRook.setPos(Position.of(6, color.initRow()));
         this.getLeftCastlingAvaliability().put(color, false);
         this.getRightCastlingAvaliability().put(color, false);
+        this.playHistory.add(new Play(king, Position.of(5, color.initRow()), Position.of(7, color.initRow()), 1));
         return true;
     }
     

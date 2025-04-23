@@ -142,7 +142,7 @@ public abstract class Piece implements Serializable {
                 
             } else {
                 if (recordMovement) {
-                    chessGame.getPlayHistory().add(new Play(this, initPos, finPos));
+                    chessGame.getPlayHistory().add(new Play(this, initPos, finPos, 0));
                 }
             }
             this.setPos(finPos);
@@ -234,9 +234,14 @@ public abstract class Piece implements Serializable {
      * @see Piece#checkIfMovementCausesCheck(Position)
      */
     public boolean basicLegalityChecks(Position finPos, boolean checkCheck) {
-        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
-        if (checkCheck && this.checkIfMovementCausesCheck(finPos)) return false;
-        return !this.getPos().equals(finPos);
+        return !(
+            this.getGame().checkPieceSameColorAs(this, finPos) ||
+            (checkCheck && this.checkIfMovementCausesCheck(finPos)) ||
+            this.getPos().equals(finPos)
+        );
+//        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
+//        if (checkCheck && this.checkIfMovementCausesCheck(finPos)) return false;
+//        return !this.getPos().equals(finPos);
     }
     
     /**

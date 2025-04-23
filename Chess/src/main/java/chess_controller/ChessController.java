@@ -73,19 +73,16 @@ public class ChessController {
             if (game.checkPiece(selectedPos)) {
                 Piece piece = game.findPiece(selectedPos);
                 boolean playDone = false;
-                int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
                 
                 if (piece instanceof King) {
                     if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
                         game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
-                        castlingInfo = -1;
                         // A play of left castling was done.
                     }
                     if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && game.checkRightCastling(game.getActivePlayer())) {
                         game.doRightCastling(game.getActivePlayer());
                         playDone = true;
-                        castlingInfo = 1;
                         // A play of right castling was done.
                     }
                     // If none of the ifs were entered, playDone stays as false and castlingInfo as 0.
@@ -99,8 +96,13 @@ public class ChessController {
                     }
                     playDone = true;
                 }
+                
+                if (piece instanceof King && !piece.checkLegalMovement(clickedPos)) {
+                    view.highlightPiecesThatCanCapture(clickedPos);
+                }
+                
                 if (playDone) { // Record the play (special case for castling) and update the active player
-                    view.updatePlayHistory(castlingInfo, game.getLastPlay());
+                    view.updatePlayHistory(game.getLastPlay());
                     game.changeActivePlayer();
                     view.updateActivePlayer();
                 }
@@ -124,6 +126,8 @@ public class ChessController {
         if (!userVerification) return;
         game = Chess.standardGame();
         view.updateBoard();
+        view.updateActivePlayer();
+        view.resetPlayHistory();
     }
     
     public void saveClick() {
@@ -152,6 +156,9 @@ public class ChessController {
             while (bufis.available()>0) {
                 game = (Chess) ois.readObject();
             }
+            view.updateBoard();
+            view.updateActivePlayer();
+            view.reloadPlayHistory();
         }
         catch (IOException ex) {System.err.println("Error:" + ex.getMessage());}
         catch (ClassNotFoundException ex) {System.err.println("Err:" + ex.getMessage());}
