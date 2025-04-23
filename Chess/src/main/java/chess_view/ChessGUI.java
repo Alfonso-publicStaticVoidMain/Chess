@@ -175,19 +175,22 @@ public class ChessGUI extends JFrame {
         }
     }
     
-    public void highlightPiecesThatCanCapture(Position pos) {
+    public void highlightPiecesThatCanCapture(Position initPos, Position finPos) {
         Chess chess = controller.getGame();
-        if (chess.checkPiece(pos) && chess.findPiece(pos) instanceof King) {
+        if (chess.checkPiece(initPos) && chess.findPiece(initPos) instanceof King) {
+            Piece foundPiece = chess.findPiece(initPos);
             chess.getPieces().stream()
+                .filter(piece -> piece.getColor() != foundPiece.getColor())
                 .filter(piece -> // Filter to all pieces that could move and capture to the given position, accounting for Pawn's special movement when capturing
                 (piece instanceof Pawn) ?
-                    Position.yDist(piece.getPos(), pos) == piece.getColor().yDirection()
-                    && Math.abs(Position.xDist(piece.getPos(), pos)) == 1
-                : piece.checkLegalMovement(pos, false))
-                .map(piece -> boardButtons[piece.getPos().x()-1][piece.getPos().y()-1]) // Map each piece to the button representing its position
+                    Position.yDist(piece.getPos(), finPos) == piece.getColor().yDirection()
+                    && Math.abs(Position.xDist(piece.getPos(), finPos)) == 1
+                : piece.checkLegalMovement(finPos, false))
+                .map(piece -> boardButtons[piece.getPos().x()][piece.getPos().y()]) // Map each piece to the button representing its position
                 .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
                     Color originalColor = button.getBackground();
                     button.setBackground(Color.RED);
+                    button.repaint();
 
                     Timer timer = new Timer(1000, e -> button.setBackground(originalColor));
                     timer.setRepeats(false);

@@ -77,6 +77,11 @@ public class ChessController implements ActionListener {
                 boolean playDone = false;
                 
                 if (piece instanceof King) {
+                    if (!piece.checkLegalMovement(clickedPos)) {
+                        view.highlightPiecesThatCanCapture(selectedPos, clickedPos);
+                        redHighlights = true;
+                    }
+                    
                     if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
                         game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
@@ -97,11 +102,6 @@ public class ChessController implements ActionListener {
                         game.crownPawn(piece, view.pawnCrowningMenu(piece));
                     }
                     playDone = true;
-                }
-                
-                if (piece instanceof King && !piece.checkLegalMovement(clickedPos)) {
-                    view.highlightPiecesThatCanCapture(clickedPos);
-                    redHighlights = true;
                 }
                 
                 if (playDone) { // Record the play (special case for castling) and update the active player
