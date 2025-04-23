@@ -2,6 +2,8 @@ package chess_controller;
 
 import chess_model.*;
 import chess_view.ChessGUI;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -10,13 +12,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Alfonso Gallego Fernández
  */
-public class ChessController {
+public class ChessController implements ActionListener {
     
     /**
      * {@link Chess} game the controller is controlling.
@@ -207,6 +208,13 @@ public class ChessController {
             case 8 -> 'H';
             default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
         };
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

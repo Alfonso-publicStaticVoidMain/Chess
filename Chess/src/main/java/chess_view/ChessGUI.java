@@ -10,7 +10,6 @@ import java.awt.GridLayout;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
@@ -20,8 +19,7 @@ import javax.swing.table.*;
  * @author Alfonso Gallego
  * @version 1.0
  */
-public class ChessGUI {
-    private final JFrame mainFrame;
+public class ChessGUI extends JFrame {
     private final JPanel boardPanel;
     private final JPanel topPanel;
     private final JPanel rightPanel;
@@ -38,9 +36,9 @@ public class ChessGUI {
     private ChessController controller;
 
     public ChessGUI() {
-        mainFrame = new JFrame("Chess Game");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(1000, 600);
+        this.setTitle("Chess Game");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(1000, 600);
 
         // Top panel - Active player + Save & Reset buttons
         topPanel = new JPanel();
@@ -73,7 +71,7 @@ public class ChessGUI {
         topPanel.add(saveButton, BorderLayout.EAST);
         topPanel.add(loadButton, BorderLayout.EAST);
         
-        mainFrame.add(topPanel, BorderLayout.NORTH);
+        this.add(topPanel, BorderLayout.NORTH);
         
         // Right panel - Play History
         rightPanel = new JPanel(new BorderLayout());
@@ -89,14 +87,14 @@ public class ChessGUI {
             new Font("Arial", Font.BOLD, 16), Color.BLACK));
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         rightPanel.add(tablePanel, BorderLayout.CENTER);
-        mainFrame.add(rightPanel, BorderLayout.EAST);
+        this.add(rightPanel, BorderLayout.EAST);
         
         // Central (board) panel - Chess board
         boardPanel = new JPanel(new GridLayout(9, 9));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         boardButtons = new JButton[9][9];
-        mainFrame.add(boardPanel);
-        mainFrame.setVisible(true);
+        this.add(boardPanel);
+        this.setVisible(true);
     }
     
     public void setController(ChessController controller) {
@@ -216,7 +214,8 @@ public class ChessGUI {
     
     public String pawnCrowningMenu(Piece piece) {
         Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
-        int n = JOptionPane.showOptionDialog(mainFrame,
+        int n = JOptionPane.showOptionDialog(
+            this,
             "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
             "Crowning Menu",
             JOptionPane.DEFAULT_OPTION,
@@ -256,7 +255,7 @@ public class ChessGUI {
     
     public void checkMessage(ChessColor activePlayer) {
         JOptionPane.showConfirmDialog(
-            mainFrame,
+            this,
             activePlayer+" is in checkmate.\n"+activePlayer.opposite()+" wins.",
             "End of the game",
             JOptionPane.OK_CANCEL_OPTION,
@@ -268,7 +267,7 @@ public class ChessGUI {
     
     public void drawMessage(ChessColor activePlayer) {
         JOptionPane.showConfirmDialog(
-            mainFrame,
+            this,
             activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
             "End of the game",
             JOptionPane.OK_CANCEL_OPTION,
@@ -280,7 +279,7 @@ public class ChessGUI {
     
     public boolean areYouSureYouWantToDoThis(String message) {
         return JOptionPane.showConfirmDialog(
-            mainFrame,
+            this,
             message,
             "Are you sure you want to do this?",
             JOptionPane.OK_CANCEL_OPTION
@@ -290,7 +289,7 @@ public class ChessGUI {
     public String userTextInputMessage(String title) {
         JTextField textField = new JTextField(20);
         int n = JOptionPane.showConfirmDialog(
-            mainFrame,
+            this,
             textField,
             title,
             JOptionPane.OK_CANCEL_OPTION,
