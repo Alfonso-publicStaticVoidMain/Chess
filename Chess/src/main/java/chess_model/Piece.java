@@ -1,11 +1,13 @@
 package chess_model;
 
+import java.io.Serializable;
+
 /**
  * Abstract class representing chess Pieces, to be extended by child classes
  * of each piece type.
  * @author Alfonso Gallego
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable {
     /**
      * The {@link Position} the Piece has in the chess board.
      */
@@ -129,13 +131,13 @@ public abstract class Piece {
         if (this.checkLegalMovement(finPos, checkCheck)) {
             if (chessGame.checkPiece(finPos)) {
                 capturedPiece = chessGame.findPiece(finPos);
-                chessGame.pieces().remove(capturedPiece);
+                chessGame.getPieces().remove(capturedPiece);
                 if (recordMovement) {
                     chessGame.getPlayHistory().add(new Play(this, initPos, finPos, capturedPiece));
                 }
             } else if (this instanceof Pawn pawn && pawn.checkLegalEnPassant() && pawn.xDirEnPassant() == Position.xDist(initPos, finPos)) {
                 capturedPiece = chessGame.getLastPlay().piece();
-                chessGame.pieces().remove(capturedPiece);
+                chessGame.getPieces().remove(capturedPiece);
                 if (recordMovement) chessGame.getPlayHistory().add(new Play(this, initPos, finPos, capturedPiece));
                 
             } else {

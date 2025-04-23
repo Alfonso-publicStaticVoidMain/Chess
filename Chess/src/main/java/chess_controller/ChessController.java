@@ -2,6 +2,14 @@ package chess_controller;
 
 import chess_model.*;
 import chess_view.ChessGUI;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,91 +45,116 @@ public class ChessController {
         this.game = game;
         this.view = view;
         this.view.setController(this);
-        this.view.initializeBoard();
-        this.view.updateBoard();
     }
 
     /**
      * Getter for the game attribute of the controller.
      * @return The {@link Chess} game the controller is controlling.
      */
-    public Chess getGame() {
-        return game;
-    }
-    
-    /**
-     * "Getter" for the active player of the controller.
-     * @return The {@link ChessColor} of the active player of the {@link Chess}
-     * game the controller is controlling.
-     */
-    public ChessColor activePlayer() {
-        return this.game.activePlayer();
-    }
+    public Chess getGame() {return game;}
     
     /**
      * Method intended to be used as the action listener for the view's buttons
      * on the chess board, where x and y are the coordinates of that button
-     * @param x
-     * @param y 
+     * @param x X coordinate of the button clicked.
+     * @param y Y coordinate of the button clicked.
      */
     public void handleClick(int x, int y) {
         if (x == 0 || y == 0) return; // Ignore label clicks
-        if (this.game.isEndOfGame()) return; // Don't do anything if the game has ended.
+        if (game.isGameFinished()) return; // Don't do anything if the game has ended.
         Position clickedPos = Position.of(x, y);
         
         if (selectedPos == null) { // First click stores the selected position.
-            if (this.game.checkPiece(clickedPos) && this.game.findPiece(clickedPos).getColor() == this.activePlayer()) {
+            if (game.checkPiece(clickedPos) && game.findPiece(clickedPos).getColor() == game.getActivePlayer()) {
                 selectedPos = clickedPos;
-                this.view.highlightValidMoves(selectedPos);
+                view.highlightValidMoves(selectedPos);
             }
         } else { // Second click attempts to do the movement.
-            if (this.game.checkPiece(selectedPos)) {
-                Piece piece = this.game.findPiece(selectedPos);
+            if (game.checkPiece(selectedPos)) {
+                Piece piece = game.findPiece(selectedPos);
                 boolean playDone = false;
                 int castlingInfo = 0; // -1 = left castling was done; 1 = right castling was done; 0 = no castling was done
                 
                 if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && this.game.checkLeftCastling(this.activePlayer())) {
-                        this.game.doLeftCastling(this.activePlayer());
+                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
+                        game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
                         castlingInfo = -1;
                         // A play of left castling was done.
                     }
-                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && this.game.checkRightCastling(this.activePlayer())) {
-                        this.game.doRightCastling(this.activePlayer());
+                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && game.checkRightCastling(game.getActivePlayer())) {
+                        game.doRightCastling(game.getActivePlayer());
                         playDone = true;
                         castlingInfo = 1;
                         // A play of right castling was done.
                     }
-                    // If none of the ifs were entered, playDone stats as false and castlingInfo as 0.
+                    // If none of the ifs were entered, playDone stays as false and castlingInfo as 0.
                 }
                 
                 if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     
-                    if (piece instanceof Pawn && piece.getPos().y() == this.activePlayer().crowningRow()) { // Pawn crowning
-                        this.game.crownPawn(piece, this.view.pawnCrowningMenu(piece));
+                    if (piece instanceof Pawn && piece.getPos().y() == game.getActivePlayer().crowningRow()) { // Pawn crowning
+                        game.crownPawn(piece, view.pawnCrowningMenu(piece));
                     }
                     playDone = true;
                 }
                 if (playDone) { // Record the play (special case for castling) and update the active player
-                    this.view.updatePlayHistory(castlingInfo, this.game.getLastPlay());
-                    this.game.changeActivePlayer();
-                    this.view.updateActivePlayer();
+                    view.updatePlayHistory(castlingInfo, game.getLastPlay());
+                    game.changeActivePlayer();
+                    view.updateActivePlayer();
                 }
             }
-            this.view.clearHighlights();
+            view.clearHighlights();
             selectedPos = null;
-            this.view.updateBoard();
+            view.updateBoard();
             
-            if (this.game.checkMate(this.game.activePlayer())) {
-                this.view.checkMessage(this.game.activePlayer().opposite());
-                this.game.endGame();
-            } else if (this.game.checkMate(this.game.activePlayer(), false)) {
-                this.view.drawMessage(this.game.activePlayer());
-                this.game.endGame();
+            if (game.checkMate(game.getActivePlayer())) {
+                view.checkMessage(game.getActivePlayer());
+                game.finishGame();
+            } else if (this.game.checkMate(game.getActivePlayer(), false)) {
+                view.drawMessage(game.getActivePlayer());
+                game.finishGame();
             }
         }
+    }
+    
+    public void resetClick() {
+        boolean userVerification = view.areYouSureYouWantToDoThis("Do you want to reset the game?");
+        if (!userVerification) return;
+        game = Chess.standardGame();
+        view.updateBoard();
+    }
+    
+    public void saveClick() {
+        boolean userVerification = view.areYouSureYouWantToDoThis("Do you want to save the state of the game?");
+        if (!userVerification) return;
+        String filePath = view.userTextInputMessage("Enter the name of your game");
+        try (
+            FileOutputStream fos = new FileOutputStream("savedgames"+File.separator+filePath+".dat", false);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos))
+        {
+            oos.writeObject(game);
+        } catch (IOException ex) {
+            System.err.println("Error:" + ex.getMessage());
+        }
+    }
+    
+    public void loadClick() {
+        boolean userVerification = view.areYouSureYouWantToDoThis("Do you want to load a saved game?");
+        if (!userVerification) return;
+        try (
+            FileInputStream fis = new FileInputStream(view.fileChooser("."+File.separator+"savedgames"));
+            BufferedInputStream bufis = new BufferedInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(bufis))
+        {
+            while (bufis.available()>0) {
+                game = (Chess) ois.readObject();
+            }
+        }
+        catch (IOException ex) {System.err.println("Error:" + ex.getMessage());}
+        catch (ClassNotFoundException ex) {System.err.println("Err:" + ex.getMessage());}
     }
     
     /**

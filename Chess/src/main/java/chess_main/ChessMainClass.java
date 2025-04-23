@@ -89,8 +89,7 @@ public class ChessMainClass {
     }
     
     public static void main(String[] args) {
-        Chess game = new Chess();
-        game.addStandardPieces();
+        Chess game = Chess.standardGame();
         boolean fin = false;
         ChessColor activePlayer;
         

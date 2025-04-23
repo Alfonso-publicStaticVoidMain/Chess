@@ -1,5 +1,7 @@
 package chess_model;
 
+import java.io.Serializable;
+
 /**
  * Record representing a Play in a chess game, storing the Piece that was moved,
  * its initial and final Positions, and the Piece that was captured, if any.
@@ -10,7 +12,7 @@ package chess_model;
  * @param pieceCaptured {@link Piece} captured in the Play, if any.
  */
 //public class Play {
-public record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured) {
+public record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured) implements Serializable {
 //    /**
 //     * The {@link Piece} that was moved.
 //     */

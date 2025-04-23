@@ -1,6 +1,7 @@
 package chess_model;
 
 import chess_controller.ChessController;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @param x X coordinate of the Position.
  * @param y Y coordinate of the Position.
  */
-public record Position(int x, int y) {
+public record Position(int x, int y) implements Serializable {
 //public class Position {
 //    /**
 //     * The X coordinate of the position.

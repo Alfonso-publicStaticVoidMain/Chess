@@ -1,6 +1,7 @@
 package chess_model;
 
 import chess_controller.ChessController;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -9,7 +10,7 @@ import java.util.stream.IntStream;
  * @author Alfonso Gallego
  * @version 1.0
  */
-public class Chess {
+public class Chess implements Serializable {
     
     /**
      * List containing all pieces currently in the game.
@@ -22,14 +23,12 @@ public class Chess {
     private final List<Play> playHistory = new LinkedList<>();
     
     /**
-     * Map attribute representing the avaliability of left castling for each
-     * player.
+     * Map representing the avaliability of left castling for each player.
      */
     private final Map<ChessColor, Boolean> leftCastlingAvaliability = new HashMap<>();
     
     /**
-     * Map attribute representing the avaliability of right castling for each
-     * player.
+     * Map representing the avaliability of right castling for each player.
      */
     private final Map<ChessColor, Boolean> rightCastlingAvaliability = new HashMap<>();
     
@@ -41,37 +40,29 @@ public class Chess {
     /**
      * Boolean attribute to track if the game has ended.
      */
-    private boolean endOfGame = false;
+    private boolean gameFinished = false;
 
     /**
-     * Getter for the {@code endOfGame} attribute.
+     * Getter for the {@code gameFinished} attribute.
      * @return True if the game has ended, false otherwise.
      */
-    public boolean isEndOfGame() {
-        return endOfGame;
-    }
+    public boolean isGameFinished() {return gameFinished;}
     
     /**
-     * Sets the {@code endOfGame} attribute to true, effectively ending the game.
+     * Sets the {@code gameFinished} attribute to true, effectively ending the game.
      */
-    public void endGame() {
-        this.endOfGame = true;
-    }
+    public void finishGame() {this.gameFinished = true;}
     
     /**
      * Getter for the active player attribute.
      * @return The color of the active player.
      */
-    public ChessColor activePlayer() {
-        return activePlayer;
-    }
+    public ChessColor getActivePlayer() {return activePlayer;}
     
     /**
      * If the active player is white, it changes to black and viceversa.
      */
-    public void changeActivePlayer() {
-        this.activePlayer = this.activePlayer == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
-    }
+    public void changeActivePlayer() {this.activePlayer = this.activePlayer.opposite();}
     
     /**
      * Getter for the left castling avaliability attribute.
@@ -93,13 +84,13 @@ public class Chess {
      * Getter for the pieces attribute.
      * @return The List of Pieces of {@code this} game.
      */
-    public List<Piece> pieces() {return this.pieces;}
+    public List<Piece> getPieces() {return pieces;}
 
     /**
      * Getter for the playHistory attribute.
      * @return The List of Plays of {@code this} game.
      */
-    public List<Play> getPlayHistory() {return this.playHistory;}
+    public List<Play> getPlayHistory() {return playHistory;}
     
     /**
      * Gets the last {@link Play} stored in the {@code playHistory} attribute.
@@ -108,14 +99,14 @@ public class Chess {
      * empty.
      */
     public Play getLastPlay() {
-        return this.getPlayHistory().isEmpty() ? null : this.getPlayHistory().get(this.getPlayHistory().size()-1);
+        return playHistory.isEmpty() ? null : playHistory.get(playHistory.size()-1);
     }
 
     /**
      * Empty constructor that simply adds the default true castling
      * avaliabilities for each color.
      */
-    public Chess() {
+    protected Chess() {
         this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
         this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
         this.rightCastlingAvaliability.put(ChessColor.WHITE, true);
@@ -498,8 +489,8 @@ public class Chess {
      * </ul>
      */
     public boolean crownPawn(Piece piece, String newType) throws IllegalArgumentException {
-        if (!(piece instanceof Pawn)) return false;
-        if (piece.getPos().y() != piece.getColor().crowningRow()) return false;
+        if (!(piece instanceof Pawn)) throw new IllegalArgumentException("[DEBUG] Chess@crownPawn: "+piece.getSimpleName()+" in position "+piece.getPos()+" isn't a pawn.");
+        if (piece.getPos().y() != piece.getColor().crowningRow()) throw new IllegalArgumentException("[DEBUG] Chess@crownPawn: "+piece.getSimpleName()+" in position "+piece.getPos()+" is a Pawn but can't be crowned");
         this.pieces.remove(piece);
         switch (newType.toLowerCase()) {
             case "knight" -> {
@@ -535,6 +526,17 @@ public class Chess {
         }
         throw new IllegalArgumentException(newType+" wasn't a legal type to crown a pawn into.");
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.pieces);
+        hash = 71 * hash + Objects.hashCode(this.playHistory);
+        hash = 71 * hash + Objects.hashCode(this.leftCastlingAvaliability);
+        hash = 71 * hash + Objects.hashCode(this.rightCastlingAvaliability);
+        hash = 71 * hash + Objects.hashCode(this.activePlayer);
+        hash = 71 * hash + (this.gameFinished ? 1 : 0);
+        return hash;
+    }
+
 }
