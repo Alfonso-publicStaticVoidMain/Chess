@@ -1,19 +1,42 @@
 package chess_view;
 
 import chess_controller.ChessController;
-import chess_model.*;
+import chess_model.Chess;
+import chess_model.ChessColor;
+import chess_model.King;
+import chess_model.Pawn;
+import chess_model.Piece;
+import chess_model.Play;
+import chess_model.Position;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import javax.swing.*;
+
 import java.io.File;
 import java.io.IOException;
-import javax.swing.border.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  * Class to implement a GUI for chess.
