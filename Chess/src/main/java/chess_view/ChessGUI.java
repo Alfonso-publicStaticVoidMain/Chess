@@ -102,7 +102,7 @@ public class ChessGUI extends JFrame {
     
     public void setController(ChessController controller) {
         this.controller = controller;
-        this.initializeBoard(); // Also adds actionListener to the board buttons
+        this.initializeBoard();
         this.updateBoard();
         for (JButton[] buttonArray : boardButtons) {
             for (JButton button : buttonArray) {
@@ -146,8 +146,6 @@ public class ChessGUI extends JFrame {
                     button.setActionCommand("boardButton");
                     button.putClientProperty("x", x);
                     button.putClientProperty("y", y);
-//                    final int fx = x, fy = y;
-//                    button.addActionListener(e -> controller.handleClick(fx, fy));
                 }
                 boardPanel.add(button);
             }
@@ -164,6 +162,9 @@ public class ChessGUI extends JFrame {
                     if (piece.checkLegalMovement(potentialMove)) {
                         boardButtons[x][y].setBackground(Color.GREEN);
                     }
+                    if (piece.checkLegalMovement(potentialMove, false) && !piece.checkLegalMovement(potentialMove, true)) {
+                        boardButtons[x][y].setBackground(Color.ORANGE);
+                    }
                     if (piece instanceof King && (
                         ((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
                         || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())))
@@ -173,6 +174,28 @@ public class ChessGUI extends JFrame {
                 }
             }
         }
+    }
+    
+    public void highlightPiecesThatCanCaptureKing(Position initPos, Position finPos) {
+        Chess auxGame = controller.getGame().copyGame();
+        ChessColor activePlayer = controller.getGame().getActivePlayer();
+        Piece pieceToMove = auxGame.findPiece(initPos);
+        pieceToMove.move(finPos, false);
+        auxGame.getPieces().stream()
+            .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
+                piece.getColor() != activePlayer &&
+                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos())
+            )
+            .map(piece -> boardButtons[piece.getPos().x()][piece.getPos().y()]) // Map each piece to its button on the board
+            .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
+                Color originalColor = button.getBackground();
+                button.setBackground(Color.RED);
+                button.repaint();
+
+                Timer timer = new Timer(1000, e -> button.setBackground(originalColor));
+                timer.setRepeats(false);
+                timer.start();
+            });
     }
     
     public void highlightPiecesThatCanCapture(Position initPos, Position finPos) {
@@ -227,15 +250,15 @@ public class ChessGUI extends JFrame {
     }
     
     public String pawnCrowningMenu(Piece piece) {
-        Object[] options = {"Queen", "Knight", "Rook", "Bishop"};
+        String[] options = {"Queen", "Knight", "Rook", "Bishop"};
         int n = JOptionPane.showOptionDialog(
             this,
             "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
             "Crowning Menu",
             JOptionPane.DEFAULT_OPTION,
             JOptionPane.QUESTION_MESSAGE,
-            null, //do not use a custom Icon
-            options, //the titles of buttons
+            null,
+            options,
             options[0]); //default button title
         return switch (n) {
             case 1 -> "Knight";
@@ -337,15 +360,5 @@ public class ChessGUI extends JFrame {
             updatePlayHistory(play);
         }
     }
-
-//    private String pieceSymbol(Piece piece) {
-//        if (piece instanceof Pawn) return piece.getColor() == ChessColor.WHITE ? "♙" : "♟";
-//        if (piece instanceof Knight) return piece.getColor() == ChessColor.WHITE ? "♘" : "♞";
-//        if (piece instanceof Bishop) return piece.getColor() == ChessColor.WHITE ? "♗" : "♝";
-//        if (piece instanceof Rook) return piece.getColor() == ChessColor.WHITE ? "♖" : "♜";
-//        if (piece instanceof Queen) return piece.getColor() == ChessColor.WHITE ? "♕" : "♛";
-//        if (piece instanceof King) return piece.getColor() == ChessColor.WHITE ? "♔" : "♚";
-//        return "?";
-//    }
     
 }

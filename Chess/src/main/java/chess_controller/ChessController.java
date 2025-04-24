@@ -62,10 +62,10 @@ public class ChessController implements ActionListener {
      * @param y Y coordinate of the button clicked.
      */
     public void handleClick(int x, int y) {
+        view.clearHighlights();
         if (x == 0 || y == 0) return; // Ignore label clicks
         if (game.isGameFinished()) return; // Don't do anything if the game has ended.
         Position clickedPos = Position.of(x, y);
-        boolean redHighlights = false;
         if (selectedPos == null) { // First click stores the selected position.
             if (game.checkPiece(clickedPos) && game.findPiece(clickedPos).getColor() == game.getActivePlayer()) {
                 selectedPos = clickedPos;
@@ -76,12 +76,11 @@ public class ChessController implements ActionListener {
                 Piece piece = game.findPiece(selectedPos);
                 boolean playDone = false;
                 
+                if (!piece.checkLegalMovement(clickedPos)) {
+                    view.highlightPiecesThatCanCaptureKing(selectedPos, clickedPos);
+                }
+                
                 if (piece instanceof King) {
-                    if (!piece.checkLegalMovement(clickedPos)) {
-                        view.highlightPiecesThatCanCapture(selectedPos, clickedPos);
-                        redHighlights = true;
-                    }
-                    
                     if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
                         game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
@@ -103,14 +102,13 @@ public class ChessController implements ActionListener {
                     }
                     playDone = true;
                 }
-                
+
                 if (playDone) { // Record the play (special case for castling) and update the active player
                     view.updatePlayHistory(game.getLastPlay());
                     game.changeActivePlayer();
                     view.updateActivePlayer();
                 }
             }
-            if (!redHighlights) view.clearHighlights();
             selectedPos = null;
             view.updateBoard();
             
