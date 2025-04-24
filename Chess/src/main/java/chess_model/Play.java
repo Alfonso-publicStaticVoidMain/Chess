@@ -13,25 +13,6 @@ import java.io.Serializable;
  */
 //public class Play {
 public record Play(Piece piece, Position initPos, Position finPos, Piece pieceCaptured, int castlingInfo) implements Serializable {
-//    /**
-//     * The {@link Piece} that was moved.
-//     */
-//    private final Piece piece;
-//    
-//    /**
-//     * The initial {@link Position} from which that {@link Piece} was moved.
-//     */
-//    private final Position initPos;
-//    
-//    /**
-//     * The final {@link Position} the {@link Piece} was moved to.
-//     */
-//    private final Position finPos;
-//    
-//    /**
-//     * The {@link Piece} that was captured, or {@code null} if none was captured.
-//     */
-//    private final Piece pieceCaptured;
 
     /**
      * 4-parameter constructor, setting the pieceCaptured attribute to

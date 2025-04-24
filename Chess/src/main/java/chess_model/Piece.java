@@ -15,7 +15,7 @@ public abstract class Piece implements Serializable {
     /**
      * {@link ChessColor} of the Piece, storing certain qualities of that Piece.
      */
-    private ChessColor color;
+    private final ChessColor color;
     /**
      * {@link Chess} game where the Piece is being played at.
      */
@@ -33,7 +33,7 @@ public abstract class Piece implements Serializable {
 
     /**
      * Checks if the given {@link Position} would be a legal movement for
-     * the Piece.
+     * this Piece.
      * @param finPos Position we're attempting to move the Piece to.
      * @param checkCheck State parameter to track if we want to declare a
      * movement illegal if it causes a check.
@@ -101,9 +101,7 @@ public abstract class Piece implements Serializable {
      * The method will be overwritten in the {@link Pawn} class, returning
      * the attribute {@code initRowPawn} of its color.
      */
-    public int initRow() {
-        return this.color.initRow();
-    }
+    public int initRow() {return this.color.initRow();}
     
     /**
      * If the movement is legal, moves {@code this} Piece to the specified
@@ -115,7 +113,7 @@ public abstract class Piece implements Serializable {
      * be added to the playHistory attribute of the Chess game of {@code this}.
      * @return True if the movement was sucessfully done. In that case,
      * updates {@code this}'s position, and if there was a Piece previously in
-     * that position, eliminates it from its game's pieces List, also taking
+     * that position, removes it from its game's pieces List, also taking
      * into account the possiblity of an En Passant capture for Pawns.
      * <br><br>
      * If {@code recordMovement} is set to true, the movement is recorded into
@@ -172,7 +170,7 @@ public abstract class Piece implements Serializable {
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
      * into account the possiblity of an En Passant capture for Pawns.
-     * @see Piece#move(chess.Position, boolean, boolean) 
+     * @see Piece#move(Position, boolean, boolean) 
      */
     public boolean move(Position finPos, boolean checkCheck) {
         return this.move(finPos, checkCheck, true);
@@ -186,7 +184,7 @@ public abstract class Piece implements Serializable {
      * updates {@code this}'s position, and if there was a Piece previously in
      * that position, eliminates it from its game's pieces List, also taking
      * into account the possiblity of an En Passant capture for Pawns.
-     * @see Piece#move(chess.Position, boolean, boolean) 
+     * @see Piece#move(Position, boolean, boolean) 
      */
     public boolean move(Position finPos) {
         return this.move(finPos, true, true);
@@ -211,7 +209,6 @@ public abstract class Piece implements Serializable {
         Chess auxGame = this.getGame().copyGame();
         Piece copyOfPiece = auxGame.findPiece(this.getPos());
         copyOfPiece.move(finPos, false, true);
-        //System.out.println("[DEBUG] Position of Piece "+copyOfPiece+" = "+copyOfPiece.getPos());
         return auxGame.findKing(copyOfPiece.getColor()).checkCheck();
     }
     
@@ -239,9 +236,6 @@ public abstract class Piece implements Serializable {
             (checkCheck && this.checkIfMovementCausesCheck(finPos)) ||
             this.getPos().equals(finPos)
         );
-//        if (this.getGame().checkPieceSameColorAs(this, finPos)) return false;
-//        if (checkCheck && this.checkIfMovementCausesCheck(finPos)) return false;
-//        return !this.getPos().equals(finPos);
     }
     
     /**
@@ -251,7 +245,10 @@ public abstract class Piece implements Serializable {
      * {@code this}'s color with the first letter of {@code this}'s class,
      * differentiating Kings and Knights by using 'K' for the former and 'k'
      * for the latter.
+     * @deprecated This method is overridden by each subclass, returning
+     * the ASCII character that represents the piece.
      */
+    @Deprecated
     @Override
     public String toString() {
         char typeChar;

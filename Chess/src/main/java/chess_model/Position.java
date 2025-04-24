@@ -13,15 +13,6 @@ import java.util.List;
  * @param y Y coordinate of the Position.
  */
 public record Position(int x, int y) implements Serializable {
-//public class Position {
-//    /**
-//     * The X coordinate of the position.
-//     */
-//    private final int x;
-//    /**
-//     * The Y coordinate of the position.
-//     */
-//    private final int y;
     
     /**
      * Field storing the A1 position of the chess board.
@@ -300,18 +291,6 @@ public record Position(int x, int y) implements Serializable {
     G1, G2, G3, G4, G5, G6, G7, G8,
     H1, H2, H3, H4, H5, H6, H7, H8
     );
-    
-//    /**
-//     * Getter for the x attribute of the Position.
-//     * @return The X coordinate of the Position.
-//     */
-//    public int x() {return x;}
-//    
-//    /**
-//     * Getter for the y attribute of the Position.
-//     * @return The Y coordinate of the Position.
-//     */
-//    public int y() {return y;}
     
     /**
      * Static method to obtain all possible chess positions.
