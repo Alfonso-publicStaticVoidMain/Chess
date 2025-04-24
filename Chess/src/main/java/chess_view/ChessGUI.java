@@ -51,6 +51,8 @@ public class ChessGUI extends JFrame {
 
         // Top panel - Active player + Save & Reset buttons
         topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topPanel.setPreferredSize(new Dimension(250, 40));
         
         activePlayerLabel = new JLabel("Active Player: WHITE", SwingConstants.CENTER);
         activePlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -60,11 +62,15 @@ public class ChessGUI extends JFrame {
         saveButton = ChessGUI.standardButton("Save");      
         loadButton = ChessGUI.standardButton("Load");
         
-        topPanel.add(activePlayerLabel, BorderLayout.WEST);
-        topPanel.add(Box.createRigidArea(new Dimension(150, 0)), BorderLayout.EAST);
-        topPanel.add(resetButton, BorderLayout.EAST);
-        topPanel.add(saveButton, BorderLayout.EAST);
-        topPanel.add(loadButton, BorderLayout.EAST);
+        topPanel.add(Box.createHorizontalStrut(150));
+        topPanel.add(activePlayerLabel);
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(resetButton);
+        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(saveButton);
+        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(loadButton);
+        topPanel.add(Box.createHorizontalStrut(80));
         
         this.add(topPanel, BorderLayout.NORTH);
         

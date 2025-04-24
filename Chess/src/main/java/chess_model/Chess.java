@@ -305,7 +305,7 @@ public class Chess implements Serializable {
                 for (Piece p : this.pieces) {
                     if (y != 0 && p.getPos().equals(Position.of(x, y))) {
                         printedPiece = true;                       
-                        System.out.print("|" + p + "|");
+                        System.out.print("|" + p.twoCharName() + "|");
                     }
                 }
                 if (!printedPiece && y != 0) System.out.print("|__|");

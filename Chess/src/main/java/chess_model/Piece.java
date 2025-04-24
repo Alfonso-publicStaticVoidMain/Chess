@@ -245,12 +245,11 @@ public abstract class Piece implements Serializable {
      * {@code this}'s color with the first letter of {@code this}'s class,
      * differentiating Kings and Knights by using 'K' for the former and 'k'
      * for the latter.
-     * @deprecated This method is overridden by each subclass, returning
-     * the ASCII character that represents the piece.
+     * @deprecated This method is only used to play the game by console, which
+     * is itself a deprecated way of doing so.
      */
     @Deprecated
-    @Override
-    public String toString() {
+    public String twoCharName() {
         char typeChar;
         if (this instanceof Knight) typeChar = 'k';
         else typeChar = Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
