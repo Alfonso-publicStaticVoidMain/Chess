@@ -24,28 +24,32 @@ public class ChessGUI extends JFrame {
     private final JPanel boardPanel;
     private final JPanel topPanel;
     private final JPanel rightPanel;
-//    private final JPanel leftPanel;
+
     private final JLabel activePlayerLabel;
     private final JTable playHistoryArea;
     private final JPanel tablePanel;
-//    private final JLabel whiteTimer;
-//    private final JLabel blackTimer;
-//    private final Timer gameTimer;
+    
+    private final JPanel leftPanel;
+    private final JLabel whiteTimer;
+    private final JLabel blackTimer;
+    private final Timer gameTimer;
+    private int whiteSeconds = 300;
+    private int blackSeconds = 300;
+    
     private final JScrollPane scrollPane;
     private final DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
     private final JButton resetButton;
     private final JButton saveButton;
     private final JButton loadButton;
-//    private int whiteSeconds = 300;
-//    private int blackSeconds = 300;
+
     
     private ChessController controller;
 
     public ChessGUI() {
         this.setTitle("Chess Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1000, 600);
+        this.setSize(1100, 600);
 
         // Top panel - Active player + Save & Reset buttons
         topPanel = new JPanel();
@@ -84,48 +88,48 @@ public class ChessGUI extends JFrame {
         
         // Central (board) panel - Chess board
         boardPanel = new JPanel(new GridLayout(9, 9));
-        boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         boardButtons = new JButton[9][9];
         this.initializeBoard();
         this.add(boardPanel, BorderLayout.CENTER);
         this.setVisible(true);
-//        // Left panel - timers
-//        leftPanel = new JPanel();
-//        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-//        leftPanel.setPreferredSize(new Dimension(100, 0));
-//        whiteTimer = new JLabel(formatTime(whiteSeconds), SwingConstants.CENTER);
-//        whiteTimer.setFont(new Font("Arial", Font.BOLD, 16));
-//        whiteTimer.setAlignmentX(Component.RIGHT_ALIGNMENT);
-//        blackTimer = new JLabel(formatTime(blackSeconds), SwingConstants.CENTER);
-//        blackTimer.setFont(new Font("Arial", Font.BOLD, 16));
-//        blackTimer.setAlignmentX(Component.RIGHT_ALIGNMENT);
-//        leftPanel.add(Box.createVerticalStrut(100)); // Space from top
-//        leftPanel.add(blackTimer);
-//        leftPanel.add(Box.createVerticalGlue());
-//        leftPanel.add(whiteTimer);
-//        leftPanel.add(Box.createVerticalStrut(100)); // Space at bottom
-//        this.add(leftPanel, BorderLayout.WEST);
-//        this.setVisible(true);
-//        gameTimer = new Timer(1000, e -> {
-//            if (controller.getGame().getActivePlayer() == ChessColor.WHITE) {
-//                whiteSeconds--;
-//                whiteTimer.setText(formatTime(whiteSeconds));
-//                if (whiteSeconds <= 0) {
-//                    ((Timer) e.getSource()).stop();
-//                    JOptionPane.showMessageDialog(this, "White ran out of time!");
-//                    controller.getGame().finishGame();
-//                }
-//            } else {
-//                blackSeconds--;
-//                blackTimer.setText(formatTime(blackSeconds));
-//                if (blackSeconds <= 0) {
-//                    ((Timer) e.getSource()).stop();
-//                    JOptionPane.showMessageDialog(this, "Black ran out of time!");
-//                    controller.getGame().finishGame();
-//                }
-//            }
-//        });
-//        gameTimer.start();
+        // Left panel - timers
+        leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setPreferredSize(new Dimension(100, 0));
+        whiteTimer = new JLabel(formatTime(whiteSeconds), SwingConstants.CENTER);
+        whiteTimer.setFont(new Font("Arial", Font.BOLD, 16));
+        whiteTimer.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        blackTimer = new JLabel(formatTime(blackSeconds), SwingConstants.CENTER);
+        blackTimer.setFont(new Font("Arial", Font.BOLD, 16));
+        blackTimer.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        leftPanel.add(Box.createVerticalStrut(100)); // Space from top
+        leftPanel.add(blackTimer);
+        leftPanel.add(Box.createVerticalGlue());
+        leftPanel.add(whiteTimer);
+        leftPanel.add(Box.createVerticalStrut(100)); // Space at bottom
+        this.add(leftPanel, BorderLayout.WEST);
+        this.setVisible(true);
+        gameTimer = new Timer(1000, e -> {
+            if (controller.getGame().getActivePlayer() == ChessColor.WHITE) {
+                whiteSeconds--;
+                whiteTimer.setText(formatTime(whiteSeconds));
+                if (whiteSeconds <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    JOptionPane.showMessageDialog(this, "White ran out of time!");
+                    controller.getGame().finishGame();
+                }
+            } else {
+                blackSeconds--;
+                blackTimer.setText(formatTime(blackSeconds));
+                if (blackSeconds <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    JOptionPane.showMessageDialog(this, "Black ran out of time!");
+                    controller.getGame().finishGame();
+                }
+            }
+        });
+        gameTimer.start();
     }
     
     public static JButton standardButton(String label) {
