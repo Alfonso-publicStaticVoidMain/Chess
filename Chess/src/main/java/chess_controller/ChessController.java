@@ -95,7 +95,7 @@ public class ChessController implements ActionListener {
                 
                 if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
-                    
+                    if (!game.isGameStarted()) game.startGame();
                     if (piece instanceof Pawn && piece.getPos().y() == game.getActivePlayer().crowningRow()) { // Pawn crowning
                         game.crownPawn(piece, view.pawnCrowningMenu(piece));
                     }

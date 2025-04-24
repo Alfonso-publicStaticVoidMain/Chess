@@ -41,6 +41,54 @@ public class Chess implements Serializable {
      * Boolean attribute to track if the game has ended.
      */
     private boolean gameFinished = false;
+    
+    /**
+     * Boolean attribute to tracj uf tge game has started.
+     */
+    private boolean gameStarted = false;
+    
+    /**
+     * Integer attribute to track the seconds left for white player.
+     */
+    private int whiteSeconds = 300;
+    
+    /**
+     * Integer attribute to track the seconds left for black player.
+     */
+    private int blackSeconds = 300;
+
+    /**
+     * Informs if the game has started yet.
+     * @return True if the game has started, false otherwise.
+     */
+    public boolean isGameStarted() {return gameStarted;}
+    
+    /**
+     * Sets the {@code gameStarted} attribute to true.
+     */
+    public void startGame() {gameStarted = true;}
+
+    /**
+     * Getter for the {@code whiteSeconds} attribute.
+     * @return The number of seconds left for white player.
+     */
+    public int getWhiteSeconds() {return whiteSeconds;}
+    
+    /**
+     * Substracts one second from the seconds remaining for white player.
+     */
+    public void consumeWhiteSecond() {whiteSeconds--;}
+
+    /**
+     * Getter for the {@code blackSeconds} attribute.
+     * @return The number of seconds left for black player.
+     */
+    public int getBlackSeconds() {return blackSeconds;}
+    
+    /**
+     * Substracts one second from the seconds remaining for black player.
+     */
+    public void consumeBlackSecond() {blackSeconds--;}
 
     /**
      * Getter for the {@code gameFinished} attribute.
@@ -49,7 +97,7 @@ public class Chess implements Serializable {
     public boolean isGameFinished() {return gameFinished;}
     
     /**
-     * Sets the {@code gameFinished} attribute to true, effectively ending the game.
+     * Sets the {@code gameFinished} attribute to true, ending the game.
      */
     public void finishGame() {this.gameFinished = true;}
     
