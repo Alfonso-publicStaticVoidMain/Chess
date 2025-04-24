@@ -27,7 +27,7 @@ public class ChessGUI extends JFrame {
     private final JTable playHistoryArea;
     private final JPanel tablePanel;
     private final JScrollPane scrollPane;
-    private DefaultTableModel tableModel;
+    private final DefaultTableModel tableModel;
     private final JButton[][] boardButtons;
     private final JButton resetButton;
     private final JButton saveButton;
@@ -47,26 +47,9 @@ public class ChessGUI extends JFrame {
         activePlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         activePlayerLabel.setPreferredSize(new Dimension(250, 30));
         
-        resetButton = new JButton();
-        resetButton.setOpaque(true);
-        resetButton.setBorderPainted(false);
-        resetButton.setFont(new Font("Arial", Font.BOLD, 16));
-        resetButton.setText("Reset");
-        resetButton.setActionCommand("reset");
-        
-        saveButton = new JButton();
-        saveButton.setOpaque(true);
-        saveButton.setBorderPainted(false);
-        saveButton.setFont(new Font("Arial", Font.BOLD, 16));
-        saveButton.setText("Save");
-        saveButton.setActionCommand("save");
-        
-        loadButton = new JButton();
-        loadButton.setOpaque(true);
-        loadButton.setBorderPainted(false);
-        loadButton.setFont(new Font("Arial", Font.BOLD, 16));
-        loadButton.setText("Load");
-        loadButton.setActionCommand("load");
+        resetButton = ChessGUI.standardButton("Reset");       
+        saveButton = ChessGUI.standardButton("Save");      
+        loadButton = ChessGUI.standardButton("Load");
         
         topPanel.add(activePlayerLabel, BorderLayout.WEST);
         topPanel.add(Box.createRigidArea(new Dimension(150, 0)), BorderLayout.EAST);
@@ -96,13 +79,23 @@ public class ChessGUI extends JFrame {
         boardPanel = new JPanel(new GridLayout(9, 9));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         boardButtons = new JButton[9][9];
+        this.initializeBoard();
         this.add(boardPanel);
         this.setVisible(true);
     }
     
+    public static JButton standardButton(String label) {
+        JButton result = new JButton();
+        result.setOpaque(true);
+        result.setBorderPainted(false);
+        result.setFont(new Font("Arial", Font.BOLD, 16));
+        result.setText(label);
+        result.setActionCommand(label);
+        return result;
+    }
+    
     public void setController(ChessController controller) {
         this.controller = controller;
-        this.initializeBoard();
         this.updateBoard();
         for (JButton[] buttonArray : boardButtons) {
             for (JButton button : buttonArray) {

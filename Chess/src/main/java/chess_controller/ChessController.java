@@ -91,7 +91,6 @@ public class ChessController implements ActionListener {
                         playDone = true;
                         // A play of right castling was done.
                     }
-                    // If none of the ifs were entered, playDone stays as false and castlingInfo as 0.
                 }
                 
                 if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
@@ -142,7 +141,7 @@ public class ChessController implements ActionListener {
         {
             oos.writeObject(game);
         } catch (IOException ex) {
-            System.err.println("Error:" + ex.getMessage());
+            System.err.println("I/O error: " + ex.getMessage());
         }
     }
     
@@ -161,8 +160,8 @@ public class ChessController implements ActionListener {
             view.updateActivePlayer();
             view.reloadPlayHistory();
         }
-        catch (IOException ex) {System.err.println("Error:" + ex.getMessage());}
-        catch (ClassNotFoundException ex) {System.err.println("Err:" + ex.getMessage());}
+        catch (IOException ex) {System.err.println("I/O error: " + ex.getMessage());}
+        catch (ClassNotFoundException ex) {System.err.println("Class not found: " + ex.getMessage());}
     }
     
     /**
@@ -219,13 +218,13 @@ public class ChessController implements ActionListener {
             int y = (int) clickedButton.getClientProperty("y");
             this.handleClick(x, y);
         }
-        if (command.equals("reset")) {
+        if (command.equals("Reset")) {
             this.resetClick();
         }
-        if (command.equals("save")) {
+        if (command.equals("Save")) {
             this.saveClick();
         }
-        if (command.equals("load")) {
+        if (command.equals("Load")) {
             this.loadClick();
         }
     }
