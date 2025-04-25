@@ -12,11 +12,7 @@ import javax.swing.SwingUtilities;
 public class ChessMainGUI {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Chess chess = Chess.standardGame();
-            ChessGUI view = new ChessGUI();
-            ChessController controller = new ChessController(chess, view);
-        });
+        SwingUtilities.invokeLater(() -> new ChessController(Chess.standardGame(), new ChessGUI()));
     }
     
 }
