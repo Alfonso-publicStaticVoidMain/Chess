@@ -11,8 +11,12 @@ import javax.swing.SwingUtilities;
  */
 public class ChessMainGUI {
 
+    public static ChessController initializeStandardGame() {
+        return new ChessController(Chess.standardGame(), new ChessGUI());
+    }
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ChessController(Chess.standardGame(), new ChessGUI()));
+        SwingUtilities.invokeLater(ChessMainGUI::initializeStandardGame);
     }
     
 }

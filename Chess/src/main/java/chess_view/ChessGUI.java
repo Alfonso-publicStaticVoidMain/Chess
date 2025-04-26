@@ -271,14 +271,28 @@ public class ChessGUI extends JFrame {
     }
     
     public void highlightPiecesThatCanCaptureKing(Position initPos, Position finPos) {
+//        System.out.println("[DEBUG] Red highlights method called with parameters "+initPos+" and "+finPos);
         Chess auxGame = controller.getGame().copyGame();
         ChessColor activePlayer = controller.getGame().getActivePlayer();
         Piece pieceToMove = auxGame.findPiece(initPos);
-        pieceToMove.move(finPos, false);
+        /*boolean validMove = */pieceToMove.move(finPos, false);
+//        System.out.println("[DEBUG] Movement of "+pieceToMove.getSimpleName()+" from "+initPos+" to "+finPos+" is: "+validMove);
+//        auxGame.printBoard();
+//        System.out.println("[DEBUG] Pieces that can eat the King in "+auxGame.findKing(activePlayer).getPos()+":");
+//        auxGame.getPieces().stream()
+//            .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
+//                piece.getColor() != activePlayer &&
+//                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos(), false)
+//            )
+//            .forEach(piece -> {
+//                System.out.println(piece.getSimpleName()+" in position "+piece.getPos());
+//            });
+        
+        
         auxGame.getPieces().stream()
             .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
                 piece.getColor() != activePlayer &&
-                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos())
+                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos(), false)
             )
             .map(piece -> boardButtons[piece.getPos().x()][piece.getPos().y()]) // Map each piece to its button on the board
             .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
