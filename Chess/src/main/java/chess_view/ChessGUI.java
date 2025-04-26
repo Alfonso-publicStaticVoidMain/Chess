@@ -44,6 +44,7 @@ import javax.swing.table.DefaultTableModel;
  * @version 1.0
  */
 public class ChessGUI extends JFrame {
+
     private final JPanel boardPanel;
     private final JPanel boardWrapper;
     private final JButton[][] boardButtons;
@@ -150,6 +151,18 @@ public class ChessGUI extends JFrame {
         this.setVisible(true);
     }
     
+    /**
+     * Standard template for a JButton, to be followed by the reset, save and
+     * load buttons.
+     * @param label String to be displayed inside the button.
+     * @return A JButton that:
+     * <ul>
+     * <li>Is opaque.</li>
+     * <li>Does not have a border.</li>
+     * <li>Its font is Arial, bold and size 16.</li>
+     * <li>Its text and ActionCommand is the label parameter.</li>
+     * </ul>
+     */
     public static JButton standardButton(String label) {
         JButton result = new JButton();
         result.setOpaque(true);
@@ -161,10 +174,10 @@ public class ChessGUI extends JFrame {
     }
     
     private static String formatTime(int seconds) {
-    int mins = seconds / 60;
-    int secs = seconds % 60;
-    return String.format("%02d:%02d", mins, secs);
-}
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        return String.format("%02d:%02d", mins, secs);
+    }
     
     public void setController(ChessController controller) {
         this.controller = controller;
@@ -271,24 +284,10 @@ public class ChessGUI extends JFrame {
     }
     
     public void highlightPiecesThatCanCaptureKing(Position initPos, Position finPos) {
-//        System.out.println("[DEBUG] Red highlights method called with parameters "+initPos+" and "+finPos);
         Chess auxGame = controller.getGame().copyGame();
         ChessColor activePlayer = controller.getGame().getActivePlayer();
         Piece pieceToMove = auxGame.findPiece(initPos);
-        /*boolean validMove = */pieceToMove.move(finPos, false);
-//        System.out.println("[DEBUG] Movement of "+pieceToMove.getSimpleName()+" from "+initPos+" to "+finPos+" is: "+validMove);
-//        auxGame.printBoard();
-//        System.out.println("[DEBUG] Pieces that can eat the King in "+auxGame.findKing(activePlayer).getPos()+":");
-//        auxGame.getPieces().stream()
-//            .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
-//                piece.getColor() != activePlayer &&
-//                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos(), false)
-//            )
-//            .forEach(piece -> {
-//                System.out.println(piece.getSimpleName()+" in position "+piece.getPos());
-//            });
-        
-        
+        pieceToMove.move(finPos, false);
         auxGame.getPieces().stream()
             .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
                 piece.getColor() != activePlayer &&
@@ -305,54 +304,23 @@ public class ChessGUI extends JFrame {
                 timer.start();
             });
     }
-    
-    public void highlightPiecesThatCanCapture(Position initPos, Position finPos) {
-        Chess chess = controller.getGame();
-        if (chess.checkPiece(initPos) && chess.findPiece(initPos) instanceof King) {
-            Piece foundPiece = chess.findPiece(initPos);
-            chess.getPieces().stream()
-                .filter(piece -> piece.getColor() != foundPiece.getColor())
-                .filter(piece -> // Filter to all pieces that could move and capture to the given position, accounting for Pawn's special movement when capturing
-                (piece instanceof Pawn) ?
-                    Position.yDist(piece.getPos(), finPos) == piece.getColor().yDirection()
-                    && Math.abs(Position.xDist(piece.getPos(), finPos)) == 1
-                : piece.checkLegalMovement(finPos, false))
-                .map(piece -> boardButtons[piece.getPos().x()][piece.getPos().y()]) // Map each piece to the button representing its position
-                .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
-                    Color originalColor = button.getBackground();
-                    button.setBackground(Color.RED);
-                    button.repaint();
-
-                    Timer timer = new Timer(1000, e -> button.setBackground(originalColor));
-                    timer.setRepeats(false);
-                    timer.start();
-                });
-        }
-    }
 
     public void clearHighlights() {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
-                if ((x + y) % 2 == 0) {
-                    boardButtons[x][y].setBackground(Color.WHITE);
-                } else {
-                    boardButtons[x][y].setBackground(Color.GRAY);
-                }
+                boardButtons[x][y].setBackground((x + y) % 2 == 0 ? Color.WHITE : Color.GRAY);
             }
         }
     }
 
     public void updateBoard() {
-        Chess chess = controller.getGame();
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
-                JButton button = boardButtons[x][y];
-                if (chess.checkPiece(Position.of(x, y))) {
-                    Piece piece = chess.findPiece(Position.of(x, y));
-                    button.setText(piece.toString());
-                } else {
-                    button.setText("");
-                }
+                boardButtons[x][y].setText(
+                    controller.getGame().checkPiece(Position.of(x, y)) ?
+                    controller.getGame().findPiece(Position.of(x, y)).toString()
+                    : ""
+                );
             }
         }
     }
