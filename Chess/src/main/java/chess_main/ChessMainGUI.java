@@ -15,8 +15,12 @@ public class ChessMainGUI {
         return new ChessController(Chess.standardGame(), new ChessGUI());
     }
     
+    public static ChessController initializeAlmostChessGame() {
+        return new ChessController(Chess.almostChessGame(), new ChessGUI());
+    }
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ChessMainGUI::initializeStandardGame);
+        SwingUtilities.invokeLater(ChessMainGUI::initializeAlmostChessGame);
     }
     
 }

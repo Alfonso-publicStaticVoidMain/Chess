@@ -4,25 +4,24 @@ import graphic_resources.ChessImages;
 import javax.swing.ImageIcon;
 
 /**
- * Class representing the Chancellor piece, a nonstandard chess Piece in the
- * Almost Chess variant, that moves either like a Knight or Rook and substitutes
- * the Queen.
+ * Class representing the Mann piece, a nonstandard chess Piece, that moves
+ * like a King, but it's not a royal Piece and be captured normally.
  * @author Alfonso Gallego
  */
-public class Chancellor extends Piece {    
+public class Mann extends Piece {    
     
-    public Chancellor(Position pos, ChessColor color) {
+    public Mann(Position pos, ChessColor color) {
         super(pos, color);
     }
     
     /**
      * Checks if the proposed position would be a legal movement of the 
-     * Chancellor within the {@code Chess} game it's in.
-     * @param finPos Position the Chancellor is attempting to move to.
+     * Mann within the {@code Chess} game it's in.
+     * @param finPos Position the Mann is attempting to move to.
      * @param checkCheck State parameter to determine if we will declare the
      * movement illegal if it causes a check of its own King.
      * @return True if the proposed final Position is a legal movement for
-     * {@code this} Chancellor, performing the following checks:
+     * {@code this} Mann, performing the following checks:
      * <br><br>
      * First, some common legality checks are performed within the method 
      * {@link Piece#basicLegalityChecks}: If there's a piece of the same color 
@@ -46,27 +45,25 @@ public class Chancellor extends Piece {
      */
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
-        if (!this.basicLegalityChecks(finPos, checkCheck)) return false;      
+        if (!this.basicLegalityChecks(finPos, checkCheck)) return false;
         Position initPos = this.getPos();
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
-        if (isKnightLikePath(Xmovement, Ymovement)) return true;
-        if (!isRookLikePath(Xmovement, Ymovement)) return false;
-        return this.getGame().isPathClear(initPos, finPos);
+        return this.getGame().isPathClear(this.getPos(), finPos) && Math.abs(Xmovement) == 1 && Math.abs(Ymovement) == 1;
     }
 
     /**
-     * Copies this Chancellor as a new Chancellor object.
-     * @return A Chancellor object with the same {@link Position} and
+     * Copies this Mann as a new Mann object.
+     * @return A Mann object with the same {@link Position} and
      * {@link ChessColor}, but with no game associated to it.
      */
     @Override
     public Piece copy() {
-        return new Chancellor(this.getPos(), this.getColor());
+        return new Mann(this.getPos(), this.getColor());
     }
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteChancellor : ChessImages.blackChancellor;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteMann : ChessImages.blackMann;
     }
 }

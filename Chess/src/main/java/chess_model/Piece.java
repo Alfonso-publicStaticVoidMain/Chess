@@ -67,8 +67,8 @@ public abstract class Piece implements Serializable {
     
     /**
      * Returns an ImageIcon representing this piece.
-     * @return An ImageIcon located in src\main\resources\ChessPieces appropiate
-     * for the Piece.
+     * @return An ImageIcon created from a .png in src\main\resources\ChessPieces
+     * representing this Piece.
      */
     public abstract ImageIcon toIcon();
     
@@ -244,6 +244,38 @@ public abstract class Piece implements Serializable {
             (checkCheck && this.checkIfMovementCausesCheck(finPos)) ||
             this.getPos().equals(finPos)
         );
+    }
+    
+    public static boolean isRookLikePath(int Xmovement, int Ymovement) {
+        return !(Xmovement != 0 && Ymovement != 0);
+    }
+    
+    public static boolean isRookLikePath(Position initPos, Position finPos) {
+        int Xmovement = Position.xDist(initPos, finPos);
+        int Ymovement = Position.yDist(initPos, finPos);
+        return isRookLikePath(Xmovement, Ymovement);
+    }
+    
+    public static boolean isBishopLikePath(int Xmovement, int Ymovement) {
+        return Math.abs(Xmovement) == Math.abs(Ymovement);
+    }
+    
+    public static boolean isBishopLikePath(Position initPos, Position finPos) {
+        int Xmovement = Position.xDist(initPos, finPos);
+        int Ymovement = Position.yDist(initPos, finPos);
+        return isBishopLikePath(Xmovement, Ymovement);
+    }
+    
+    public static boolean isKnightLikePath(int Xmovement, int Ymovement) {
+        return Math.abs(Xmovement)+Math.abs(Ymovement)==3
+            && Math.abs(Xmovement)<=2 && Math.abs(Xmovement)>=1
+            && Math.abs(Ymovement)<=2 && Math.abs(Ymovement)>=1;
+    }
+    
+    public static boolean isKnightLikePath(Position initPos, Position finPos) {
+        int Xmovement = Position.xDist(initPos, finPos);
+        int Ymovement = Position.yDist(initPos, finPos);
+        return isKnightLikePath(Xmovement, Ymovement);
     }
     
     /**

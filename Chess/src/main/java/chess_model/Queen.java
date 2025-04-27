@@ -39,8 +39,7 @@ public class Queen extends Piece {
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!this.basicLegalityChecks(finPos, checkCheck)) return false;
-        Position initPos = this.getPos();
-        return this.getGame().isPathClear(initPos, finPos);
+        return this.getGame().isPathClear(this.getPos(), finPos);
     }
 
     /**

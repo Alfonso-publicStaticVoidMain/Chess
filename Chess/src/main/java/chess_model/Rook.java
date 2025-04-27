@@ -40,11 +40,8 @@ public class Rook extends Piece {
     @Override
     public boolean checkLegalMovement(Position finPos, boolean checkCheck) {
         if (!this.basicLegalityChecks(finPos, checkCheck)) return false;
-        Position initPos = this.getPos();
-        int Xmovement = Position.xDist(initPos, finPos);
-        int Ymovement = Position.yDist(initPos, finPos);
-        if (Xmovement != 0 && Ymovement != 0) return false;
-        return this.getGame().isPathClear(initPos, finPos);
+        if (!isRookLikePath(this.getPos(), finPos)) return false;
+        return this.getGame().isPathClear(this.getPos(), finPos);
     }
 
     /**

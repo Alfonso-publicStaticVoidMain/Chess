@@ -172,6 +172,12 @@ public class Chess implements Serializable {
         return chess;
     }
     
+    public static Chess almostChessGame() {
+        Chess chess = new Chess();
+        chess.addAlmostChessPieces();
+        return chess;
+    }
+    
     /**
      * Sets the game of each piece in {@code this} game's piece list
      * to {@code this}.
@@ -202,6 +208,33 @@ public class Chess implements Serializable {
             this.pieces.add(new Bishop(Position.of(6, color.initRow()), color));
             // Add Queen
             this.pieces.add(new Queen(Position.of(4, color.initRow()), color));
+            // Add King
+            this.pieces.add(new King(Position.of(5, color.initRow()), color));
+        }
+        this.linkPieces();
+    }
+    
+    /**
+     * Adds the standard Chess pieces to {@code this} game's pieces list.
+     * @see Position#of(int, int)
+     * @see Chess#linkPieces
+     */
+    public void addAlmostChessPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            // Add Pawns
+            IntStream.rangeClosed(1, 8)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, color.initRowPawn()), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, color.initRow()), color));
+            this.pieces.add(new Rook(Position.of(8, color.initRow()), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(2, color.initRow()), color));
+            this.pieces.add(new Knight(Position.of(7, color.initRow()), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(3, color.initRow()), color));
+            this.pieces.add(new Bishop(Position.of(6, color.initRow()), color));
+            // Add Chancellor
+            this.pieces.add(new Chancellor(Position.of(4, color.initRow()), color));
             // Add King
             this.pieces.add(new King(Position.of(5, color.initRow()), color));
         }
