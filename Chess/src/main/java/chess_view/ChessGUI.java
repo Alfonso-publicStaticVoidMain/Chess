@@ -12,9 +12,11 @@ import chess_model.Position;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +49,6 @@ import javax.swing.table.DefaultTableModel;
 public class ChessGUI extends JFrame {
 
     private final JPanel boardPanel;
-    private final JPanel boardWrapper;
     private final JButton[][] boardButtons;
     
     private final JPanel topPanel;
@@ -115,23 +116,14 @@ public class ChessGUI extends JFrame {
         rightPanel.add(tablePanel, BorderLayout.CENTER);
         this.add(rightPanel, BorderLayout.EAST);
         
-        // Central (board) panel - Chess board
-        boardPanel = new JPanel(new GridLayout(9, 9));
+        // Central (board) panel - Chess board TO DO
+        boardPanel = new JPanel(new SquareGridLayout(9, 9));
         boardPanel.setPreferredSize(new Dimension(720, 720));
         boardPanel.setBounds(0, 0, 720, 720);
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         boardButtons = new JButton[9][9];
-        boardWrapper = new JPanel(null) {
-            @Override
-            public void doLayout() {
-                int size = Math.min(getWidth(), getHeight());
-                boardPanel.setBounds(0, 0, size, size);
-            }
-        };
-        boardWrapper.setLayout(null);
-        boardWrapper.add(boardPanel);
         this.initializeBoard();
-        this.add(boardWrapper, BorderLayout.CENTER);
+        this.add(boardPanel, BorderLayout.CENTER);
 
         // Left panel - timers
         leftPanel = new JPanel();
@@ -321,11 +313,6 @@ public class ChessGUI extends JFrame {
                     controller.getGame().findPiece(Position.of(x, y)).toIcon() :
                     new ImageIcon()
                 );
-//                boardButtons[x][y].setText(
-//                    controller.getGame().checkPiece(Position.of(x, y)) ?
-//                    controller.getGame().findPiece(Position.of(x, y)).toString()
-//                    : ""
-//                );
             }
         }
     }
@@ -440,6 +427,59 @@ public class ChessGUI extends JFrame {
         for (Play play : controller.getGame().getPlayHistory()) {
             updatePlayHistory(play);
         }
+    }
+    
+    public static class SquareGridLayout implements LayoutManager {
+        private int rows;
+        private int cols;
+
+        public SquareGridLayout(int rows, int cols) {
+            this.rows = rows;
+            this.cols = cols;
+        }
+
+        @Override
+        public void layoutContainer(Container parent) {
+            int width = parent.getWidth();
+            int height = parent.getHeight();
+
+            // Calculate maximum size that fits both horizontally and vertically
+            int squareSize = Math.min(width / cols, height / rows);
+
+            // Calculate total grid size
+            int gridWidth = squareSize * cols;
+            int gridHeight = squareSize * rows;
+
+            // Center the grid if there's extra space
+            int xOffset = (width - gridWidth) / 2;
+            int yOffset = (height - gridHeight) / 2;
+
+            for (int i = 0; i < parent.getComponentCount(); i++) {
+                int r = i / cols;
+                int c = i % cols;
+
+                int x = xOffset + c * squareSize;
+                int y = yOffset + r * squareSize;
+
+                parent.getComponent(i).setBounds(x, y, squareSize, squareSize);
+            }
+        }
+
+        @Override
+        public Dimension minimumLayoutSize(Container parent) {
+            return new Dimension(cols * 10, rows * 10);
+        }
+
+        @Override
+        public Dimension preferredLayoutSize(Container parent) {
+            return new Dimension(cols * 50, rows * 50);
+        }
+
+        @Override
+        public void addLayoutComponent(String name, Component comp) {}
+
+        @Override
+        public void removeLayoutComponent(Component comp) {}
     }
     
 }

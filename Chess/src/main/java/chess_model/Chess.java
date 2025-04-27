@@ -101,6 +101,14 @@ public class Chess implements Serializable {
      */
     public void finishGame() {this.gameFinished = true;}
     
+    public void nullLeftCastlingAvaliability(ChessColor player) {
+        leftCastlingAvaliability.put(player, false);
+    }
+    
+    public void nullRightCastlingAvaliability(ChessColor player) {
+        rightCastlingAvaliability.put(player, false);
+    }
+    
     /**
      * Getter for the active player attribute.
      * @return The color of the active player.
@@ -379,18 +387,18 @@ public class Chess implements Serializable {
     public boolean isPathClear(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
-        
-        if (Xmovement*Ymovement!=0 && Math.abs(Xmovement)!=Math.abs(Ymovement)) {
-            //System.out.println("[DEBUG] Error on the isPathClear method: Input positions "+ initPos + " and " + finPos + " do not match movement of a Rook or Bishop.");
-            return false;
-        }
+        return isPathClear(initPos.x(), initPos.y(), Xmovement, Ymovement);
+    }
+    
+    public boolean isPathClear(int initXPos, int initYPos, int Xmovement, int Ymovement) {
+        if (!Piece.isBishopLikePath(Xmovement, Ymovement) && !Piece.isRookLikePath(Xmovement, Ymovement)) return false;
         
         int Xdirection = (Xmovement > 0) ? 1 : (Xmovement < 0) ? -1 : 0;
         int Ydirection = (Ymovement > 0) ? 1 : (Ymovement < 0) ? -1 : 0;
         int steps = Math.max(Math.abs(Xmovement), Math.abs(Ymovement));
         
         return IntStream.range(1, steps)
-            .mapToObj(n -> Position.of(initPos.x() + n*Xdirection, initPos.y() + n*Ydirection))
+            .mapToObj(n -> Position.of(initXPos + n*Xdirection, initYPos + n*Ydirection))
             .noneMatch(position -> this.checkPiece(position));
     }
     
@@ -429,10 +437,7 @@ public class Chess implements Serializable {
                         King auxKing = auxGame.findKing(color);
                         Piece auxPiece = auxGame.findPiece(p.getPos());
                         auxPiece.move(finPos, false, true);
-                        if (!auxKing.checkCheck()) {
-                            //System.out.println("[DEBUG] Piece " + auxPiece + " moving to " + finPos + " doesn't cause a check!");
-                            return false;
-                        }
+                        if (!auxKing.checkCheck()) return false;
                     }
                 }
             }
