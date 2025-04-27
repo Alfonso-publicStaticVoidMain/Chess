@@ -23,8 +23,20 @@ public class ChessMainGUI {
         return new ChessController(Chess.capablancaGame(), new ChessGUI(8, 10));
     }
     
+    public static ChessController initializeJanusGame() {
+        return new ChessController(Chess.janusGame(), new ChessGUI(8, 10));
+    }
+    
+    public static ChessController initializeModernGame() {
+        return new ChessController(Chess.modernGame(), new ChessGUI(9, 9));
+    }
+    
+    public static ChessController initializeTuttiFruttiGame() {
+        return new ChessController(Chess.tuttiFruttiGame(), new ChessGUI(8, 8));
+    }
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ChessMainGUI::initializeCapablancaGame);
+        SwingUtilities.invokeLater(ChessMainGUI::initializeModernGame);
     }
     
 }

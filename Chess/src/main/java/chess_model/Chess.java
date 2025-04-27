@@ -204,6 +204,30 @@ public class Chess implements Serializable {
         return chess;
     }
     
+    public static Chess janusGame() {
+        Chess chess = new Chess();
+        chess.config = GameConfiguration.janusConfig;
+        chess.addJanusPieces();
+        chess.setTrueCastlingAvaliabilities();
+        return chess;
+    }
+    
+    public static Chess modernGame() {
+        Chess chess = new Chess();
+        chess.config = GameConfiguration.modernConfig;
+        chess.addModernPieces();
+        chess.setTrueCastlingAvaliabilities();
+        return chess;
+    }
+    
+    public static Chess tuttiFruttiGame() {
+        Chess chess = new Chess();
+        chess.config = GameConfiguration.tuttiFruttiConfig;
+        chess.addTuttiFruttiPieces();
+        chess.setTrueCastlingAvaliabilities();
+        return chess;
+    }
+    
     /**
      * Sets the game of each piece in {@code this} game's piece list
      * to {@code this}.
@@ -301,6 +325,89 @@ public class Chess implements Serializable {
         }
         this.linkPieces();
     }
+    
+    public void addJanusPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            int initRow = color.initRow(config);
+            int initRowPawn = color.initRowPawn(config);
+            
+            // Add Pawns
+            IntStream.rangeClosed(1, 10)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, initRowPawn), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, initRow), color));
+            this.pieces.add(new Rook(Position.of(10, initRow), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(3, initRow), color));
+            this.pieces.add(new Knight(Position.of(8, initRow), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(4, initRow), color));
+            this.pieces.add(new Bishop(Position.of(7, initRow), color));
+            // Add ArchBishops
+            this.pieces.add(new ArchBishop(Position.of(2, initRow), color));
+            this.pieces.add(new ArchBishop(Position.of(9, initRow), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(6, initRow), color));
+            // Add King
+            this.pieces.add(new King(Position.of(5, initRow), color));
+        }
+        this.linkPieces();
+    }
+    
+    public void addModernPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            int initRow = color.initRow(config);
+            int initRowPawn = color.initRowPawn(config);
+            
+            // Add Pawns
+            IntStream.rangeClosed(1, 9)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, initRowPawn), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, initRow), color));
+            this.pieces.add(new Rook(Position.of(9, initRow), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(2, initRow), color));
+            this.pieces.add(new Knight(Position.of(8, initRow), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(3, initRow), color));
+            this.pieces.add(new Bishop(Position.of(7, initRow), color));
+            // Add ArchBishops
+            this.pieces.add(new ArchBishop(Position.of(6, initRow), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(4, initRow), color));
+            // Add King
+            this.pieces.add(new King(Position.of(5, initRow), color));
+        }
+        this.linkPieces();
+    }
+    
+    public void addTuttiFruttiPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            int initRow = color.initRow(config);
+            int initRowPawn = color.initRowPawn(config);
+            
+            // Add Pawns
+            IntStream.rangeClosed(1, 8)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, initRowPawn), color)));
+            // Add Chancellor
+            this.pieces.add(new Chancellor(Position.of(1, initRow), color));
+            // Add Rook
+            this.pieces.add(new Rook(Position.of(8, initRow), color));
+            // Add Knight
+            this.pieces.add(new Knight(Position.of(2, initRow), color));
+            // Add ArchBishop
+            this.pieces.add(new ArchBishop(Position.of(7, initRow), color));
+            // Add Bishop
+            this.pieces.add(new Bishop(Position.of(3, initRow), color));
+            // Add Amazon
+            this.pieces.add(new Amazon(Position.of(4, initRow), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(6, initRow), color));
+            // Add King
+            this.pieces.add(new King(Position.of(5, initRow), color));
+        }
+        this.linkPieces();
+    }
 
     public int initKingCol() {
         return config.kingInitCol();
@@ -367,15 +474,6 @@ public class Chess implements Serializable {
     public boolean checkPiece(Position pos) {
         return this.pieces.stream()
             .anyMatch(piece -> piece.getPos().equals(pos));
-//        long numberOfPiecesInPosition = this.pieces.stream()
-//            .filter(piece -> piece.getPos().equals(pos))
-//            .count();
-//        if (numberOfPiecesInPosition > 1) {
-//            System.out.println("Illegal number of pieces found in position " + pos);
-//            System.out.println(numberOfPiecesInPosition+" pieces were found.");
-//            return false;
-//        }
-//        return numberOfPiecesInPosition == 1;
     }
     
     /**

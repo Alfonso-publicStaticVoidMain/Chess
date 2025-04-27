@@ -245,7 +245,7 @@ public class ChessGUI extends JFrame {
                     button.setEnabled(false);
                 } else {
                     // Regular chessboard squares
-                    if ((col + row) % 2 == 0) {
+                    if ((col + row + 1) % 2 == 0) {
                         button.setBackground(Color.WHITE);
                     } else {
                         button.setBackground(Color.GRAY);

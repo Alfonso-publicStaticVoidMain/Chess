@@ -159,7 +159,7 @@ public abstract class Piece implements Serializable {
             if (chessGame.getLeftCastlingAvaliability().get(color) &&
                 ((this instanceof King && initPos.equals(chessGame.initKingPosition(color)))
                 ||
-                (this instanceof Rook && initPos.equals(chessGame.initLeftRookPosition(color))))
+                ((this instanceof Rook || this instanceof Chancellor) && initPos.equals(chessGame.initLeftRookPosition(color))))
             ) {
                 chessGame.getLeftCastlingAvaliability().put(color, false);
             }
@@ -167,7 +167,7 @@ public abstract class Piece implements Serializable {
             if (chessGame.getRightCastlingAvaliability().get(color) &&
                 ((this instanceof King && initPos.equals(chessGame.initKingPosition(color)))
                 ||
-                (this instanceof Rook && initPos.equals(chessGame.initRightRookPosition(color))))
+                ((this instanceof Rook || this instanceof Chancellor) && initPos.equals(chessGame.initRightRookPosition(color))))
             ) {
                 chessGame.getRightCastlingAvaliability().put(color, false);
             }
