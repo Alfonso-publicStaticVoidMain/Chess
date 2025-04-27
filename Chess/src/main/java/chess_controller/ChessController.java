@@ -81,12 +81,17 @@ public class ChessController implements ActionListener {
                 }
                 
                 if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
+                    if (game.checkLeftCastling(game.getActivePlayer()) &&
+                        clickedPos.equals(game.leftCastlingKingPosition(game.getActivePlayer()))    
+                    ) {
                         game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
                         // A play of left castling was done.
                     }
-                    if (clickedPos.equals(Position.of(7, piece.initRow())) && game.checkRightCastling(game.getActivePlayer())) {
+                    
+                    if (game.checkRightCastling(game.getActivePlayer()) &&
+                        clickedPos.equals(game.rightCastlingKingPosition(game.getActivePlayer()))    
+                    ) {
                         game.doRightCastling(game.getActivePlayer());
                         playDone = true;
                         // A play of right castling was done.

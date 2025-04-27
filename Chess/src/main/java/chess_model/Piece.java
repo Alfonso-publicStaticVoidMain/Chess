@@ -156,17 +156,21 @@ public abstract class Piece implements Serializable {
             }
             this.setPos(finPos);
             
-            if ((this instanceof King || this instanceof Rook) &&
-                chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
-                initPos.equals(Position.of(1, this.initRow()))
-                || initPos.equals(Position.of(5, this.initRow())))
-                ) chessGame.getLeftCastlingAvaliability().put(this.getColor(), false);
+            if (chessGame.getLeftCastlingAvaliability().get(color) &&
+                ((this instanceof King && initPos.equals(chessGame.initKingPosition(color)))
+                ||
+                (this instanceof Rook && initPos.equals(chessGame.initLeftRookPosition(color))))
+            ) {
+                chessGame.getLeftCastlingAvaliability().put(color, false);
+            }
             
-            if ((this instanceof King || this instanceof Rook) &&
-                chessGame.getRightCastlingAvaliability().get(this.getColor()) && (
-                initPos.equals(Position.of(8, this.initRow()))
-                || initPos.equals(Position.of(5, this.initRow())))
-                ) chessGame.getRightCastlingAvaliability().put(this.getColor(), false);
+            if (chessGame.getRightCastlingAvaliability().get(color) &&
+                ((this instanceof King && initPos.equals(chessGame.initKingPosition(color)))
+                ||
+                (this instanceof Rook && initPos.equals(chessGame.initRightRookPosition(color))))
+            ) {
+                chessGame.getRightCastlingAvaliability().put(color, false);
+            }
         }
         return false;
     }

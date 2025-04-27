@@ -20,7 +20,7 @@ public record GameConfiguration(
     String[] crownablePieces
 ) implements Serializable {
 
-    public static GameConfiguration standardFactory(int maxRows, int maxCols, int movementWhenCastling, int kingInitCol, String[] crownablePieces) {
+    public static GameConfiguration configFactory(int maxRows, int maxCols, int movementWhenCastling, int kingInitCol, String[] crownablePieces) {
         Map<ChessColor, Integer> initRowMap = new EnumMap<>(ChessColor.class);
         initRowMap.put(ChessColor.WHITE, 1);
         initRowMap.put(ChessColor.BLACK, maxRows);
@@ -36,6 +36,7 @@ public record GameConfiguration(
         return new GameConfiguration(initRowMap, initRowPawnMap, crowningRowMap, kingInitCol, 1, maxCols, kingInitCol - movementWhenCastling, kingInitCol + movementWhenCastling, crownablePieces);
     }
     
-    public static GameConfiguration standardGameConfig = standardFactory(8, 8, 2, 5, new String[] {"Queen", "Knight", "Rook", "Bishop"});
-    public static GameConfiguration almostChessConfig = standardFactory(8, 8, 2, 5, new String[] {"Chancellor", "Knight", "Rook", "Bishop"});
+    public static GameConfiguration standardGameConfig = configFactory(8, 8, 2, 5, new String[] {"Queen", "Knight", "Rook", "Bishop"});
+    public static GameConfiguration almostChessConfig = configFactory(8, 8, 2, 5, new String[] {"Chancellor", "Knight", "Rook", "Bishop"});
+    public static GameConfiguration capablancaConfig = configFactory(8, 10, 3, 6, new String[] {"Queen", "Chancellor", "ArchBishop", "Knight", "Rook", "Bishop"});
 }

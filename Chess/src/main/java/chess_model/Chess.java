@@ -196,6 +196,14 @@ public class Chess implements Serializable {
         return chess;
     }
     
+    public static Chess capablancaGame() {
+        Chess chess = new Chess();
+        chess.config = GameConfiguration.capablancaConfig;
+        chess.addCapablancaPieces();
+        chess.setTrueCastlingAvaliabilities();
+        return chess;
+    }
+    
     /**
      * Sets the game of each piece in {@code this} game's piece list
      * to {@code this}.
@@ -236,7 +244,7 @@ public class Chess implements Serializable {
     }
     
     /**
-     * Adds the standard Chess pieces to {@code this} game's pieces list.
+     * Adds the Almost Chess pieces to {@code this} game's pieces list.
      * @see Position#of(int, int)
      * @see Chess#linkPieces
      */
@@ -264,29 +272,86 @@ public class Chess implements Serializable {
         }
         this.linkPieces();
     }
+    
+    public void addCapablancaPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            int initRow = color.initRow(config);
+            int initRowPawn = color.initRowPawn(config);
+            
+            // Add Pawns
+            IntStream.rangeClosed(1, 10)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, initRowPawn), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, initRow), color));
+            this.pieces.add(new Rook(Position.of(10, initRow), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(2, initRow), color));
+            this.pieces.add(new Knight(Position.of(9, initRow), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(4, initRow), color));
+            this.pieces.add(new Bishop(Position.of(7, initRow), color));
+            // Add Chancellor
+            this.pieces.add(new Chancellor(Position.of(8, initRow), color));
+            // Add ArchBishop
+            this.pieces.add(new ArchBishop(Position.of(3, initRow), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(5, initRow), color));
+            // Add King
+            this.pieces.add(new King(Position.of(6, initRow), color));
+        }
+        this.linkPieces();
+    }
 
+    public int initKingCol() {
+        return config.kingInitCol();
+    }
+    
     public Position initKingPosition(ChessColor color) {
         return Position.of(config.kingInitCol(), color.initRow(config));
+    }
+    
+    public int initLeftRookCol() {
+        return config.leftRookInitCol();
     }
     
     public Position initLeftRookPosition(ChessColor color) {
         return Position.of(config.leftRookInitCol(), color.initRow(config));
     }
     
+    public int initRightRookCol() {
+        return config.rightRookInitCol();
+    }
+    
     public Position initRightRookPosition(ChessColor color) {
         return Position.of(config.rightRookInitCol(), color.initRow(config));
+    }
+ 
+    public int leftCastlingKingCol() {
+        return config.leftCastlingCol();
     }
     
     public Position leftCastlingKingPosition(ChessColor color) {
         return Position.of(config.leftCastlingCol(), color.initRow(config));
     }
     
+    public int leftCastlingRookCol() {
+        return config.leftCastlingCol()+1;
+    }
+    
     public Position leftCastlingRookPosition(ChessColor color) {
         return Position.of(config.leftCastlingCol()+1, color.initRow(config));
     }
     
+    public int rightCastlingKingCol() {
+        return config.rightCastlingCol();
+    }
+    
     public Position rightCastlingKingPosition(ChessColor color) {
         return Position.of(config.rightCastlingCol(), color.initRow(config));
+    }
+    
+    public int rightCastlingRookCol() {
+        return config.rightCastlingCol()-1;
     }
     
     public Position rightCastlingRookPosition(ChessColor color) {
@@ -538,9 +603,12 @@ public class Chess implements Serializable {
         if (!this.getLeftCastlingAvaliability().get(color)) return false;
         King king = this.findKing(color);
         int initRow = color.initRow(config);
-        if (king.checkCheck(Position.of(4, initRow)) || king.checkCheck(Position.of(3, initRow))) return false;
-        return IntStream.rangeClosed(2, 4)
-            .allMatch(i -> !this.checkPiece(Position.of(i, initRow)));
+        if (
+            IntStream.rangeClosed(leftCastlingKingCol(), king.getPos().x())
+                .anyMatch(x -> king.checkCheck(Position.of(x, initRow)))
+        ) return false;
+        return IntStream.rangeClosed(initLeftRookCol()+1, leftCastlingRookCol())
+            .allMatch(x -> !this.checkPiece(Position.of(x, initRow)));
     }
     
     /**
@@ -561,8 +629,11 @@ public class Chess implements Serializable {
         if (!this.getRightCastlingAvaliability().get(color)) return false;
         King king = this.findKing(color);
         int initRow = color.initRow(config);
-        if (king.checkCheck(Position.of(6, initRow)) || king.checkCheck(Position.of(7, initRow))) return false;
-        return IntStream.rangeClosed(6, 7)
+        if (
+            IntStream.rangeClosed(king.getPos().x(), rightCastlingKingCol())
+                .anyMatch(x -> king.checkCheck(Position.of(x, initRow)))
+        ) return false;
+        return IntStream.rangeClosed(rightCastlingRookCol(), initRightRookCol()-1)
             .allMatch(i -> !this.checkPiece(Position.of(i, initRow)));
     }
     
@@ -577,14 +648,13 @@ public class Chess implements Serializable {
      */
     public boolean doLeftCastling(ChessColor color) {
         if (!this.checkLeftCastling(color)) return false;
-        int initRow = color.initRow(config);
-        Piece king = this.findPiece(Position.of(5, initRow));
-        Piece leftRook = this.findPiece(Position.of(1, initRow));
-        king.setPos(Position.of(3, initRow));
-        leftRook.setPos(Position.of(4, initRow));
+        Piece king = this.findPiece(initKingPosition(color));
+        Piece leftRook = this.findPiece(initLeftRookPosition(color));
+        king.setPos(leftCastlingKingPosition(color));
+        leftRook.setPos(leftCastlingRookPosition(color));
         this.getLeftCastlingAvaliability().put(color, false);
         this.getRightCastlingAvaliability().put(color, false);
-        this.playHistory.add(new Play(king, Position.of(5, initRow), Position.of(3, initRow), -1));
+        this.playHistory.add(new Play(king, initKingPosition(color), leftCastlingKingPosition(color), -1));
         return true;
     }
     
@@ -600,13 +670,13 @@ public class Chess implements Serializable {
     public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
         int initRow = color.initRow(config);
-        Piece king = this.findPiece(Position.of(5, initRow));
-        Piece rightRook = this.findPiece(Position.of(8, initRow));
-        king.setPos(Position.of(7, initRow));
-        rightRook.setPos(Position.of(6, initRow));
+        Piece king = this.findPiece(initKingPosition(color));
+        Piece rightRook = this.findPiece(initRightRookPosition(color));
+        king.setPos(rightCastlingKingPosition(color));
+        rightRook.setPos(rightCastlingRookPosition(color));
         this.getLeftCastlingAvaliability().put(color, false);
         this.getRightCastlingAvaliability().put(color, false);
-        this.playHistory.add(new Play(king, Position.of(5, initRow), Position.of(7, initRow), 1));
+        this.playHistory.add(new Play(king, initKingPosition(color), rightCastlingKingPosition(color), 1));
         return true;
     }
     

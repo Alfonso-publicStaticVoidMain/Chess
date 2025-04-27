@@ -275,8 +275,8 @@ public class ChessGUI extends JFrame {
                         boardButtons[col][row].setBackground(Color.ORANGE);
                     }
                     if (piece instanceof King && (
-                        (chess.checkLeftCastling(piece.getColor()) && potentialMove.equals(Position.of(3, piece.initRow())))
-                        || (chess.checkRightCastling(piece.getColor()) && potentialMove.equals(Position.of(7, piece.initRow())))
+                        (chess.checkLeftCastling(piece.getColor()) && potentialMove.equals(chess.leftCastlingKingPosition(piece.getColor())))
+                        || (chess.checkRightCastling(piece.getColor()) && potentialMove.equals(chess.rightCastlingKingPosition(piece.getColor())))
                     )) {
                         boardButtons[col][row].setBackground(Color.GREEN);
                     }
