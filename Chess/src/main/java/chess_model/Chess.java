@@ -140,6 +140,13 @@ public class Chess implements Serializable {
      */
     public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
 
+    public void setTrueCastlingAvaliabilities() {
+        this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
+        this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
+        this.rightCastlingAvaliability.put(ChessColor.WHITE, true);
+        this.rightCastlingAvaliability.put(ChessColor.BLACK, true);
+    }
+    
     /**
      * Getter for the pieces attribute.
      * @return The List of Pieces of {@code this} game.
@@ -177,10 +184,7 @@ public class Chess implements Serializable {
         Chess chess = new Chess();
         chess.config = GameConfiguration.standardGameConfig;
         chess.addStandardPieces();
-        chess.leftCastlingAvaliability.put(ChessColor.WHITE, true);
-        chess.leftCastlingAvaliability.put(ChessColor.BLACK, true);
-        chess.rightCastlingAvaliability.put(ChessColor.WHITE, true);
-        chess.rightCastlingAvaliability.put(ChessColor.BLACK, true);
+        chess.setTrueCastlingAvaliabilities();
         return chess;
     }
     
@@ -188,10 +192,7 @@ public class Chess implements Serializable {
         Chess chess = new Chess();
         chess.config = GameConfiguration.almostChessConfig;
         chess.addAlmostChessPieces();
-        chess.leftCastlingAvaliability.put(ChessColor.WHITE, true);
-        chess.leftCastlingAvaliability.put(ChessColor.BLACK, true);
-        chess.rightCastlingAvaliability.put(ChessColor.WHITE, true);
-        chess.rightCastlingAvaliability.put(ChessColor.BLACK, true);
+        chess.setTrueCastlingAvaliabilities();
         return chess;
     }
     
@@ -262,6 +263,34 @@ public class Chess implements Serializable {
             this.pieces.add(new King(Position.of(5, initRow), color));
         }
         this.linkPieces();
+    }
+
+    public Position initKingPosition(ChessColor color) {
+        return Position.of(config.kingInitCol(), color.initRow(config));
+    }
+    
+    public Position initLeftRookPosition(ChessColor color) {
+        return Position.of(config.leftRookInitCol(), color.initRow(config));
+    }
+    
+    public Position initRightRookPosition(ChessColor color) {
+        return Position.of(config.rightRookInitCol(), color.initRow(config));
+    }
+    
+    public Position leftCastlingKingPosition(ChessColor color) {
+        return Position.of(config.leftCastlingCol(), color.initRow(config));
+    }
+    
+    public Position leftCastlingRookPosition(ChessColor color) {
+        return Position.of(config.leftCastlingCol()+1, color.initRow(config));
+    }
+    
+    public Position rightCastlingKingPosition(ChessColor color) {
+        return Position.of(config.rightCastlingCol(), color.initRow(config));
+    }
+    
+    public Position rightCastlingRookPosition(ChessColor color) {
+        return Position.of(config.rightCastlingCol()-1, color.initRow(config));
     }
     
     /**

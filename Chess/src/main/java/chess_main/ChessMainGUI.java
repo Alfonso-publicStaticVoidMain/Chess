@@ -20,7 +20,7 @@ public class ChessMainGUI {
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ChessMainGUI::initializeAlmostChessGame);
+        SwingUtilities.invokeLater(() -> new ChessController(Chess.standardGame(), new ChessGUI(8, 10)));
     }
     
 }
