@@ -1,5 +1,8 @@
 package chess_model;
 
+import graphic_resources.ChessImages;
+import javax.swing.ImageIcon;
+
 /**
  * Class representing the Queen piece.
  * @author Alfonso Gallego
@@ -53,6 +56,11 @@ public class Queen extends Piece {
     @Override
     public String toString() {
         return this.getColor() == ChessColor.WHITE ? "♕" : "♛";
+    }
+    
+    @Override
+    public ImageIcon toIcon() {
+        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteQueen : ChessImages.blackQueen;
     }
     
 }

@@ -1,6 +1,7 @@
 package chess_model;
 
 import java.io.Serializable;
+import javax.swing.ImageIcon;
 
 /**
  * Abstract class representing chess Pieces, to be extended by child classes
@@ -63,6 +64,13 @@ public abstract class Piece implements Serializable {
      * and {@link ChessColor}, but with no game associated to it.
      */
     public abstract Piece copy();
+    
+    /**
+     * Returns an ImageIcon representing this piece.
+     * @return An ImageIcon located in src\main\resources\ChessPieces appropiate
+     * for the Piece.
+     */
+    public abstract ImageIcon toIcon();
     
     /**
      * Getter for the position attribute of {@code this} Piece.

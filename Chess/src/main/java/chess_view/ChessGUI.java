@@ -22,6 +22,7 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -316,11 +317,15 @@ public class ChessGUI extends JFrame {
     public void updateBoard() {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
-                boardButtons[x][y].setText(
-                    controller.getGame().checkPiece(Position.of(x, y)) ?
-                    controller.getGame().findPiece(Position.of(x, y)).toString()
-                    : ""
+                boardButtons[x][y].setIcon(controller.getGame().checkPiece(Position.of(x, y)) ?
+                    controller.getGame().findPiece(Position.of(x, y)).toIcon() :
+                    new ImageIcon()
                 );
+//                boardButtons[x][y].setText(
+//                    controller.getGame().checkPiece(Position.of(x, y)) ?
+//                    controller.getGame().findPiece(Position.of(x, y)).toString()
+//                    : ""
+//                );
             }
         }
     }

@@ -1,5 +1,8 @@
 package chess_model;
 
+import graphic_resources.ChessImages;
+import javax.swing.ImageIcon;
+
 /**
  * Class representing the King piece.
  * @author Alfonso Gallego
@@ -94,4 +97,8 @@ public class King extends Piece {
         return this.getColor() == ChessColor.WHITE ? "♔" : "♚";
     }
     
+    @Override
+    public ImageIcon toIcon() {
+        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteKing : ChessImages.blackKing;
+    }
 }

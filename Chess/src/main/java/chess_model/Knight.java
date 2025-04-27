@@ -1,5 +1,8 @@
 package chess_model;
 
+import graphic_resources.ChessImages;
+import javax.swing.ImageIcon;
+
 /**
  * Class representing the Knight piece.
  * @author Alfonso Gallego
@@ -62,6 +65,11 @@ public class Knight extends Piece {
     @Override
     public String toString() {
         return this.getColor() == ChessColor.WHITE ? "♘" : "♞";
+    }
+    
+    @Override
+    public ImageIcon toIcon() {
+        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteKnight : ChessImages.blackKnight;
     }
     
 }

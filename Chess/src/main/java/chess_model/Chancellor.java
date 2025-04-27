@@ -1,5 +1,8 @@
 package chess_model;
 
+import graphic_resources.ChessImages;
+import javax.swing.ImageIcon;
+
 /**
  * Class representing the Chancellor piece, a nonstandard chess Piece in the
  * Almost Chess variant, that moves either like a Knight or Rook and substitutes
@@ -64,4 +67,8 @@ public class Chancellor extends Piece {
         return new Chancellor(this.getPos(), this.getColor());
     }
     
+    @Override
+    public ImageIcon toIcon() {
+        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteChancellor : ChessImages.blackChancellor;
+    }
 }
