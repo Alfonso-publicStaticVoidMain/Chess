@@ -109,7 +109,10 @@ public abstract class Piece implements Serializable {
      * The method will be overwritten in the {@link Pawn} class, returning
      * the attribute {@code initRowPawn} of its color.
      */
-    public int initRow() {return this.color.initRow();}
+    public int initRow() {
+        if (this instanceof Pawn) return color.initRowPawn(game.getConfig());
+        return color.initRow(game.getConfig());
+    }
     
     /**
      * If the movement is legal, moves {@code this} Piece to the specified
@@ -155,14 +158,14 @@ public abstract class Piece implements Serializable {
             
             if ((this instanceof King || this instanceof Rook) &&
                 chessGame.getLeftCastlingAvaliability().get(this.getColor()) && (
-                initPos.equals(Position.of(1, this.getColor().initRow()))
-                || initPos.equals(Position.of(5, this.getColor().initRow())))
+                initPos.equals(Position.of(1, this.initRow()))
+                || initPos.equals(Position.of(5, this.initRow())))
                 ) chessGame.getLeftCastlingAvaliability().put(this.getColor(), false);
             
             if ((this instanceof King || this instanceof Rook) &&
                 chessGame.getRightCastlingAvaliability().get(this.getColor()) && (
-                initPos.equals(Position.of(8, this.getColor().initRow()))
-                || initPos.equals(Position.of(5, this.getColor().initRow())))
+                initPos.equals(Position.of(8, this.initRow()))
+                || initPos.equals(Position.of(5, this.initRow())))
                 ) chessGame.getRightCastlingAvaliability().put(this.getColor(), false);
         }
         return false;

@@ -68,12 +68,17 @@ public class ChessGUI extends JFrame {
     private final JLabel blackTimer;
     private Timer gameTimer;
     
+    private final int rows;
+    private final int cols;
+    
     private ChessController controller;
 
-    public ChessGUI() {
+    public ChessGUI(int rows, int cols) {
         this.setTitle("Chess Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1100, 650);
+        this.rows = rows;
+        this.cols = cols;
 
         // Top panel - Active player + Save & Reset buttons
         topPanel = new JPanel();
@@ -117,11 +122,11 @@ public class ChessGUI extends JFrame {
         this.add(rightPanel, BorderLayout.EAST);
         
         // Central (board) panel - Chess board TO DO
-        boardPanel = new JPanel(new SquareGridLayout(9, 9));
-        boardPanel.setPreferredSize(new Dimension(720, 720));
-        boardPanel.setBounds(0, 0, 720, 720);
+        boardPanel = new JPanel(new SquareGridLayout(rows+1, cols+1));
+        boardPanel.setPreferredSize(new Dimension(80*(rows+1), 80*(cols+1)));
+        boardPanel.setBounds(0, 0, 80*(rows+1), 80*(cols+1));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        boardButtons = new JButton[9][9];
+        boardButtons = new JButton[cols+1][rows+1];
         this.initializeBoard();
         this.add(boardPanel, BorderLayout.CENTER);
 
@@ -212,64 +217,68 @@ public class ChessGUI extends JFrame {
         gameTimer.start();
     }
     
+    public static JButton boardButton() {
+        JButton button = new JButton();
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(80, 80));
+        return button;
+    }
+    
     public void initializeBoard() {
-        for (int y = 8; y >= 0; y--) {
-            for (int x = 0; x <= 8; x++) {
-                JButton button = new JButton();
-                button.setOpaque(true);
-                button.setBorderPainted(false);
-                button.setPreferredSize(new Dimension(80, 80));
-                boardButtons[x][y] = button;
+        
+        for (int row = rows; row >= 0; row--) {
+            for (int col = 0; col <= cols; col++) {
+                JButton button = boardButton();
+                boardButtons[col][row] = button;
 
-                if (x == 0 && y == 0) {
-                    // Bottom-left empty corner (label intersection)
+                if (col == 0 && row == 0) {
                     button.setText("");
                     button.setEnabled(false);
-                } else if (y == 0) {
-                    // Column labels (A to H) at the bottom
-                    button.setText(""+ ChessController.convertNumberToLetter(x));
+                } else if (row == 0) {
+                    button.setText(""+ ChessController.convertNumberToLetter(col));
                     button.setFont(new Font("Arial", Font.BOLD, 16));
                     button.setEnabled(false);
-                } else if (x == 0) {
-                    // Row labels (1 to 8) on the left
-                    button.setText(String.valueOf(y));
+                } else if (col == 0) {
+                    button.setText(String.valueOf(row));
                     button.setFont(new Font("Arial", Font.BOLD, 16));
                     button.setEnabled(false);
                 } else {
                     // Regular chessboard squares
-                    if ((x + y) % 2 == 0) {
+                    if ((col + row) % 2 == 0) {
                         button.setBackground(Color.WHITE);
                     } else {
                         button.setBackground(Color.GRAY);
                     }
                     button.setFont(new Font("Dialog", Font.PLAIN, 24));
                     button.setActionCommand("boardButton");
-                    button.putClientProperty("x", x);
-                    button.putClientProperty("y", y);
+                    button.putClientProperty("x", col);
+                    button.putClientProperty("y", row);
                 }
                 boardPanel.add(button);
             }
         }
+
     }
 
     public void highlightValidMoves(Position pos) {
         Chess chess = controller.getGame();
         if (chess.checkPiece(pos)) {
             Piece piece = chess.findPiece(pos);
-            for (int x = 1; x <= 8; x++) {
-                for (int y = 1; y <= 8; y++) {
-                    Position potentialMove = Position.of(x, y);
+            for (int col = 1; col <= cols; col++) {
+                for (int row = 1; row <= rows; row++) {
+                    Position potentialMove = Position.of(col, row);
                     if (piece.checkLegalMovement(potentialMove)) {
-                        boardButtons[x][y].setBackground(Color.GREEN);
+                        boardButtons[col][row].setBackground(Color.GREEN);
                     }
                     if (piece.checkLegalMovement(potentialMove, false) && !piece.checkLegalMovement(potentialMove, true)) {
-                        boardButtons[x][y].setBackground(Color.ORANGE);
+                        boardButtons[col][row].setBackground(Color.ORANGE);
                     }
                     if (piece instanceof King && (
-                        ((potentialMove.equals(Position.of(3, piece.getColor().initRow())) && chess.checkLeftCastling(piece.getColor()))
-                        || (potentialMove.equals(Position.of(7, piece.getColor().initRow())) && chess.checkRightCastling(piece.getColor())))
+                        (chess.checkLeftCastling(piece.getColor()) && potentialMove.equals(Position.of(3, piece.initRow())))
+                        || (chess.checkRightCastling(piece.getColor()) && potentialMove.equals(Position.of(7, piece.initRow())))
                     )) {
-                        boardButtons[x][y].setBackground(Color.GREEN);
+                        boardButtons[col][row].setBackground(Color.GREEN);
                     }
                 }
             }
@@ -299,41 +308,35 @@ public class ChessGUI extends JFrame {
     }
 
     public void clearHighlights() {
-        for (int x = 1; x <= 8; x++) {
-            for (int y = 1; y <= 8; y++) {
-                boardButtons[x][y].setBackground((x + y) % 2 == 0 ? Color.WHITE : Color.GRAY);
+        for (int col = 1; col <= cols; col++) {
+            for (int row = 1; row <= rows; row++) {
+                boardButtons[col][row].setBackground((col + row) % 2 == 0 ? Color.WHITE : Color.GRAY);
             }
         }
     }
 
     public void updateBoard() {
-        for (int x = 1; x <= 8; x++) {
-            for (int y = 1; y <= 8; y++) {
-                boardButtons[x][y].setIcon(controller.getGame().checkPiece(Position.of(x, y)) ?
-                    controller.getGame().findPiece(Position.of(x, y)).toIcon() :
+        for (int col = 1; col <= cols; col++) {
+            for (int row = 1; row <= rows; row++) {
+                boardButtons[col][row].setIcon(controller.getGame().checkPiece(Position.of(col, row)) ?
+                    controller.getGame().findPiece(Position.of(col, row)).toIcon() :
                     new ImageIcon()
                 );
             }
         }
     }
     
-    public String pawnCrowningMenu(Piece piece) {
-        String[] options = {"Queen", "Knight", "Rook", "Bishop"};
+    public String pawnCrowningMenu(Piece piece, String[] options) {
         int n = JOptionPane.showOptionDialog(
             this,
-            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select Queen.",
+            "You can crown a pawn. What piece do you want to crown your pawn into?\nNot selecting any option will automatically select the first option.",
             "Crowning Menu",
             JOptionPane.DEFAULT_OPTION,
             JOptionPane.QUESTION_MESSAGE,
             null,
             options,
             options[0]); //default button title
-        return switch (n) {
-            case 1 -> "Knight";
-            case 2 -> "Rook";
-            case 3 -> "Bishop";
-            default -> "Queen";
-        };
+        return options[n];
     }
     
     public void updateActivePlayer() {

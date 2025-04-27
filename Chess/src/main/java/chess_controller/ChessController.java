@@ -81,12 +81,12 @@ public class ChessController implements ActionListener {
                 }
                 
                 if (piece instanceof King) {
-                    if (clickedPos.equals(Position.of(3, piece.getColor().initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
+                    if (clickedPos.equals(Position.of(3, piece.initRow())) && game.checkLeftCastling(game.getActivePlayer())) {
                         game.doLeftCastling(game.getActivePlayer());
                         playDone = true;
                         // A play of left castling was done.
                     }
-                    if (clickedPos.equals(Position.of(7, piece.getColor().initRow())) && game.checkRightCastling(game.getActivePlayer())) {
+                    if (clickedPos.equals(Position.of(7, piece.initRow())) && game.checkRightCastling(game.getActivePlayer())) {
                         game.doRightCastling(game.getActivePlayer());
                         playDone = true;
                         // A play of right castling was done.
@@ -96,8 +96,8 @@ public class ChessController implements ActionListener {
                 if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
                     piece.move(clickedPos);
                     if (!game.isGameStarted()) game.startGame();
-                    if (piece instanceof Pawn && piece.getPos().y() == game.getActivePlayer().crowningRow()) { // Pawn crowning
-                        game.crownPawn(piece, view.pawnCrowningMenu(piece));
+                    if (piece instanceof Pawn && piece.getPos().y() == game.getActivePlayer().crowningRow(game.getConfig())) { // Pawn crowning
+                        game.crownPawn(piece, view.pawnCrowningMenu(piece, game.getConfig().crownablePieces()));
                     }
                     playDone = true;
                 }
@@ -174,17 +174,18 @@ public class ChessController implements ActionListener {
      * @hidden 
      */
     public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
-        return switch (Character.toLowerCase(letter)) {
-            case 'a' -> 1;
-            case 'b' -> 2;
-            case 'c' -> 3;
-            case 'd' -> 4;
-            case 'e' -> 5;
-            case 'f' -> 6;
-            case 'g' -> 7;
-            case 'h' -> 8;
-            default -> throw new IllegalArgumentException("Invalid letter to convert to number: "+letter);
-        };
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(Character.toUpperCase(letter))+1;
+//        return switch (Character.toLowerCase(letter)) {
+//            case 'a' -> 1;
+//            case 'b' -> 2;
+//            case 'c' -> 3;
+//            case 'd' -> 4;
+//            case 'e' -> 5;
+//            case 'f' -> 6;
+//            case 'g' -> 7;
+//            case 'h' -> 8;
+//            default -> throw new IllegalArgumentException("Invalid letter to convert to number: "+letter);
+//        };
     }
     
     /**
@@ -196,17 +197,18 @@ public class ChessController implements ActionListener {
      * @hidden 
      */
     public static char convertNumberToLetter(int num) throws IllegalArgumentException {
-        return switch (num) {
-            case 1 -> 'A';
-            case 2 -> 'B';
-            case 3 -> 'C';
-            case 4 -> 'D';
-            case 5 -> 'E';
-            case 6 -> 'F';
-            case 7 -> 'G';
-            case 8 -> 'H';
-            default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
-        };
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(num-1);
+//        return switch (num) {
+//            case 1 -> 'A';
+//            case 2 -> 'B';
+//            case 3 -> 'C';
+//            case 4 -> 'D';
+//            case 5 -> 'E';
+//            case 6 -> 'F';
+//            case 7 -> 'G';
+//            case 8 -> 'H';
+//            default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
+//        };
     }
 
     @Override

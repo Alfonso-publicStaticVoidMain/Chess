@@ -132,7 +132,7 @@ public class ChessMainClass {
                     Position finPos = positions[1];
                     Piece pieceToMove = game.findPiece(initPos);
                     pieceToMove.move(finPos);
-                    if (pieceToMove instanceof Pawn pawn && finPos.y() == activePlayer.crowningRow()) {
+                    if (pieceToMove instanceof Pawn pawn && finPos.y() == activePlayer.crowningRow(game.getConfig())) {
                         game.printBoard();
                         System.out.printf("----------------------------------%n");
                         String crowningAnswer = printCrowningMenu(pawn, game);

@@ -12,11 +12,11 @@ import javax.swing.SwingUtilities;
 public class ChessMainGUI {
 
     public static ChessController initializeStandardGame() {
-        return new ChessController(Chess.standardGame(), new ChessGUI());
+        return new ChessController(Chess.standardGame(), new ChessGUI(8, 8));
     }
     
     public static ChessController initializeAlmostChessGame() {
-        return new ChessController(Chess.almostChessGame(), new ChessGUI());
+        return new ChessController(Chess.almostChessGame(), new ChessGUI(8, 8));
     }
     
     public static void main(String[] args) {

@@ -14,15 +14,6 @@ public class Pawn extends Piece {
     }
     
     /**
-     * Getter for the initial row of this pawn, as dictated by its color.
-     * @return 2 if this Pawn's {@link ChessColor} is WHITE, 7 if its BLACK.
-     */
-    @Override
-    public int initRow() {
-        return this.getColor().initRowPawn();
-    }
-    
-    /**
      * Getter for the Y direction of this pawn, as dictated by its color.
      * @return 1 if this Pawn's {@link ChessColor} is WHITE, -1 if its BLACK.
      */

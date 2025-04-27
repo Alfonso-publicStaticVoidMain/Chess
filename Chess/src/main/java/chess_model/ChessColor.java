@@ -12,12 +12,12 @@ public enum ChessColor {
     /**
      * WHITE color of chess.
      */
-    WHITE(1, 2, 1, 8),
+    WHITE(1),
 
     /**
      * BLACK color of chess.
      */
-    BLACK(-1, 7, 8, 1);
+    BLACK(-1);
     
     /**
      * Integer representing the direction the pawns of this color moves.
@@ -25,26 +25,8 @@ public enum ChessColor {
      */
     private final int yDirection;
     
-    /**
-     * Integer representing the initial row of the Pawns of this color.
-     */
-    private final int initRowPawn;
-    
-    /**
-     * Integer representing the initial row of non-Pawns of this color.
-     */
-    private final int initRow;
-    
-    /**
-     * Integer representing the crowning row of Pawns of this color.
-     */
-    private final int crowningRow;
-    
-    ChessColor(int yDirection, int initRowPawn, int initRow, int crowningRow) {
+    ChessColor(int yDirection) {
         this.yDirection = yDirection;
-        this.initRowPawn = initRowPawn;
-        this.initRow = initRow;
-        this.crowningRow = crowningRow;
     }
 
     /**
@@ -53,24 +35,18 @@ public enum ChessColor {
      * 1 for {@code WHITE} and -1 for {@code BLACK}.
      */
     public int yDirection() {return this.yDirection;}
-    /**
-     * Getter for the initial row of Pawns attribute.
-     * @return The initial row of {@link Pawn}s of this color, ie, 2 for
-     * WHITE and 7 for BLACK.
-     */
-    public int initRowPawn() {return this.initRowPawn;}
-    /**
-     * Getter for the initial row of non-Pawns attribute.
-     * @return The initial row of non-{@link Pawn} {@link Piece}s of this color,
-     * ie, 1 for WHITE and 8 for BLACK.
-     */
-    public int initRow() {return this.initRow;}
-    /**
-     * Getter for the crowning row of Pawns attribute.
-     * @return The row {@link Pawn}s of this color must reach in order to crown,
-     * ie, 8 for WHITE and 1 for BLACK.
-     */
-    public int crowningRow() {return this.crowningRow;}
+    
+    public int initRow(GameConfiguration config) {
+        return config.initRow().get(this);
+    }
+    
+    public int initRowPawn(GameConfiguration config) {
+        return config.initRowPawn().get(this);
+    }
+    
+    public int crowningRow(GameConfiguration config) {
+        return config.crowningRow().get(this);
+    }
     
     /**
      * Returns the opposite color of {@code this}.
