@@ -1,6 +1,6 @@
-package chess_view;
+package view;
 
-import chess_controller.ChessController;
+import controller.ChessController;
 import chess_model.Chess;
 import chess_model.ChessColor;
 import chess_model.King;
@@ -8,6 +8,7 @@ import chess_model.Pawn;
 import chess_model.Piece;
 import chess_model.Play;
 import chess_model.Position;
+import graphic_resources.Buttons;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -56,6 +57,7 @@ public class ChessGUI extends JFrame {
     private final JButton resetButton;
     private final JButton saveButton;
     private final JButton loadButton;
+    private final JButton backButton;
     
     private final JPanel rightPanel;
     private final JTable playHistoryArea;
@@ -89,9 +91,10 @@ public class ChessGUI extends JFrame {
         activePlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         activePlayerLabel.setPreferredSize(new Dimension(250, 30));
         
-        resetButton = ChessGUI.standardButton("Reset");       
-        saveButton = ChessGUI.standardButton("Save");      
-        loadButton = ChessGUI.standardButton("Load");
+        resetButton = Buttons.standardButton("Reset");       
+        saveButton = Buttons.standardButton("Save");      
+        loadButton = Buttons.standardButton("Load");
+        backButton = Buttons.standardButton("Back");
         
         topPanel.add(Box.createHorizontalStrut(150));
         topPanel.add(activePlayerLabel);
@@ -101,7 +104,9 @@ public class ChessGUI extends JFrame {
         topPanel.add(saveButton);
         topPanel.add(Box.createHorizontalStrut(10));
         topPanel.add(loadButton);
-        topPanel.add(Box.createHorizontalStrut(80));
+        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(backButton);
+        topPanel.add(Box.createHorizontalStrut(60));
         
         this.add(topPanel, BorderLayout.NORTH);
         
@@ -148,29 +153,7 @@ public class ChessGUI extends JFrame {
         this.add(leftPanel, BorderLayout.WEST);
         this.setVisible(true);
     }
-    
-    /**
-     * Standard template for a JButton, to be followed by the reset, save and
-     * load buttons.
-     * @param label String to be displayed inside the button.
-     * @return A JButton that:
-     * <ul>
-     * <li>Is opaque.</li>
-     * <li>Does not have a border.</li>
-     * <li>Its font is Arial, bold and size 16.</li>
-     * <li>Its text and ActionCommand is the label parameter.</li>
-     * </ul>
-     */
-    public static JButton standardButton(String label) {
-        JButton result = new JButton();
-        result.setOpaque(true);
-        result.setBorderPainted(false);
-        result.setFont(new Font("Arial", Font.BOLD, 16));
-        result.setText(label);
-        result.setActionCommand(label);
-        return result;
-    }
-    
+        
     private static String formatTime(int seconds) {
         int mins = seconds / 60;
         int secs = seconds % 60;
@@ -188,6 +171,7 @@ public class ChessGUI extends JFrame {
         resetButton.addActionListener(this.controller);
         saveButton.addActionListener(this.controller);
         loadButton.addActionListener(this.controller);
+        backButton.addActionListener(this.controller);
         gameTimer = new Timer(1000, e -> {
             Chess game = controller.getGame();
             if (game.isGameStarted()) {
@@ -251,7 +235,7 @@ public class ChessGUI extends JFrame {
                         button.setBackground(Color.GRAY);
                     }
                     button.setFont(new Font("Dialog", Font.PLAIN, 24));
-                    button.setActionCommand("boardButton");
+                    button.setActionCommand("Board Button");
                     button.putClientProperty("x", col);
                     button.putClientProperty("y", row);
                 }
@@ -484,5 +468,4 @@ public class ChessGUI extends JFrame {
         @Override
         public void removeLayoutComponent(Component comp) {}
     }
-    
 }

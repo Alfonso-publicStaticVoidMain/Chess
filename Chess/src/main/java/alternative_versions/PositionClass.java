@@ -1,6 +1,6 @@
 package alternative_versions;
 
-import chess_controller.ChessController;
+import controller.ChessController;
 import chess_model.Chess;
 import java.util.List;
 

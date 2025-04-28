@@ -1,7 +1,8 @@
-package chess_controller;
+package controller;
 
 import chess_model.*;
-import chess_view.ChessGUI;
+import controller.IndexController;
+import view.ChessGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -178,7 +180,7 @@ public class ChessController implements ActionListener {
      * [a-h].
      * @hidden 
      */
-    public static int convertLetterToNumber(char letter) throws IllegalArgumentException {
+    public static int convertLetterToNumber(char letter) {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(Character.toUpperCase(letter))+1;
 //        return switch (Character.toLowerCase(letter)) {
 //            case 'a' -> 1;
@@ -201,7 +203,7 @@ public class ChessController implements ActionListener {
      * inclusive).
      * @hidden 
      */
-    public static char convertNumberToLetter(int num) throws IllegalArgumentException {
+    public static char convertNumberToLetter(int num) {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(num-1);
 //        return switch (num) {
 //            case 1 -> 'A';
@@ -219,20 +221,23 @@ public class ChessController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        JButton clickedButton = (JButton) e.getSource();
-        if (command.equals("boardButton")) {
-            int x = (int) clickedButton.getClientProperty("x");
-            int y = (int) clickedButton.getClientProperty("y");
-            this.handleClick(x, y);
-        }
-        if (command.equals("Reset")) {
-            this.resetClick();
-        }
-        if (command.equals("Save")) {
-            this.saveClick();
-        }
-        if (command.equals("Load")) {
-            this.loadClick();
+        System.out.println("[DEBUG] ChessController action received: "+command);
+        switch (command) {
+            case "Board Button" -> {
+                JButton clickedButton = (JButton) e.getSource();
+                int x = (int) clickedButton.getClientProperty("x");
+                int y = (int) clickedButton.getClientProperty("y");
+                System.out.println("[DEBUG] Position: "+Position.of(x, y)+" (x="+x+", y="+y+")");
+                handleClick(x, y);
+            }
+            case "Reset" -> this.resetClick();
+            case "Save" -> this.saveClick();
+            case "Load" -> this.loadClick();
+            case "Back" -> SwingUtilities.invokeLater( () -> {
+                view.dispose();
+                new IndexController();
+            });
+            default -> {}
         }
     }
     

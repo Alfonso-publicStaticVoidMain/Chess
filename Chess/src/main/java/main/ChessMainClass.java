@@ -1,4 +1,4 @@
-package chess_main;
+package main;
 
 import chess_model.Chess;
 import chess_model.ChessColor;

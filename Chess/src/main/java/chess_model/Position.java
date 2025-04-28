@@ -1,6 +1,6 @@
 package chess_model;
 
-import chess_controller.ChessController;
+import controller.ChessController;
 import java.io.Serializable;
 import java.util.List;
 
