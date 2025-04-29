@@ -339,7 +339,7 @@ public abstract class Piece implements Serializable {
      * color and type.
      * @return A concatenation of a character being the first letter of
      * {@code this}'s color with the first letter of {@code this}'s class,
-     * differentiating Kings and Knights by using 'K' for the former and 'k'
+     * differentiating Kings and Knights by using 'K' for the former and 'N'
      * for the latter.
      * @deprecated This method is only used to play the game by console, which
      * is itself a deprecated way of doing so.
@@ -347,7 +347,7 @@ public abstract class Piece implements Serializable {
     @Deprecated
     public String twoCharName() {
         char typeChar;
-        if (this instanceof Knight) typeChar = 'k';
+        if (this instanceof Knight) typeChar = 'N';
         else typeChar = Character.toUpperCase(this.getClass().getSimpleName().charAt(0));
         return "" + Character.toUpperCase(this.getColor().name().charAt(0)) + typeChar;
     }
