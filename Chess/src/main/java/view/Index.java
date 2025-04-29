@@ -56,18 +56,6 @@ public class Index extends JFrame {
         buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttons = new JButton[variantNames.length+2];
-        final Dimension buttonSize = new Dimension(250, 50);
-//        for (int i = 0; i < variantNames.length; i++) {
-//            JButton button = Buttons.standardButton(variantNames[i]+" ("+variantSizes[i]+")", variantNames[i]);
-//            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-//            button.setMaximumSize(buttonSize);
-//            button.setMinimumSize(buttonSize);
-//            button.setPreferredSize(buttonSize);
-//            button.setBackground(Color.RED);
-//            buttons[i] = button;
-//            buttonsPanel.add(button);
-//            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-//        }
 
         for (int i = 0; i < variantNames.length; i++) {
             String variant = variantNames[i];
@@ -82,13 +70,13 @@ public class Index extends JFrame {
             JButton button = Buttons.standardButton(variant + " (" + variantSizes[i] + ")", variant);
             button.setMaximumSize(new Dimension(250, 50)); 
             button.setMinimumSize(new Dimension(250, 50));
-            button.setPreferredSize(new Dimension(250, 50)); // force same size
+            button.setPreferredSize(new Dimension(250, 50));
             button.setBackground(Color.RED);
             button.setAlignmentY(Component.CENTER_ALIGNMENT);
             buttons[i] = button;
 
             rowPanel.add(button);
-            rowPanel.add(Box.createRigidArea(new Dimension(20, 0))); // horizontal space between button and icons
+            rowPanel.add(Box.createRigidArea(new Dimension(20, 0)));
             // Icons panel (horizontal stack)
             iconsPanel = new JPanel();
             iconsPanel.setLayout(new BoxLayout(iconsPanel, BoxLayout.X_AXIS));

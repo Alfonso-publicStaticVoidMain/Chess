@@ -1,4 +1,4 @@
-package main;
+package alternative_versions;
 
 import chess_model.Chess;
 import chess_model.ChessColor;
@@ -15,7 +15,7 @@ import java.util.Scanner;
  * completely obsolete.
  */
 @Deprecated
-public class ChessMainClass {
+public class ChessMainConsole {
 
     private static final Scanner keyboard = new Scanner(System.in, "ISO-8859-1");
     

@@ -231,8 +231,12 @@ public class ChessController implements ActionListener {
             case "Save" -> saveClick();
             case "Load" -> loadClick();
             case "Back" -> SwingUtilities.invokeLater( () -> {
-                view.dispose();
-                new IndexController();
+                boolean userVerification = !game.isGameStarted() ? true :
+                view.areYouSureYouWantToDoThis("Do you want to go back to the index?\nYou'll lose the state of the game unless you saved it.");
+                if (userVerification) {
+                    view.dispose();
+                    new IndexController();
+                }
             });
         }
     }
