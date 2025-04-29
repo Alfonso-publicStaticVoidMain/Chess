@@ -64,6 +64,6 @@ public class Mann extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteMann : ChessImages.blackMann;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITEMANN : ChessImages.BLACKMANN;
     }
 }

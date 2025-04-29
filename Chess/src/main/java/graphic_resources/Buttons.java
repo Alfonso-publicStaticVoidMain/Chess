@@ -14,6 +14,8 @@ public class Buttons {
      * Standard template for a JButton, to be followed by the reset, save and
      * load buttons.
      * @param label String to be displayed inside the button.
+     * @param actionCommand String to assign to the action command of the
+     * button.
      * @return A JButton that:
      * <ul>
      * <li>Is opaque.</li>
@@ -32,6 +34,13 @@ public class Buttons {
         return result;
     }
     
+    /**
+     * Overloaded version of {@link Buttons#standardButton(String, String)},
+     * defaulting actionCommand to label.
+     * @param label
+     * @return A button with text and action command label in the style of
+     * {@link Buttons#standardButton(String, String)}.
+     */
     public static JButton standardButton(String label) {
         return standardButton(label, label);
     }

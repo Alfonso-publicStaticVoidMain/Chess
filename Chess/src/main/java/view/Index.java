@@ -97,20 +97,20 @@ public class Index extends JFrame {
 
             // Add icons based on variant
             switch (variant) {
-                case "Almost Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                case "Almost Chess" -> iconsPanel.add(new JLabel(ChessImages.WHITECHANCELLOR));
                 case "Capablanca Chess", "Gothic Chess" -> {
-                    iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                    iconsPanel.add(new JLabel(ChessImages.WHITECHANCELLOR));
                     iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-                    iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                    iconsPanel.add(new JLabel(ChessImages.WHITEARCHBISHOP));
                 }
-                case "Janus Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
-                case "Modern Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                case "Janus Chess" -> iconsPanel.add(new JLabel(ChessImages.WHITEARCHBISHOP));
+                case "Modern Chess" -> iconsPanel.add(new JLabel(ChessImages.WHITEARCHBISHOP));
                 case "Tutti Frutti Chess" -> {
-                    iconsPanel.add(new JLabel(ChessImages.whiteAmazon));
+                    iconsPanel.add(new JLabel(ChessImages.WHITEAMAZON));
                     iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-                    iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                    iconsPanel.add(new JLabel(ChessImages.WHITECHANCELLOR));
                     iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-                    iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                    iconsPanel.add(new JLabel(ChessImages.WHITEARCHBISHOP));
                 }
             }
 

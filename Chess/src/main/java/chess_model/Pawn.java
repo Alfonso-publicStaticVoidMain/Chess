@@ -159,7 +159,7 @@ public class Pawn extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whitePawn : ChessImages.blackPawn;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITEPAWN : ChessImages.BLACKPAWN;
     }
     
 }

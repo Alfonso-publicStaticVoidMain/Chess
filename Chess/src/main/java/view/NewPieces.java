@@ -13,14 +13,14 @@ import graphic_resources.ChessImages;
 public class NewPieces extends JFrame {
 
     // Using the predefined icons from ChessImages class for white and black pieces
-    private static final ImageIcon WHITE_AMAZON_ICON = ChessImages.whiteAmazon;
-    private static final ImageIcon BLACK_AMAZON_ICON = ChessImages.blackAmazon;
+    private static final ImageIcon WHITE_AMAZON_ICON = ChessImages.WHITEAMAZON;
+    private static final ImageIcon BLACK_AMAZON_ICON = ChessImages.BLACKAMAZON;
 
-    private static final ImageIcon WHITE_ARCHBISHOP_ICON = ChessImages.whiteArchbishop;
-    private static final ImageIcon BLACK_ARCHBISHOP_ICON = ChessImages.blackArchbishop;
+    private static final ImageIcon WHITE_ARCHBISHOP_ICON = ChessImages.WHITEARCHBISHOP;
+    private static final ImageIcon BLACK_ARCHBISHOP_ICON = ChessImages.BLACKARCHBISHOP;
 
-    private static final ImageIcon WHITE_CHANCELLOR_ICON = ChessImages.whiteChancellor;
-    private static final ImageIcon BLACK_CHANCELLOR_ICON = ChessImages.blackChancellor;
+    private static final ImageIcon WHITE_CHANCELLOR_ICON = ChessImages.WHITECHANCELLOR;
+    private static final ImageIcon BLACK_CHANCELLOR_ICON = ChessImages.BLACKCHANCELLOR;
     
     private final JPanel piecesPanel;
     private final JPanel amazonPanel;

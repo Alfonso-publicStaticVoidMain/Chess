@@ -2,7 +2,6 @@ package chess_model;
 
 import controller.ChessController;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Record representing the valid positions of a chess board. Contains two
@@ -15,27 +14,21 @@ import java.util.List;
 public record Position(int x, int y) implements Serializable {
     
     /**
-     * Constructor of the record Position.
-     * error message.
-     * @param x X coordinate of the position.
-     * @param y Y coordinate of the position.
-     */
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    
-    /**
      * Static factory method to create new Positions from a String representing
      * the position in algebraic chess notation (A1, A2, etc.)
      * @param pos String representing the position.
-     * @return Returns a new Position constructed by converting the first char
-     * of the String to an integer, to store it as the x coordinate of the
-     * position, and storing the second as the y coordinate.
-     * If the String doesn't have length 2, or if its characters don't represent
-     * a position in algebraic notation, an error message is printed and 
-     * {@code null} is returned.
+     * @return A new Position constructed by converting the first char of the
+     * String to an integer, to store it as the x coordinate of the position,
+     * and storing the second as the y coordinate.
+     * If the String doesn't have length 2, or if its characters does't
+     * represent a position in algebraic notation, an error message is printed
+     * and {@code null} is returned.
+     * @deprecated This method only works for positions with y coordinate of up
+     * to 9, so it doesn't work for Chess gamer with boards of that size. In
+     * any case, the {@link Position#of(int, int)} method is generally prefered
+     * to create new Positions.
      */
+    @Deprecated
     public static Position of(String pos) {
         if (pos.length()!=2) {
             System.out.println("Error occurred while trying to create the position with value: " + pos);
@@ -48,8 +41,8 @@ public record Position(int x, int y) implements Serializable {
             if (x >= 1 && y >= 1) return new Position(x, y);
             else throw new IllegalArgumentException(pos+" represents coordinates ("+x+", "+y+"), which are outside the chess board");
         } catch (IllegalArgumentException e) {
-            System.out.println("Error occurred while trying to create the position with value: " + pos);
-            System.out.println(e);
+            System.err.println("Error occurred while trying to create the position with value: " + pos);
+            System.err.println(e);
             return null;
         }
     }
@@ -69,8 +62,8 @@ public record Position(int x, int y) implements Serializable {
             if (x >= 1 && y >= 1) return new Position(x, y);
             else throw new IllegalArgumentException("Coordinates ("+x+", "+y+") are outside the chess board");
         } catch (IllegalArgumentException e) {
-            System.out.println("Error occurred while trying to create the position with values: ("+x+", "+y+")");
-            System.out.println(e);
+            System.err.println("Error occurred while trying to create the position with values: ("+x+", "+y+")");
+            System.err.println(e);
             return null;
         }
     }
@@ -115,22 +108,18 @@ public record Position(int x, int y) implements Serializable {
             return false;
         }
         final Position other = (Position) obj;
-        return (this.x == other.x && this.y == other.y);
-//        if (this.x != other.x) {
-//            return false;
-//        }
-//        return this.y == other.y;
+        return (x == other.x && y == other.y);
     }
 
     /**
-     * Represents the Position using the algebraic notation, A1, A2, etc.
-     * @return Returns a 2-character String with the first being the x
-     * coordinate of the Position converted to a letter (1 -> A, up to
-     * 8 -> H) and the second being the digit of the y coordinate.
+     * Represents the Position using the algebraic chess notation, A1, A2, etc.
+     * @return Returns a String whose first character is the x coordinate of the
+     * Position converted to a letter (1 -> A,  and so on) and the rest being
+     * the digits of the y coordinate.
      */
     @Override
     public String toString() {
-        return "" + ChessController.convertNumberToLetter(this.x) + this.y;
+        return "" + ChessController.convertNumberToLetter(x) + y;
     }
 
 }

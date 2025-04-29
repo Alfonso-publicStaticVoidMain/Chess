@@ -17,7 +17,7 @@ import java.util.Scanner;
 @Deprecated
 public class ChessMainClass {
 
-    static Scanner keyboard = new Scanner(System.in, "ISO-8859-1");
+    private static final Scanner keyboard = new Scanner(System.in, "ISO-8859-1");
     
     public static Position[] printMoveMenu(ChessColor activePlayer, Chess game) {
         boolean fin = false;

@@ -67,6 +67,6 @@ public class Chancellor extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteChancellor : ChessImages.blackChancellor;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITECHANCELLOR : ChessImages.BLACKCHANCELLOR;
     }
 }

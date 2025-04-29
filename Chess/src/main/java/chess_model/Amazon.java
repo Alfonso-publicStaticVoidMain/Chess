@@ -62,6 +62,6 @@ public class Amazon extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteAmazon : ChessImages.blackAmazon;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITEAMAZON : ChessImages.BLACKAMAZON;
     }
 }

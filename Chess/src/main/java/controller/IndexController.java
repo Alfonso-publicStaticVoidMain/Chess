@@ -25,6 +25,10 @@ public class IndexController implements ActionListener {
         return new ChessController(Chess.capablancaGame(), new ChessGUI(8, 10));
     }
     
+    public static ChessController initializeGothicGame() {
+        return new ChessController(Chess.gothicGame(), new ChessGUI(8, 10));
+    }
+    
     public static ChessController initializeJanusGame() {
         return new ChessController(Chess.janusGame(), new ChessGUI(8, 10));
     }
@@ -65,6 +69,12 @@ public class IndexController implements ActionListener {
                 SwingUtilities.invokeLater(() -> {
                     view.dispose();
                     initializeCapablancaGame();
+                });
+            }
+            case "Gothic Chess" -> {
+                SwingUtilities.invokeLater(() -> {
+                    view.dispose();
+                    initializeGothicGame();
                 });
             }
             case "Janus Chess" -> {

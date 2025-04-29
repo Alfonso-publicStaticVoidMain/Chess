@@ -269,7 +269,7 @@ public abstract class Piece implements Serializable {
      * the X and Y movements from the coordinates of the given positions.
      * @param initPos Initial position of the movement.
      * @param finPos Final position of the movement.
-     * @return 
+     * @return False if both Xmovement and Ymovement are 0, true otherwise.
      */
     public static boolean isRookLikePath(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
@@ -277,22 +277,57 @@ public abstract class Piece implements Serializable {
         return isRookLikePath(Xmovement, Ymovement);
     }
     
+    /**
+     * Checks if the proposed movement follows a diagonal path, like a Bishop
+     * would.
+     * @param Xmovement Signed distance travelled in the X axis.
+     * @param Ymovement Signed distance travelled in the Y axis.
+     * @return True if the absolute value of both X and Y movements is the same,
+     * false otherwise.
+     */
     public static boolean isBishopLikePath(int Xmovement, int Ymovement) {
         return Math.abs(Xmovement) == Math.abs(Ymovement);
     }
     
+    /**
+     * Overloaded version of {@link Chess#isBishopLikePath(int, int)},
+     * calculating the X and Y movements from the coordinates of the given
+     * positions.
+     * @param initPos Initial position of the movement.
+     * @param finPos Final position of the movement.
+     * @return True if the absolute value of both X and Y movements is the same,
+     * false otherwise.
+     */
     public static boolean isBishopLikePath(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
         return isBishopLikePath(Xmovement, Ymovement);
     }
     
+    /**
+     * Checks if the proposed movement matches the movement of a Knight.
+     * @param Xmovement Signed distance travelled in the X axis.
+     * @param Ymovement Signed distance travelled in the Y axis.
+     * @return True if the absolute value of the sum of the X and Y movements
+     * is exactly 3, and each of those absolute values is between 1 and 2, both
+     * inclusive. False otherwise.
+     */
     public static boolean isKnightLikePath(int Xmovement, int Ymovement) {
         return Math.abs(Xmovement)+Math.abs(Ymovement)==3
             && Math.abs(Xmovement)<=2 && Math.abs(Xmovement)>=1
             && Math.abs(Ymovement)<=2 && Math.abs(Ymovement)>=1;
     }
     
+    /**
+     * Overloaded version of {@link Chess#isKnightLikePath(int, int)},
+     * calculating the X and Y movements from the coordinates of the given
+     * positions.
+     * @param initPos Initial position of the movement.
+     * @param finPos Final position of the movement.
+     * @return True if the absolute value of the sum of the X and Y movements
+     * is exactly 3, and each of those absolute values is between 1 and 2, both
+     * inclusive. False otherwise.
+     */
     public static boolean isKnightLikePath(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);
@@ -318,8 +353,7 @@ public abstract class Piece implements Serializable {
     }
     
     /**
-     * Returns a name of {@code this} representing its color and its type
-     * of piece.
+     * Returns String representing {@code this}'s color and type.
      * @return A concatenation of the name of the color of {@code this} Piece,
      * a blank space, and the simple name of {@code this}'s class.
      */

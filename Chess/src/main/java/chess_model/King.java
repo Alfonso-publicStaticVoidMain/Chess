@@ -99,6 +99,6 @@ public class King extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteKing : ChessImages.blackKing;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITEKING : ChessImages.BLACKKING;
     }
 }

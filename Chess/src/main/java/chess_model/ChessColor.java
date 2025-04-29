@@ -34,27 +34,50 @@ public enum ChessColor {
      * @return The direction that {@link Pawn}s of this color move towards, ie,
      * 1 for {@code WHITE} and -1 for {@code BLACK}.
      */
-    public int yDirection() {return this.yDirection;}
+    public int yDirection() {return yDirection;}
     
+    /**
+     * Getter for the initial row value of {@code this} color according to
+     * the configuration parameter.
+     * @param config {@link GameConfiguration} with respect to whom check the
+     * initial row value.
+     * @return The initial row where regular pieces start in the 
+     * configuration parameter.
+     */
     public int initRow(GameConfiguration config) {
         return config.initRow().get(this);
     }
     
+    /**
+     * Getter for the initial row value of Pawns for {@code this} color
+     * according to the configuration parameter.
+     * @param config {@link GameConfiguration} with respect to whom check the
+     * initial row value.
+     * @return The initial row where Pawns start in the configuration parameter.
+     */
     public int initRowPawn(GameConfiguration config) {
         return config.initRowPawn().get(this);
     }
     
+    /**
+     * Getter for the crowning row value of Pawns for {@code this} color
+     * according to the configuration parameter.
+     * @param config {@link GameConfiguration} with respect to whom check the
+     * crowning row value.
+     * @return The row Pawns need to reach in order to crown in the
+     * configuration parameter.
+     */
     public int crowningRow(GameConfiguration config) {
         return config.crowningRow().get(this);
     }
     
     /**
      * Returns the opposite color of {@code this}.
-     * @return Returns the oppositve of {@code this} color, ie, BLACK if
-     * {@code this} was WHITE, and WHITE if {@code this} was BLACK.
+     * @return The oppositve of {@code this} color, ie, BLACK if {@code this}
+     * is WHITE, and WHITE if {@code this} is BLACK.
      */
     public ChessColor opposite() {
-        return this==WHITE ? BLACK : WHITE;
+        return this == WHITE ? BLACK : WHITE;
     }
     
 }

@@ -159,7 +159,6 @@ public class ChessGUI extends JFrame {
     
     public void setController(ChessController controller) {
         this.controller = controller;
-        this.updateBoard();
         for (JButton[] buttonArray : boardButtons) {
             for (JButton button : buttonArray) {
                 button.addActionListener(this.controller);

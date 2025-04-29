@@ -1,12 +1,9 @@
 package controller;
 
 import chess_model.*;
-import java.awt.Color;
 import view.ChessGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -17,10 +14,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 
 /**
- *
+ * Class that controls the {@link ChessGUI} view of a given chess game
+ * according to its {@link Chess} model game.
  * @author Alfonso Gallego Fernández
  */
 public class ChessController implements ActionListener {
@@ -34,8 +31,7 @@ public class ChessController implements ActionListener {
      */
     private ChessGUI view;
     /**
-     * {@link Position} currently stored as the potential initial position of
-     * a movement.
+     * {@link Piece} currently stored as the potential piece to move.
      */
     private Piece selectedPiece;
 
@@ -52,6 +48,7 @@ public class ChessController implements ActionListener {
         this.game = game;
         this.view = view;
         this.view.setController(this);
+        this.view.updateBoard();
     }
 
     /**
@@ -62,7 +59,7 @@ public class ChessController implements ActionListener {
     
     /**
      * Method intended to be used as the action listener for the view's buttons
-     * on the chess board, where x and y are the coordinates of that button
+     * on the chess board.
      * @param x X coordinate of the button clicked.
      * @param y Y coordinate of the button clicked.
      */
@@ -141,6 +138,7 @@ public class ChessController implements ActionListener {
             /*case "Standard Chess"*/ default -> Chess.standardGame();
             case "Almost Chess" -> Chess.almostChessGame();
             case "Capablanca Chess" -> Chess.capablancaGame();
+            case "Gothic Chess" -> Chess.gothicGame();
             case "Janus Chess" -> Chess.janusGame();
             case "Modern Chess" -> Chess.modernGame();
             case "Tutti Frutti Chess" -> Chess.tuttiFruttiGame();
@@ -205,17 +203,6 @@ public class ChessController implements ActionListener {
      */
     public static int convertLetterToNumber(char letter) {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(Character.toUpperCase(letter))+1;
-//        return switch (Character.toLowerCase(letter)) {
-//            case 'a' -> 1;
-//            case 'b' -> 2;
-//            case 'c' -> 3;
-//            case 'd' -> 4;
-//            case 'e' -> 5;
-//            case 'f' -> 6;
-//            case 'g' -> 7;
-//            case 'h' -> 8;
-//            default -> throw new IllegalArgumentException("Invalid letter to convert to number: "+letter);
-//        };
     }
     
     /**
@@ -226,17 +213,6 @@ public class ChessController implements ActionListener {
      */
     public static char convertNumberToLetter(int num) {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(num-1);
-//        return switch (num) {
-//            case 1 -> 'A';
-//            case 2 -> 'B';
-//            case 3 -> 'C';
-//            case 4 -> 'D';
-//            case 5 -> 'E';
-//            case 6 -> 'F';
-//            case 7 -> 'G';
-//            case 8 -> 'H';
-//            default -> throw new IllegalArgumentException("Invalid number to convert to letter: "+num);
-//        };
     }
 
     @Override
@@ -251,14 +227,13 @@ public class ChessController implements ActionListener {
                 System.out.println("[DEBUG] Position: "+Position.of(x, y)+" (x="+x+", y="+y+")");
                 handleClick(x, y);
             }
-            case "Reset" -> this.resetClick();
-            case "Save" -> this.saveClick();
-            case "Load" -> this.loadClick();
+            case "Reset" -> resetClick();
+            case "Save" -> saveClick();
+            case "Load" -> loadClick();
             case "Back" -> SwingUtilities.invokeLater( () -> {
                 view.dispose();
                 new IndexController();
             });
-            default -> {}
         }
     }
 }

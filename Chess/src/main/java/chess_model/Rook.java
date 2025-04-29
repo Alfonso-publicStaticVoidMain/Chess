@@ -61,7 +61,7 @@ public class Rook extends Piece {
     
     @Override
     public ImageIcon toIcon() {
-        return this.getColor() == ChessColor.WHITE ? ChessImages.whiteRook : ChessImages.blackRook;
+        return this.getColor() == ChessColor.WHITE ? ChessImages.WHITEROOK : ChessImages.BLACKROOK;
     }
     
 }
