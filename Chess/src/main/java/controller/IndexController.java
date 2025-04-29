@@ -4,7 +4,6 @@ import chess_model.Chess;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
-import main.ChessMainGUI;
 import view.ChessGUI;
 import view.Index;
 
@@ -13,29 +12,29 @@ import view.Index;
  * @author Alfonso Gallego
  */
 public class IndexController implements ActionListener {
-
+    
+    public static ChessController initializeStandardGame() {
+        return new ChessController(Chess.standardGame(), new ChessGUI(8, 8));
+    }
+    
+    public static ChessController initializeAlmostChessGame() {
+        return new ChessController(Chess.almostChessGame(), new ChessGUI(8, 8));
+    }
+    
+    public static ChessController initializeCapablancaGame() {
+        return new ChessController(Chess.capablancaGame(), new ChessGUI(8, 10));
+    }
+    
+    public static ChessController initializeJanusGame() {
+        return new ChessController(Chess.janusGame(), new ChessGUI(8, 10));
+    }
+    
     public static ChessController initializeModernGame() {
         return new ChessController(Chess.modernGame(), new ChessGUI(9, 9));
     }
 
     public static ChessController initializeTuttiFruttiGame() {
         return new ChessController(Chess.tuttiFruttiGame(), new ChessGUI(8, 8));
-    }
-
-    public static ChessController initializeStandardGame() {
-        return new ChessController(Chess.standardGame(), new ChessGUI(8, 8));
-    }
-
-    public static ChessController initializeJanusGame() {
-        return new ChessController(Chess.janusGame(), new ChessGUI(8, 10));
-    }
-
-    public static ChessController initializeAlmostChessGame() {
-        return new ChessController(Chess.almostChessGame(), new ChessGUI(8, 8));
-    }
-
-    public static ChessController initializeCapablancaGame() {
-        return new ChessController(Chess.capablancaGame(), new ChessGUI(8, 10));
     }
 
     private Index view;
@@ -98,6 +97,5 @@ public class IndexController implements ActionListener {
                 });
             }
         }
-    }
-    
+    }    
 }

@@ -4,7 +4,6 @@ import controller.ChessController;
 import chess_model.Chess;
 import chess_model.ChessColor;
 import chess_model.King;
-import chess_model.Pawn;
 import chess_model.Piece;
 import chess_model.Play;
 import chess_model.Position;
@@ -16,7 +15,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.LayoutManager;
 
 import java.io.File;
@@ -40,7 +38,6 @@ import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-
 
 /**
  * Class to implement a GUI for chess.
@@ -78,7 +75,7 @@ public class ChessGUI extends JFrame {
     public ChessGUI(int rows, int cols) {
         this.setTitle("Chess Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1100, 650);
+        this.setSize(1100+80*(cols-7), 650+80*(rows-7));
         this.rows = rows;
         this.cols = cols;
 
@@ -173,7 +170,7 @@ public class ChessGUI extends JFrame {
         loadButton.addActionListener(this.controller);
         backButton.addActionListener(this.controller);
         gameTimer = new Timer(1000, e -> {
-            Chess game = controller.getGame();
+            Chess game = this.controller.getGame();
             if (game.isGameStarted()) {
                 if (controller.getGame().getActivePlayer() == ChessColor.WHITE) {
                     game.consumeWhiteSecond();
@@ -201,21 +198,11 @@ public class ChessGUI extends JFrame {
         gameTimer.start();
     }
     
-    public static JButton boardButton() {
-        JButton button = new JButton();
-        button.setOpaque(true);
-        button.setBorderPainted(false);
-        button.setPreferredSize(new Dimension(80, 80));
-        return button;
-    }
-    
     public void initializeBoard() {
-        
         for (int row = rows; row >= 0; row--) {
             for (int col = 0; col <= cols; col++) {
-                JButton button = boardButton();
+                JButton button = Buttons.boardButton();
                 boardButtons[col][row] = button;
-
                 if (col == 0 && row == 0) {
                     button.setText("");
                     button.setEnabled(false);
@@ -242,44 +229,63 @@ public class ChessGUI extends JFrame {
                 boardPanel.add(button);
             }
         }
-
     }
 
-    public void highlightValidMoves(Position pos) {
-        Chess chess = controller.getGame();
-        if (chess.checkPiece(pos)) {
-            Piece piece = chess.findPiece(pos);
-            for (int col = 1; col <= cols; col++) {
-                for (int row = 1; row <= rows; row++) {
-                    Position potentialMove = Position.of(col, row);
-                    if (piece.checkLegalMovement(potentialMove)) {
-                        boardButtons[col][row].setBackground(Color.GREEN);
-                    }
-                    if (piece.checkLegalMovement(potentialMove, false) && !piece.checkLegalMovement(potentialMove, true)) {
-                        boardButtons[col][row].setBackground(Color.ORANGE);
-                    }
-                    if (piece instanceof King && (
-                        (chess.checkLeftCastling(piece.getColor()) && potentialMove.equals(chess.leftCastlingKingPosition(piece.getColor())))
-                        || (chess.checkRightCastling(piece.getColor()) && potentialMove.equals(chess.rightCastlingKingPosition(piece.getColor())))
-                    )) {
-                        boardButtons[col][row].setBackground(Color.GREEN);
-                    }
+    public void highlightValidMoves(Piece piece) {
+        Chess game = piece.getGame();
+        for (int col = 1; col <= cols; col++) {
+            for (int row = 1; row <= rows; row++) {
+                Position potentialMove = Position.of(col, row);
+                if (piece.checkLegalMovement(potentialMove)) {
+                    boardButtons[col][row].setBackground(Color.GREEN);
+                }
+                if (piece.checkLegalMovement(potentialMove, false) && !piece.checkLegalMovement(potentialMove, true)) {
+                    boardButtons[col][row].setBackground(Color.ORANGE);
+                }
+                if (piece instanceof King && (
+                    (game.checkLeftCastling(piece.getColor()) && potentialMove.equals(game.leftCastlingKingPosition(piece.getColor())))
+                    || (game.checkRightCastling(piece.getColor()) && potentialMove.equals(game.rightCastlingKingPosition(piece.getColor())))
+                )) {
+                    boardButtons[col][row].setBackground(Color.GREEN);
                 }
             }
-        }
+        }      
     }
     
-    public void highlightPiecesThatCanCaptureKing(Position initPos, Position finPos) {
+    public void highlightMovesOfEnemyPiece(Piece piece) {
+        Chess game = piece.getGame();
+        for (int col = 1; col <= cols; col++) {
+            for (int row = 1; row <= rows; row++) {
+                Position potentialMove = Position.of(col, row);
+                JButton button = boardButtons[col][row];
+                if (piece.checkLegalMovement(potentialMove) ||
+                    (piece instanceof King && (
+                    (game.checkLeftCastling(piece.getColor()) && potentialMove.equals(game.leftCastlingKingPosition(piece.getColor())))
+                    || (game.checkRightCastling(piece.getColor()) && potentialMove.equals(game.rightCastlingKingPosition(piece.getColor())))
+                ))) {
+                    Color originalColor = button.getBackground();
+                    button.setBackground(Color.YELLOW);
+                    button.repaint();
+                    Timer timer = new Timer(1000, e -> button.setBackground(originalColor));
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+            }
+        }      
+    }
+    
+    public void highlightPiecesThatCanCaptureKing(Piece piece, Position finPos) {
+        Position initPos = piece.getPos();
         Chess auxGame = controller.getGame().copyGame();
         ChessColor activePlayer = controller.getGame().getActivePlayer();
         Piece pieceToMove = auxGame.findPiece(initPos);
         pieceToMove.move(finPos, false);
         auxGame.getPieces().stream()
-            .filter(piece -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
-                piece.getColor() != activePlayer &&
-                piece.checkLegalMovement(auxGame.findKing(activePlayer).getPos(), false)
+            .filter(p -> // Filter for the pieces of a different color than active player that can move to capture active player's King.
+                p.getColor() != activePlayer &&
+                p.checkLegalMovement(auxGame.findKing(activePlayer).getPos(), false)
             )
-            .map(piece -> boardButtons[piece.getPos().x()][piece.getPos().y()]) // Map each piece to its button on the board
+            .map(p -> boardButtons[p.getPos().x()][p.getPos().y()]) // Map each piece to its button on the board
             .forEach(button -> { // Set up a timer on each of those buttons to light it red during 1 second
                 Color originalColor = button.getBackground();
                 button.setBackground(Color.RED);
@@ -345,12 +351,16 @@ public class ChessGUI extends JFrame {
         }
     }
     
+    public void informPlayer(String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, NORMAL);
+    }
+    
     public void checkMessage(ChessColor activePlayer) {
         JOptionPane.showConfirmDialog(
             this,
             activePlayer+" is in checkmate.\n"+activePlayer.opposite()+" wins.",
             "End of the game",
-            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.OK_OPTION,
             JOptionPane.INFORMATION_MESSAGE,
             null
         );
@@ -362,7 +372,7 @@ public class ChessGUI extends JFrame {
             this,
             activePlayer+" isn't in check but every move would cause a check.\nThe game is a draw.",
             "End of the game",
-            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.OK_OPTION,
             JOptionPane.INFORMATION_MESSAGE,
             null
         );

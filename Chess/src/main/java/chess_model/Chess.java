@@ -43,7 +43,7 @@ public class Chess implements Serializable {
     private boolean gameFinished = false;
     
     /**
-     * Boolean attribute to tracj uf tge game has started.
+     * Boolean attribute to track if the game has started.
      */
     private boolean gameStarted = false;
     
@@ -57,8 +57,16 @@ public class Chess implements Serializable {
      */
     private int blackSeconds = 300;
     
+    /**
+     * Object of the {@link GameConfiguration} record class to track certain
+     * qualities of the game's rules that might have been modified on each variant.
+     */
     private GameConfiguration config;
 
+    /**
+     * Getter for the {@code config} attribute.
+     * @return The {@code config} attribute of {@code this}.
+     */
     public GameConfiguration getConfig() {return config;}
 
     /**
@@ -105,14 +113,6 @@ public class Chess implements Serializable {
      */
     public void finishGame() {this.gameFinished = true;}
     
-    public void nullLeftCastlingAvaliability(ChessColor player) {
-        leftCastlingAvaliability.put(player, false);
-    }
-    
-    public void nullRightCastlingAvaliability(ChessColor player) {
-        rightCastlingAvaliability.put(player, false);
-    }
-    
     /**
      * Getter for the active player attribute.
      * @return The color of the active player.
@@ -122,7 +122,7 @@ public class Chess implements Serializable {
     /**
      * If the active player is white, it changes to black and viceversa.
      */
-    public void changeActivePlayer() {this.activePlayer = this.activePlayer.opposite();}
+    public void changeActivePlayer() {activePlayer = activePlayer.opposite();}
     
     /**
      * Getter for the left castling avaliability attribute.
@@ -140,11 +140,15 @@ public class Chess implements Serializable {
      */
     public Map<ChessColor, Boolean> getRightCastlingAvaliability() {return rightCastlingAvaliability;}
 
-    public void setTrueCastlingAvaliabilities() {
-        this.leftCastlingAvaliability.put(ChessColor.WHITE, true);
-        this.leftCastlingAvaliability.put(ChessColor.BLACK, true);
-        this.rightCastlingAvaliability.put(ChessColor.WHITE, true);
-        this.rightCastlingAvaliability.put(ChessColor.BLACK, true);
+    /**
+     * Sets the castling avaliabilities to the given parameter for both players.
+     * @param initialValue boolean value to set the castling avaliabilities to.
+     */
+    public void setInitialCastlingAvaliabilities(boolean initialValue) {
+        this.leftCastlingAvaliability.put(ChessColor.WHITE, initialValue);
+        this.leftCastlingAvaliability.put(ChessColor.BLACK, initialValue);
+        this.rightCastlingAvaliability.put(ChessColor.WHITE, initialValue);
+        this.rightCastlingAvaliability.put(ChessColor.BLACK, initialValue);
     }
     
     /**
@@ -172,8 +176,7 @@ public class Chess implements Serializable {
     /**
      * Empty constructor.
      */
-    private Chess() {
-    }
+    private Chess() {}
     
     /**
      * Factory method to create a standard game.
@@ -184,47 +187,85 @@ public class Chess implements Serializable {
         Chess chess = new Chess();
         chess.config = GameConfiguration.standardGameConfig;
         chess.addStandardPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
+    /**
+     * Factory method to create a game using Almost Chess pieces.
+     * @return A game with all the Almost Chess game pieces on their respective
+     * starting position.
+     */
     public static Chess almostChessGame() {
         Chess chess = new Chess();
         chess.config = GameConfiguration.almostChessConfig;
         chess.addAlmostChessPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
+    /**
+     * Factory method to create a game using Capablanca Chess pieces.
+     * @return A game with all the Capablanca game pieces on their respective
+     * starting position.
+     */
     public static Chess capablancaGame() {
         Chess chess = new Chess();
         chess.config = GameConfiguration.capablancaConfig;
         chess.addCapablancaPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
+    /**
+     * Factory method to create a game using Gothic Chess pieces.
+     * @return A game with all the Gothic game pieces on their respective
+     * starting position.
+     */
+    public static Chess gothicGame() {
+        Chess chess = new Chess();
+        chess.config = GameConfiguration.gothicConfig;
+        chess.addGothicPieces();
+        chess.setInitialCastlingAvaliabilities(true);
+        return chess;
+    }
+    
+    /**
+     * Factory method to create a game using Janus Chess pieces.
+     * @return A game with all the Janus game pieces on their respective
+     * starting position.
+     */
     public static Chess janusGame() {
         Chess chess = new Chess();
         chess.config = GameConfiguration.janusConfig;
         chess.addJanusPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
+    /**
+     * Factory method to create a game using Modern Chess pieces.
+     * @return A game with all the Modern game pieces on their respective
+     * starting position.
+     */
     public static Chess modernGame() {
         Chess chess = new Chess();
         chess.config = GameConfiguration.modernConfig;
         chess.addModernPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
+    /**
+     * Factory method to create a game using Tutti Frutti Chess pieces.
+     * @return A game with all the Tutti Frutti game pieces on their respective
+     * starting position.
+     */
     public static Chess tuttiFruttiGame() {
         Chess chess = new Chess();
         chess.config = GameConfiguration.tuttiFruttiConfig;
         chess.addTuttiFruttiPieces();
-        chess.setTrueCastlingAvaliabilities();
+        chess.setInitialCastlingAvaliabilities(true);
         return chess;
     }
     
@@ -233,13 +274,12 @@ public class Chess implements Serializable {
      * to {@code this}.
      */
     public void linkPieces() {
-        this.pieces.stream()
+        pieces.stream()
             .forEach(piece -> piece.setGame(this));
     }
     
     /**
      * Adds the standard Chess pieces to {@code this} game's pieces list.
-     * @see Position#of(int, int)
      * @see Chess#linkPieces
      */
     public void addStandardPieces() {
@@ -269,7 +309,6 @@ public class Chess implements Serializable {
     
     /**
      * Adds the Almost Chess pieces to {@code this} game's pieces list.
-     * @see Position#of(int, int)
      * @see Chess#linkPieces
      */
     public void addAlmostChessPieces() {
@@ -297,6 +336,10 @@ public class Chess implements Serializable {
         this.linkPieces();
     }
     
+    /**
+     * Adds the Capablanca pieces to {@code this} game's pieces list.
+     * @see Chess#linkPieces
+     */
     public void addCapablancaPieces() {
         for (ChessColor color : ChessColor.values()) {
             int initRow = color.initRow(config);
@@ -326,6 +369,43 @@ public class Chess implements Serializable {
         this.linkPieces();
     }
     
+    /**
+     * Adds the Gothic pieces to {@code this} game's pieces list.
+     * @see Chess#linkPieces
+     */
+    public void addGothicPieces() {
+        for (ChessColor color : ChessColor.values()) {
+            int initRow = color.initRow(config);
+            int initRowPawn = color.initRowPawn(config);
+            
+            // Add Pawns
+            IntStream.rangeClosed(1, 10)
+                .forEach(x -> this.pieces.add(new Pawn(Position.of(x, initRowPawn), color)));
+            // Add Rooks
+            this.pieces.add(new Rook(Position.of(1, initRow), color));
+            this.pieces.add(new Rook(Position.of(10, initRow), color));
+            // Add Knights
+            this.pieces.add(new Knight(Position.of(2, initRow), color));
+            this.pieces.add(new Knight(Position.of(9, initRow), color));
+            // Add Bishops
+            this.pieces.add(new Bishop(Position.of(3, initRow), color));
+            this.pieces.add(new Bishop(Position.of(8, initRow), color));
+            // Add Chancellor
+            this.pieces.add(new Chancellor(Position.of(5, initRow), color));
+            // Add ArchBishop
+            this.pieces.add(new ArchBishop(Position.of(7, initRow), color));
+            // Add Queen
+            this.pieces.add(new Queen(Position.of(4, initRow), color));
+            // Add King
+            this.pieces.add(new King(Position.of(6, initRow), color));
+        }
+        this.linkPieces();
+    }
+    
+    /**
+     * Adds the Janus pieces to {@code this} game's pieces list.
+     * @see Chess#linkPieces
+     */
     public void addJanusPieces() {
         for (ChessColor color : ChessColor.values()) {
             int initRow = color.initRow(config);
@@ -354,6 +434,10 @@ public class Chess implements Serializable {
         this.linkPieces();
     }
     
+    /**
+     * Adds the Modern pieces to {@code this} game's pieces list.
+     * @see Chess#linkPieces
+     */
     public void addModernPieces() {
         for (ChessColor color : ChessColor.values()) {
             int initRow = color.initRow(config);
@@ -381,6 +465,10 @@ public class Chess implements Serializable {
         this.linkPieces();
     }
     
+    /**
+     * Adds the Tutti Frutti pieces to {@code this} game's pieces list.
+     * @see Chess#linkPieces
+     */
     public void addTuttiFruttiPieces() {
         for (ChessColor color : ChessColor.values()) {
             int initRow = color.initRow(config);
@@ -409,58 +497,128 @@ public class Chess implements Serializable {
         this.linkPieces();
     }
 
+    /**
+     * Getter for the initial column (x coordinate) of this game's King, as
+     * specified by its config attribute.
+     * @return The initial column of the King for this Chess game.
+     */
     public int initKingCol() {
         return config.kingInitCol();
     }
     
+    /**
+     * Getter for the initial Position of this game's King, as specified by its
+     * config attribute.
+     * @return The initial Position of the King for this Chess game.
+     */
     public Position initKingPosition(ChessColor color) {
         return Position.of(config.kingInitCol(), color.initRow(config));
     }
     
+    /**
+     * Getter for the initial column (x coordinate) of this game's left Rook, as
+     * specified by its config attribute.
+     * @return The initial column of the left Rook for this Chess game.
+     */
     public int initLeftRookCol() {
         return config.leftRookInitCol();
     }
     
+    /**
+     * Getter for the initial Position of this game's left Rook, as specified by
+     * its config attribute.
+     * @return The initial Position of the left Rook for this Chess game.
+     */
     public Position initLeftRookPosition(ChessColor color) {
         return Position.of(config.leftRookInitCol(), color.initRow(config));
     }
     
+    /**
+     * Getter for the initial column (x coordinate) of this game's right Rook,
+     * as specified by its config attribute.
+     * @return The initial column of the right Rook for this Chess game.
+     */
     public int initRightRookCol() {
         return config.rightRookInitCol();
     }
     
+    /**
+     * Getter for the initial Position of this game's right Rook, as specified
+     * by its config attribute.
+     * @return The initial Position of the right Rook for this Chess game.
+     */
     public Position initRightRookPosition(ChessColor color) {
         return Position.of(config.rightRookInitCol(), color.initRow(config));
     }
  
+    /**
+     * Getter for the column (x coordinate) the King moves to when left castling,
+     * as specified by this game's config attribute.
+     * @return The column the King moves to when left castling.
+     */
     public int leftCastlingKingCol() {
         return config.leftCastlingCol();
     }
     
+    /**
+     * Getter for the Position the King moves to when left castling, as
+     * specified by this game's config attribute.
+     * @return The Position the King moves to when left castling.
+     */
     public Position leftCastlingKingPosition(ChessColor color) {
         return Position.of(config.leftCastlingCol(), color.initRow(config));
     }
     
+    /**
+     * Getter for the column (x coordinate) the left Rook moves to when left
+     * castling, as specified by this game's config attribute.
+     * @return The column the left Rook moves to when left castling.
+     */
     public int leftCastlingRookCol() {
         return config.leftCastlingCol()+1;
     }
     
+    /**
+     * Getter for the Position the left Rook moves to when left castling, as
+     * specified by this game's config attribute.
+     * @return The Position the left Rook moves to when left castling.
+     */
     public Position leftCastlingRookPosition(ChessColor color) {
         return Position.of(config.leftCastlingCol()+1, color.initRow(config));
     }
     
+    /**
+     * Getter for the column (x coordinate) the King moves to when right castling,
+     * as specified by this game's config attribute.
+     * @return The column the King moves to when right castling.
+     */
     public int rightCastlingKingCol() {
         return config.rightCastlingCol();
     }
     
+    /**
+     * Getter for the Position the King moves to when right castling, as
+     * specified by this game's config attribute.
+     * @return The Position the King moves to when right castling.
+     */
     public Position rightCastlingKingPosition(ChessColor color) {
         return Position.of(config.rightCastlingCol(), color.initRow(config));
     }
     
+    /**
+     * Getter for the column (x coordinate) the right Rook moves to when right
+     * castling, as specified by this game's config attribute.
+     * @return The column the right Rook moves to when right castling.
+     */
     public int rightCastlingRookCol() {
         return config.rightCastlingCol()-1;
     }
     
+    /**
+     * Getter for the Position the left Rook moves to when left castling, as
+     * specified by this game's config attribute.
+     * @return The Position the left Rook moves to when left castling.
+     */
     public Position rightCastlingRookPosition(ChessColor color) {
         return Position.of(config.rightCastlingCol()-1, color.initRow(config));
     }
@@ -472,7 +630,7 @@ public class Chess implements Serializable {
      * {@link Position}, false otherwise.
      */
     public boolean checkPiece(Position pos) {
-        return this.pieces.stream()
+        return pieces.stream()
             .anyMatch(piece -> piece.getPos().equals(pos));
     }
     
@@ -485,7 +643,7 @@ public class Chess implements Serializable {
      */
     public Piece findPiece(Position pos) {
         if (this.checkPiece(pos)) {
-            return this.pieces.stream()
+            return pieces.stream()
                 .filter(piece -> piece.getPos().equals(pos))
                 .findAny()
                 .get();
@@ -578,7 +736,7 @@ public class Chess implements Serializable {
         result.rightCastlingAvaliability.putAll(rightCastlingAvaliability);
         this.pieces.stream()
             .forEach(piece -> result.pieces.add(piece.copy()));
-        result.playHistory.addAll(this.playHistory);
+        result.playHistory.addAll(playHistory);
         result.linkPieces();
         return result;
     }
@@ -592,7 +750,7 @@ public class Chess implements Serializable {
      * of the movement from {@code initPos} to {@code finPos}, both exclusive.
      * The method will return false if the movement isn't on a straight line or
      * diagonal.
-     * @see Chess#checkPiece
+     * @see Chess#isPathClear(int, int, int, int) 
      */
     public boolean isPathClear(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
@@ -600,7 +758,20 @@ public class Chess implements Serializable {
         return isPathClear(initPos.x(), initPos.y(), Xmovement, Ymovement);
     }
     
-    public boolean isPathClear(int initXPos, int initYPos, int Xmovement, int Ymovement) {
+    /**
+     * Checks the collision along a path following a Rook or Bishop-like
+     * movement, ie, in a straight line or a diagonal.
+     * @param initX Initial X coordinate of the movement.
+     * @param initY Initial Y coordinate of the movement.
+     * @param Xmovement Signed distance travelled in the X axis.
+     * @param Ymovement Signed distance travelled in the Y axis.
+     * @return Returns false is the path described isn't in a diagonal or
+     * straight line, like a Bishop or Rook would make.
+     * Then it returns true if there's no piece on each middle point of the
+     * described path, excluding initial and final positions.
+     * @see Chess#isPathClear(Position, Position) 
+     */
+    public boolean isPathClear(int initX, int initY, int Xmovement, int Ymovement) {
         if (!Piece.isBishopLikePath(Xmovement, Ymovement) && !Piece.isRookLikePath(Xmovement, Ymovement)) return false;
         
         int Xdirection = (Xmovement > 0) ? 1 : (Xmovement < 0) ? -1 : 0;
@@ -608,7 +779,7 @@ public class Chess implements Serializable {
         int steps = Math.max(Math.abs(Xmovement), Math.abs(Ymovement));
         
         return IntStream.range(1, steps)
-            .mapToObj(n -> Position.of(initXPos + n*Xdirection, initYPos + n*Ydirection))
+            .mapToObj(n -> Position.of(initX + n*Xdirection, initY + n*Ydirection))
             .noneMatch(position -> this.checkPiece(position));
     }
     
@@ -767,7 +938,6 @@ public class Chess implements Serializable {
      */
     public boolean doRightCastling(ChessColor color) {
         if (!this.checkRightCastling(color)) return false;
-        int initRow = color.initRow(config);
         Piece king = this.findPiece(initKingPosition(color));
         Piece rightRook = this.findPiece(initRightRookPosition(color));
         king.setPos(rightCastlingKingPosition(color));
@@ -798,54 +968,54 @@ public class Chess implements Serializable {
     public boolean crownPawn(Piece piece, String newType) throws IllegalArgumentException {
         if (!(piece instanceof Pawn)) throw new IllegalArgumentException("[DEBUG] Chess@crownPawn: "+piece.getSimpleName()+" in position "+piece.getPos()+" isn't a pawn.");
         if (piece.getPos().y() != piece.getColor().crowningRow(config)) throw new IllegalArgumentException("[DEBUG] Chess@crownPawn: "+piece.getSimpleName()+" in position "+piece.getPos()+" is a Pawn but can't be crowned");
-        this.pieces.remove(piece);
+        pieces.remove(piece);
         switch (newType.toLowerCase()) {
             case "knight" -> {
                 Piece newKnight = new Knight(piece.getPos(), piece.getColor());
                 newKnight.setGame(this);
-                this.pieces.add(newKnight);
+                pieces.add(newKnight);
                 return true;
             }
             case "bishop" -> {
                 Piece newBishop = new Bishop(piece.getPos(), piece.getColor());
                 newBishop.setGame(this);
-                this.pieces.add(newBishop);
+                pieces.add(newBishop);
                 return true;
             }
             case "rook" -> {
                 Piece newRook = new Rook(piece.getPos(), piece.getColor());
                 newRook.setGame(this);
-                this.pieces.add(newRook);
+                pieces.add(newRook);
                 return true;
             }
             case "queen" -> {
                 Piece newQueen = new Queen(piece.getPos(), piece.getColor());
                 newQueen.setGame(this);
-                this.pieces.add(newQueen);
+                pieces.add(newQueen);
                 return true;
             }
             case "chancellor" -> {
                 Piece newChancellor = new Chancellor(piece.getPos(), piece.getColor());
                 newChancellor.setGame(this);
-                this.pieces.add(newChancellor);
+                pieces.add(newChancellor);
                 return true;
             }
             case "amazon" -> {
                 Piece newAmazon = new Amazon(piece.getPos(), piece.getColor());
                 newAmazon.setGame(this);
-                this.pieces.add(newAmazon);
+                pieces.add(newAmazon);
                 return true;
             }
             case "archbishop" -> {
                 Piece newArchBishop = new ArchBishop(piece.getPos(), piece.getColor());
                 newArchBishop.setGame(this);
-                this.pieces.add(newArchBishop);
+                pieces.add(newArchBishop);
                 return true;
             }
             case "mann" -> {
                 Piece newMann = new Mann(piece.getPos(), piece.getColor());
                 newMann.setGame(this);
-                this.pieces.add(newMann);
+                pieces.add(newMann);
                 return true;
             }
         }

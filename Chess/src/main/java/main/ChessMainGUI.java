@@ -1,9 +1,6 @@
 package main;
 
-import controller.ChessController;
-import chess_model.Chess;
 import controller.IndexController;
-import view.ChessGUI;
 import javax.swing.SwingUtilities;
 
 /**

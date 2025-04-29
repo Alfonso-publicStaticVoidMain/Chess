@@ -1,10 +1,12 @@
 package controller;
 
 import chess_model.*;
-import controller.IndexController;
+import java.awt.Color;
 import view.ChessGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -34,7 +37,7 @@ public class ChessController implements ActionListener {
      * {@link Position} currently stored as the potential initial position of
      * a movement.
      */
-    private Position selectedPos;
+    private Piece selectedPiece;
 
     /**
      * Standard constructor for the {@code ChessController} class, setting the
@@ -68,21 +71,24 @@ public class ChessController implements ActionListener {
         if (x == 0 || y == 0) return; // Ignore label clicks
         if (game.isGameFinished()) return; // Don't do anything if the game has ended.
         Position clickedPos = Position.of(x, y);
-        if (selectedPos == null) { // First click stores the selected position.
-            if (game.checkPiece(clickedPos) && game.findPiece(clickedPos).getColor() == game.getActivePlayer()) {
-                selectedPos = clickedPos;
-                view.highlightValidMoves(selectedPos);
+        if (selectedPiece == null) { // First click stores the selected piece.
+            if (game.checkPiece(clickedPos)) {
+                Piece piece = game.findPiece(clickedPos);
+                if (piece.getColor() == game.getActivePlayer()) {
+                    selectedPiece = piece;
+                    view.highlightValidMoves(piece);
+                } else {
+                    view.highlightMovesOfEnemyPiece(piece);
+                }
             }
         } else { // Second click attempts to do the movement.
-            if (game.checkPiece(selectedPos)) {
-                Piece piece = game.findPiece(selectedPos);
                 boolean playDone = false;
                 
-                if (!piece.checkLegalMovement(clickedPos)) {
-                    view.highlightPiecesThatCanCaptureKing(selectedPos, clickedPos);
+                if (!selectedPiece.checkLegalMovement(clickedPos)) {
+                    view.highlightPiecesThatCanCaptureKing(selectedPiece, clickedPos);
                 }
                 
-                if (piece instanceof King) {
+                if (selectedPiece instanceof King) {
                     if (game.checkLeftCastling(game.getActivePlayer()) &&
                         clickedPos.equals(game.leftCastlingKingPosition(game.getActivePlayer()))    
                     ) {
@@ -100,11 +106,11 @@ public class ChessController implements ActionListener {
                     }
                 }
                 
-                if (!playDone && piece != null && piece.checkLegalMovement(clickedPos)) {
-                    piece.move(clickedPos);
+                if (!playDone && selectedPiece.checkLegalMovement(clickedPos)) {
+                    selectedPiece.move(clickedPos);
                     if (!game.isGameStarted()) game.startGame();
-                    if (piece instanceof Pawn && piece.getPos().y() == game.getActivePlayer().crowningRow(game.getConfig())) { // Pawn crowning
-                        game.crownPawn(piece, view.pawnCrowningMenu(piece, game.getConfig().crownablePieces()));
+                    if (selectedPiece instanceof Pawn && selectedPiece.getPos().y() == game.getActivePlayer().crowningRow(game.getConfig())) { // Pawn crowning
+                        game.crownPawn(selectedPiece, view.pawnCrowningMenu(selectedPiece, game.getConfig().crownablePieces()));
                     }
                     playDone = true;
                 }
@@ -114,8 +120,8 @@ public class ChessController implements ActionListener {
                     game.changeActivePlayer();
                     view.updateActivePlayer();
                 }
-            }
-            selectedPos = null;
+            
+            selectedPiece = null;
             view.updateBoard();
             
             if (game.checkMate(game.getActivePlayer())) {
@@ -131,7 +137,14 @@ public class ChessController implements ActionListener {
     public void resetClick() {
         boolean userVerification = view.areYouSureYouWantToDoThis("Do you want to reset the game?");
         if (!userVerification) return;
-        game = Chess.standardGame();
+        game = switch (game.getConfig().typeOfGame()) {
+            /*case "Standard Chess"*/ default -> Chess.standardGame();
+            case "Almost Chess" -> Chess.almostChessGame();
+            case "Capablanca Chess" -> Chess.capablancaGame();
+            case "Janus Chess" -> Chess.janusGame();
+            case "Modern Chess" -> Chess.modernGame();
+            case "Tutti Frutti Chess" -> Chess.tuttiFruttiGame();
+        };
         view.updateBoard();
         view.updateActivePlayer();
         view.resetPlayHistory();
@@ -160,12 +173,24 @@ public class ChessController implements ActionListener {
             BufferedInputStream bufis = new BufferedInputStream(fis);
             ObjectInputStream ois = new ObjectInputStream(bufis))
         {
-            while (bufis.available()>0) {
-                game = (Chess) ois.readObject();
+            Chess chessGame = (Chess) ois.readObject();
+            if (chessGame.getConfig().rows() == game.getConfig().rows() && chessGame.getConfig().cols() == game.getConfig().cols()) {
+                boolean playerChoice = true;
+                if (!chessGame.getConfig().typeOfGame().equals(game.getConfig().typeOfGame())) {
+                    playerChoice = view.areYouSureYouWantToDoThis("The game you wanted to load is of type: "+chessGame.getConfig().typeOfGame()+", while you're playing "+game.getConfig().typeOfGame()+
+                    "\nBut thankfully they are compatible in size. Do you still want to load that game?");
+                }
+                if (playerChoice) {
+                    game = chessGame;
+                    view.updateBoard();
+                    view.updateActivePlayer();
+                    view.reloadPlayHistory();
+                }
+            } else {
+                view.informPlayer("Incompatible dimensions", "Your selected game is of type "+chessGame.getConfig().typeOfGame()+" ("+chessGame.getConfig().rows()+"x"+chessGame.getConfig().cols()+"), while your current one is "+
+                game.getConfig().typeOfGame()+" ("+game.getConfig().rows()+"x"+game.getConfig().cols()+")");
             }
-            view.updateBoard();
-            view.updateActivePlayer();
-            view.reloadPlayHistory();
+            
         }
         catch (IOException ex) {System.err.println("I/O error: " + ex.getMessage());}
         catch (ClassNotFoundException ex) {System.err.println("Class not found: " + ex.getMessage());}
@@ -176,8 +201,6 @@ public class ChessController implements ActionListener {
      * @param letter Letter to convert.
      * @return The integer number representning its position in the english
      * alphabet.
-     * @throws IllegalArgumentException If the letter is anything other than
-     * [a-h].
      * @hidden 
      */
     public static int convertLetterToNumber(char letter) {
@@ -199,8 +222,6 @@ public class ChessController implements ActionListener {
      * Static method to convert a number to a letter.
      * @param num Number to convert to a letter.
      * @return The letter in the number's position in the english alphabet.
-     * @throws IllegalArgumentException If the number isn't within 1 and 8 (both
-     * inclusive).
      * @hidden 
      */
     public static char convertNumberToLetter(int num) {
@@ -240,5 +261,4 @@ public class ChessController implements ActionListener {
             default -> {}
         }
     }
-    
 }

@@ -253,10 +253,24 @@ public abstract class Piece implements Serializable {
         );
     }
     
+    /**
+     * Checks if the proposed movement follows a straight path, like a Rook
+     * would.
+     * @param Xmovement Signed distance travelled in the X axis.
+     * @param Ymovement Signed distance travelled in the Y axis.
+     * @return False if both Xmovement and Ymovement are 0, true otherwise.
+     */
     public static boolean isRookLikePath(int Xmovement, int Ymovement) {
         return !(Xmovement != 0 && Ymovement != 0);
     }
     
+    /**
+     * Overloaded version of {@link Chess#isRookLikePath(int, int)}, calculating
+     * the X and Y movements from the coordinates of the given positions.
+     * @param initPos Initial position of the movement.
+     * @param finPos Final position of the movement.
+     * @return 
+     */
     public static boolean isRookLikePath(Position initPos, Position finPos) {
         int Xmovement = Position.xDist(initPos, finPos);
         int Ymovement = Position.yDist(initPos, finPos);

@@ -2,6 +2,7 @@ package view;
 
 import controller.IndexController;
 import graphic_resources.Buttons;
+import graphic_resources.ChessImages;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -30,13 +31,14 @@ public class Index extends JFrame {
     private final JButton[] buttons;
     private JButton newPieces;
     private final JButton exitButton;
-    private static final String[] variantNames = {"Standard Chess", "Almost Chess", "Capablanca Chess", "Janus Chess", "Modern Chess", "Tutti Frutti Chess"};
+    private static final String[] variantNames = {"Standard Chess", "Almost Chess", "Capablanca Chess", "Gothic Chess", "Janus Chess", "Modern Chess", "Tutti Frutti Chess"};
+    private static final String[] variantSizes = {"8x8", "8x8", "8x10", "8x10", "8x10", "9x9", "8x8"};
     
     private IndexController controller;
     
     public Index() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 650);
+        setSize(600, 800);
         topPanel = new JPanel(new BorderLayout());
 
         title = new JLabel("Chess", SwingConstants.CENTER);
@@ -54,18 +56,82 @@ public class Index extends JFrame {
         buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttons = new JButton[variantNames.length+2];
-        final Dimension buttonSize = new Dimension(200, 50);
+        final Dimension buttonSize = new Dimension(250, 50);
+//        for (int i = 0; i < variantNames.length; i++) {
+//            JButton button = Buttons.standardButton(variantNames[i]+" ("+variantSizes[i]+")", variantNames[i]);
+//            button.setAlignmentX(Component.CENTER_ALIGNMENT);
+//            button.setMaximumSize(buttonSize);
+//            button.setMinimumSize(buttonSize);
+//            button.setPreferredSize(buttonSize);
+//            button.setBackground(Color.RED);
+//            buttons[i] = button;
+//            buttonsPanel.add(button);
+//            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        }
+
         for (int i = 0; i < variantNames.length; i++) {
-            JButton button = Buttons.standardButton(variantNames[i]);
-            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            button.setMaximumSize(buttonSize);
-            button.setMinimumSize(buttonSize);
-            button.setPreferredSize(buttonSize);
+            String variant = variantNames[i];
+
+            // Row panel: one row per button+icons, horizontal layout
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+            rowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+
+            // Button creation
+            JButton button = Buttons.standardButton(variant + " (" + variantSizes[i] + ")", variant);
+            button.setMaximumSize(new Dimension(250, 50)); 
+            button.setMinimumSize(new Dimension(250, 50));
+            button.setPreferredSize(new Dimension(250, 50)); // force same size
             button.setBackground(Color.RED);
+            button.setAlignmentY(Component.CENTER_ALIGNMENT);
             buttons[i] = button;
-            buttonsPanel.add(button);
-            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            rowPanel.add(button);
+            rowPanel.add(Box.createRigidArea(new Dimension(20, 0))); // horizontal space between button and icons
+            // Icons panel (horizontal stack)
+            iconsPanel = new JPanel();
+            iconsPanel.setLayout(new BoxLayout(iconsPanel, BoxLayout.X_AXIS));
+            iconsPanel.setOpaque(false); 
+            iconsPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+            // Add icons based on variant
+            switch (variant) {
+                case "Almost Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                case "Capablanca Chess", "Gothic Chess" -> {
+                    iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                    iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+                    iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                }
+                case "Janus Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                case "Modern Chess" -> iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                case "Tutti Frutti Chess" -> {
+                    iconsPanel.add(new JLabel(ChessImages.whiteAmazon));
+                    iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+                    iconsPanel.add(new JLabel(ChessImages.whiteChancellor));
+                    iconsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+                    iconsPanel.add(new JLabel(ChessImages.whiteArchbishop));
+                }
+            }
+
+            rowPanel.add(iconsPanel);
+
+            JPanel rowContainer = new JPanel();
+            rowContainer.setLayout(new BoxLayout(rowContainer, BoxLayout.X_AXIS));
+            rowContainer.setOpaque(false);
+
+            // Add horizontal margin (e.g. 30px on both sides)
+            rowContainer.add(Box.createHorizontalStrut(70));
+            rowContainer.add(rowPanel);
+            rowContainer.add(Box.createHorizontalStrut(10));
+
+            // Center alignment for rowPanel inside rowContainer
+            rowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            buttonsPanel.add(rowContainer);
+            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // vertical space between rows
         }
+
         buttonsPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
         newPieces = Buttons.standardButton("New Pieces");
@@ -81,8 +147,10 @@ public class Index extends JFrame {
         buttonsPanel.add(exitButton);
         
         add(buttonsPanel, BorderLayout.CENTER);
+        add(Box.createRigidArea(new Dimension(0, 20)), BorderLayout.SOUTH);
         setVisible(true);
     }
+    public JPanel iconsPanel;
 
     public static String[] getVariantNames() {
         return variantNames;

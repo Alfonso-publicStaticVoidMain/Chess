@@ -22,14 +22,18 @@ public class Buttons {
      * <li>Its text and ActionCommand is the label parameter.</li>
      * </ul>
      */
-    public static JButton standardButton(String label) {
+    public static JButton standardButton(String label, String actionCommand) {
         JButton result = new JButton();
         result.setOpaque(true);
         result.setBorderPainted(false);
         result.setFont(new Font("Arial", Font.BOLD, 16));
         result.setText(label);
-        result.setActionCommand(label);
+        result.setActionCommand(actionCommand);
         return result;
+    }
+    
+    public static JButton standardButton(String label) {
+        return standardButton(label, label);
     }
 
     public static JButton boardButton() {
