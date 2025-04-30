@@ -299,7 +299,7 @@ public class ChessGUI extends JFrame {
     public void clearHighlights() {
         for (int col = 1; col <= cols; col++) {
             for (int row = 1; row <= rows; row++) {
-                boardButtons[col][row].setBackground((col + row) % 2 == 0 ? Color.WHITE : Color.GRAY);
+                boardButtons[col][row].setBackground((col + row + 1) % 2 == 0 ? Color.WHITE : Color.GRAY);
             }
         }
     }
