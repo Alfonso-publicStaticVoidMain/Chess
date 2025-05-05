@@ -810,8 +810,8 @@ public class Chess implements Serializable {
         for (Piece p : this.pieces.stream()
             .filter(piece -> piece.getColor() == color)
             .toList()) {
-            for (int x = 1; x <= 8; x++) {
-                for (int y = 1; y <= 8; y++) {
+            for (int x = 1; x <= config.cols(); x++) {
+                for (int y = 1; y <= config.rows(); y++) {
                     Position finPos = Position.of(x, y);
                     if (p.checkLegalMovement(finPos)) {
                         Chess auxGame = this.copyGame();
