@@ -265,7 +265,7 @@ public abstract class Piece implements Serializable {
     }
     
     /**
-     * Overloaded version of {@link Chess#isRookLikePath(int, int)}, calculating
+     * Overloaded version of {@link Piece#isRookLikePath(int, int)}, calculating
      * the X and Y movements from the coordinates of the given positions.
      * @param initPos Initial position of the movement.
      * @param finPos Final position of the movement.
@@ -290,7 +290,7 @@ public abstract class Piece implements Serializable {
     }
     
     /**
-     * Overloaded version of {@link Chess#isBishopLikePath(int, int)},
+     * Overloaded version of {@link Piece#isBishopLikePath(int, int)},
      * calculating the X and Y movements from the coordinates of the given
      * positions.
      * @param initPos Initial position of the movement.
@@ -319,7 +319,7 @@ public abstract class Piece implements Serializable {
     }
     
     /**
-     * Overloaded version of {@link Chess#isKnightLikePath(int, int)},
+     * Overloaded version of {@link Piece#isKnightLikePath(int, int)},
      * calculating the X and Y movements from the coordinates of the given
      * positions.
      * @param initPos Initial position of the movement.

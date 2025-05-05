@@ -104,6 +104,7 @@ public class IndexController implements ActionListener {
             case "Exit" -> {
                 SwingUtilities.invokeLater(() -> {
                     view.dispose();
+                    System.exit(0);
                 });
             }
         }
